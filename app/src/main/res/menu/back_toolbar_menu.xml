@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/miBack"
+        android:icon="@drawable/ic_baseline_arrow_back_24"
+        android:title="@string/back"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/miSearch"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:title="@string/search"
+        app:showAsAction="never"
+        app:actionViewClass="android.widget.SearchView" />
+    <item
+        android:id="@+id/miBookings"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        android:title="@string/booking"
+        app:showAsAction="ifRoom" />
+</menu>

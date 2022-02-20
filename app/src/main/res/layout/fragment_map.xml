@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/fragment_map_scene2"
+    tools:context=".MapFragment">
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/svLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/border"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Style" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnHome"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/home"
+        android:src="@drawable/ic_baseline_home_24"
+        app:layout_constraintTop_toBottomOf="@id/svLocation"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapFragment" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSaloons"
+        android:layout_width="0dp"
+        android:nestedScrollingEnabled="true"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="500dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.motion.widget.MotionLayout>

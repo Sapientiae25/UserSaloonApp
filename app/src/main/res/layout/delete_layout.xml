@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/delete"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/delete"
+    android:layout_gravity="center"
+    android:drawablePadding="10dp"
+    android:textSize="25sp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingStart="15dp"
+    android:paddingEnd="70dp"
+    app:drawableTint="@color/red"
+    app:drawableStartCompat="@drawable/ic_baseline_delete_24">
+
+</TextView>
