@@ -49,6 +49,9 @@
         <argument
             android:name="filter"
             app:argType="com.example.usersaloon.FilterItem" />
+        <action
+            android:id="@+id/action_filterStyleFragment_to_styleFragment"
+            app:destination="@id/styleFragment" />
     </fragment>
     <fragment
         android:id="@+id/styleFragment"
@@ -75,6 +78,9 @@
             android:name="filter"
             app:argType="boolean"
             android:defaultValue="false" />
+        <action
+            android:id="@+id/action_saloonFragment_to_styleFragment"
+            app:destination="@id/styleFragment" />
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
@@ -91,7 +97,11 @@
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.example.usersaloon.CategoryFragment"
-        android:label="CategoryFragment" />
+        android:label="CategoryFragment" >
+        <action
+            android:id="@+id/action_categoryFragment_to_styleFragment"
+            app:destination="@id/styleFragment" />
+    </fragment>
     <action android:id="@+id/action_global_userFragment"
         app:destination="@id/userFragment" />
     <fragment

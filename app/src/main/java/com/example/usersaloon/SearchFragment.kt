@@ -100,7 +100,7 @@ class SearchFragment : Fragment(), SearchDb {
                         val styleId = obj.getString("style_id")
                         val maxTime = obj.getString("max_time")
                         val info = obj.getString("info")
-                        val rating = obj.getString("rating")
+                        val rating = obj.getString("rating").toFloatOrNull()
                         val accountId = obj.getString("account_fk")
                         val accountName = obj.getString("account_name")
                         val accountItem = AccountItem(accountId,accountName)

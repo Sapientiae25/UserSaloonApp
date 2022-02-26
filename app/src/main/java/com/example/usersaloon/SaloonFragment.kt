@@ -1,11 +1,12 @@
 package com.example.usersaloon
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -16,6 +17,9 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
+import com.denzcoskun.imageslider.ImageSlider
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import org.json.JSONObject
@@ -33,7 +37,8 @@ class SaloonFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
-            val rootView =  inflater.inflate(R.layout.activity_saloon, container, false)
+            val rootView =  inflater.inflate(R.layout.fragment_saloon, container, false)
+            val userItem = (activity as DefaultActivity).userItem
             back = arguments?.getInt("back")!!
             accountItem = arguments?.getParcelable("accountItem")!!
             rvStyleItems = rootView.findViewById(R.id.rvStyleItems)
@@ -43,21 +48,59 @@ class SaloonFragment : Fragment() {
             val tvRating = rootView.findViewById<TextView>(R.id.tvRating)
             val categoryList = mutableListOf<CategoryItem>()
             val svStyle = rootView.findViewById<SearchView>(R.id.svStyle)
-            rvStyleCategories.adapter = StyleCategoryAdapter(categoryList,(activity as DefaultActivity))
+            val ivLike = rootView.findViewById<ImageView>(R.id.ivLike)
+            rvStyleCategories.adapter = StyleCategoryAdapter(categoryList)
             rvStyleCategories.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
-            rvStyleItems.adapter = StyleItemAdapter(displayStyleList)
+            rvStyleItems.adapter = SaloonStyleAdapter(displayStyleList)
             rvStyleItems.layoutManager = LinearLayoutManager(context)
             val btnFilter = rootView.findViewById<FloatingActionButton>(R.id.btnFilter)
             tvNoStyles = rootView.findViewById(R.id.tvNoStyles)
             activity?.title = accountItem.name
             tvRating.text = accountItem.rating
-            tvAddress.text = getString(R.string.separate,accountItem.addressItem?.address,accountItem.addressItem?.postcode)
+            tvAddress.text = getString(R.string.comma,accountItem.addressItem?.address,accountItem.addressItem?.postcode)
             tvOpen.text = getString(R.string.separate,accountItem.open,accountItem.close)
             btnFilter.setOnClickListener { view ->
                 val bundle = bundleOf(Pair("accountItem",accountItem))
                 view.findNavController().navigate(R.id.action_saloonFragment_to_filterFragment,bundle) }
-            var url = "http://192.168.1.102:8012/saloon/get_categories.php"
+            val ivStoreFront = rootView.findViewById<ImageSlider>(R.id.ivStoreFront)
+            val imageList = ArrayList<SlideModel>()
+            imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
+            imageList.add(SlideModel(R.drawable.trim,ScaleTypes.FIT))
+            imageList.add(SlideModel(R.drawable.trim,ScaleTypes.FIT))
+            ivStoreFront.setImageList(imageList)
+            ivLike.setOnClickListener {
+                if (accountItem.like){ accountItem.like = false
+                    ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_border_24))
+                }else {accountItem.like = true
+                    ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_24)) }
+                val url = "http://192.168.1.102:8012/saloon/like_saloon.php"
+                val stringRequest: StringRequest = object : StringRequest(
+                    Method.POST, url, Response.Listener {},
+                    Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+                    @Throws(AuthFailureError::class)
+                    override fun getParams(): Map<String, String> {
+                        val params = HashMap<String, String>()
+                        params["account_id"] = accountItem.id
+                        params["user_id"] = userItem.id
+                        return params }}
+                VolleySingleton.instance?.addToRequestQueue(stringRequest) }
+            var url = "http://192.168.1.102:8012/saloon/get_saloon_like.php"
             var stringRequest: StringRequest = object : StringRequest(
+                Method.POST, url, Response.Listener { response ->
+                    if (response == "true"){ accountItem.like = true
+                        ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_24))}
+                    else { accountItem.like = false; ivLike.setImageDrawable(
+                        AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_border_24))}},
+                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String> {
+                    val params = HashMap<String, String>()
+                    params["account_id"] = accountItem.id
+                    params["user_id"] = userItem.id
+                    return params }}
+            VolleySingleton.instance?.addToRequestQueue(stringRequest)
+            url = "http://192.168.1.102:8012/saloon/get_categories.php"
+            stringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener { response ->
                     println(response)
                     val arr = JSONArray(response)
@@ -78,7 +121,7 @@ class SaloonFragment : Fragment() {
                 url = "http://192.168.1.102:8012/saloon/get_style.php"
                 stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
-                        println(response)
+                        Log.println(Log.ASSERT,"SUI", response)
                         val arr = JSONArray(response)
                         if (arr.length() == 0){tvNoStyles.visibility = View.VISIBLE}
                         for (x in 0 until arr.length()){
@@ -89,7 +132,7 @@ class SaloonFragment : Fragment() {
                             val styleId = obj.getString("style_id")
                             val maxTime = obj.getString("max_time")
                             val info = obj.getString("info")
-                            val rating = obj.getString("rating")
+                            val rating = obj.getString("rating").toFloatOrNull()
                             val timeItem = TimeItem(time,maxTime)
                             styleItemList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,rating=rating)) }
                         displayStyleList.addAll(styleItemList)

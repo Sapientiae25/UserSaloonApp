@@ -192,4 +192,10 @@
     <string name="submit">Submit</string>
     <string name="gender">Gender</string>
     <string name="explore">Explore</string>
+    <string name="go_to_style">Go To Style</string>
+    <string name="icon">Icon</string>
+    <string name="open_hours">Open: %1$s</string>
+    <string name="duration_time">Duration: %1$s mins</string>
+    <string name="notification">Notification</string>
+
 </resources>

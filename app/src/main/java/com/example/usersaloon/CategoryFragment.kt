@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
+import com.denzcoskun.imageslider.ImageSlider
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import java.util.*
@@ -31,9 +34,14 @@ class CategoryFragment : Fragment(){
         val styleItemList = mutableListOf<StyleItem>()
         val rvCategoryStyleItems = rootView.findViewById<RecyclerView>(R.id.rvCategoryStyleItems)
         val tvNoStyles = rootView.findViewById<TextView>(R.id.tvNoStyles)
-        val ivStoreFront = rootView.findViewById<ImageView>(R.id.ivStoreFront)
-        rvCategoryStyleItems.adapter = StyleItemAdapter(styleItemList)
+        rvCategoryStyleItems.adapter = CategoryItemAdapter(styleItemList)
         rvCategoryStyleItems.layoutManager = LinearLayoutManager(context)
+        val ivStoreFront = rootView.findViewById<ImageSlider>(R.id.ivStoreFront)
+        val imageList = ArrayList<SlideModel>()
+        imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
+        imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
+        imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
+        ivStoreFront.setImageList(imageList)
         val url = "http://192.168.1.102:8012/saloon/get_category_styles.php"
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
@@ -49,7 +57,7 @@ class CategoryFragment : Fragment(){
                     val styleId = obj.getString("style_id")
                     val maxTime = obj.getString("max_time")
                     val info = obj.getString("info")
-                    val rating = obj.getString("rating")
+                    val rating = obj.getString("rating").toFloatOrNull()
                     val timeItem = TimeItem(time,maxTime)
                     styleItemList.add(StyleItem(name,price,timeItem,info,id=styleId,rating=rating)) }
                 rvCategoryStyleItems.adapter?.notifyItemRangeInserted(0,styleItemList.size)},

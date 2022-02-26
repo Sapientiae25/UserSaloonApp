@@ -1,6 +1,7 @@
 package com.example.usersaloon
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,7 @@ class OldBookingFragment : Fragment(){
         val url = "http://192.168.1.102:8012/saloon/booked.php"
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                println(response)
+                Log.println(Log.ASSERT,"BKED",response)
                 val arr = JSONArray(response)
                 if (arr.length() == 0){tvNoBooking.visibility = View.VISIBLE}
                 for (x in 0 until arr.length()){
@@ -46,7 +47,7 @@ class OldBookingFragment : Fragment(){
                     val accountName = obj.getString("account_name")
                     val address = obj.getString("address")
                     val start = obj.getString("start")
-                    val rating = obj.getString("rating")
+                    val rating = obj.getString("rating").toFloatOrNull()
                     val accountFk = obj.getString("account_fk")
                     val accountItem = AccountItem(accountFk,accountName,addressItem=AddressItem(address=address))
                     val timeItem = TimeItem(time,maxTime)

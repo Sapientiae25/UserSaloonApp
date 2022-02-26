@@ -6,13 +6,14 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class TimeItem(val time: String="", val maxTime: String? = null): Parcelable
 @Parcelize
-data class StyleItem(val name: String,val price: Float=0.0.toFloat(), val time: TimeItem=TimeItem(),val info: String="",
+data class StyleItem(val name: String="",val price: Float=0.0.toFloat(), val time: TimeItem=TimeItem(),val info: String="",
                      val id: String = "",val bookingId:String="",val filterItem: StyleFilterItem=StyleFilterItem(),
-                     var accountItem: AccountItem? = null,val date: String="",val rating:String=""): Parcelable
+                     var accountItem: AccountItem? = null,val date: String="",val rating:Float?=null,var like: Boolean=false): Parcelable
 @Parcelize
-data class AccountItem(val id: String,var name: String="", var password: String? = null,var number: String="",
+data class AccountItem(val id: String="",var name: String="", var password: String? = null,var number: String="",
                        var open: String? = null,var close: String? = null,var addressItem: AddressItem? = null,
-                       val filterItem: FilterItem=FilterItem(),val rating:String="",var clicked: Boolean = false): Parcelable
+                       val filterItem: FilterItem=FilterItem(),val rating:String="",var clicked: Boolean = false,
+                       var like: Boolean = false): Parcelable
 @Parcelize
 data class UserItem(val id: String,val email: String="",val password: String="",var name: String="",var number: String="",
                     val gender: Int = 2): Parcelable
@@ -24,8 +25,8 @@ data class ReviewItem(val review: String,val rating: Int ,val date: String)
 @Parcelize
 data class CategoryItem(val id: String,val category: String,val accountItem: AccountItem? = null): Parcelable
 @Parcelize
-data class BookingItem(val bookingId: String,val start: String="", val end: String="",val name: String="",val cost: String="",
-                       val duration: String="", val email: String="",val styleId: String=""): Parcelable
+data class BookingItem(val bookingId: String,val time: String="", val date: String="",val duration: String="",
+                       val styleItem: StyleItem=StyleItem()): Parcelable
 @Parcelize
 data class StyleFilterItem(val length: String="",val gender: String="",val hair: String="",val style: String=""): Parcelable
 @Parcelize

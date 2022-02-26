@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ivStyle"
-    android:layout_width="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:contentDescription="@string/style_image"
-    android:src="@drawable/ic_baseline_person_24">
+    >
 
-</ImageView>
+    <ImageView
+        android:id="@+id/ivStyle"
+        android:contentDescription="@string/style_image"
+        android:src="@drawable/ic_baseline_person_24"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

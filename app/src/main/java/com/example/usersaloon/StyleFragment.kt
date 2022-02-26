@@ -9,15 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
+import com.denzcoskun.imageslider.ImageSlider
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
@@ -32,8 +34,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var styleItem : StyleItem
     private lateinit var timeItem : TimeItem
     private lateinit var chosenDate: String
-    private lateinit var bookedTimes: MutableList<Pair<Int,Int>>
-    private lateinit var tvBooked: TextView
+    private  var bookedTimes = mutableListOf<Pair<Int,Int>>()
     private lateinit var timeValue: String
 
     override fun onCreateView(
@@ -58,26 +59,63 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val rvReviews = rootView.findViewById<RecyclerView>(R.id.rvReviews)
         val reviewList = mutableListOf<ReviewItem>()
         val cal: Calendar = Calendar.getInstance()
+        val ivStyleImage = rootView.findViewById<ImageSlider>(R.id.ivStyleImage)
+        val imageList = ArrayList<SlideModel>()
+        val ivLike = rootView.findViewById<ImageView>(R.id.ivLike)
+        val llMoreLikeThis = rootView.findViewById<LinearLayout>(R.id.llMoreLikeThis)
+        imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
+        imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
+        imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
+        ivStyleImage.setImageList(imageList)
         day = cal.get(Calendar.DAY_OF_MONTH)
         month = cal.get(Calendar.MONTH)
         year = cal.get(Calendar.YEAR)
         chosenDate = getString(R.string.datetime,year,month,day)
-        tvBooked = rootView.findViewById(R.id.tvBooked)
         rvReviews.adapter = ReviewAdapter(reviewList)
         rvReviews.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
         timeItem = styleItem.time
         if (timeItem.maxTime.isNullOrEmpty()) { timeValue = timeItem.time; max = timeItem.time }
         else { timeValue = getString(R.string.time_distance, timeItem.time, timeItem.maxTime); max = timeItem.maxTime!! }
-        tvDuration.text = getString(R.string.time_mins,timeValue)
+        tvDuration.text = getString(R.string.duration_time,timeValue)
         tvPrice.text = getString(R.string.money,styleItem.price)
         btnBook.text = getString(R.string.separate,"BOOK NOW",tvPrice.text)
         requireActivity().title = styleItem.accountItem?.name
         tvName.text = styleItem.name
         tvInfo.text = styleItem.info
-        var url = "http://192.168.1.102:8012/saloon/get_saloon.php"
+        ivLike.setOnClickListener {
+            if (styleItem.like){ styleItem.like = false
+                ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_border_24))
+            }else {styleItem.like = true
+                ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_24)) }
+            val url = "http://192.168.1.102:8012/saloon/like_style.php"
+            val stringRequest: StringRequest = object : StringRequest(
+                Method.POST, url, Response.Listener {},
+                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String> {
+                    val params = HashMap<String, String>()
+                    params["style_id"] = styleItem.id
+                    params["user_id"] = userItem.id
+                    return params }}
+            VolleySingleton.instance?.addToRequestQueue(stringRequest) }
+        var url = "http://192.168.1.102:8012/saloon/get_saloon_like.php"
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                Log.println(Log.ASSERT,"ARR",response)
+                if (response == "true"){ styleItem.like = true
+                    ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_24))}
+                else { styleItem.like = false; ivLike.setImageDrawable(
+                    AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_border_24))}},
+            Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["style_id"] = styleItem.id
+                params["user_id"] = userItem.id
+                return params }}
+        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+        url = "http://192.168.1.102:8012/saloon/get_saloon.php"
+        stringRequest = object : StringRequest(
+            Method.POST, url, Response.Listener { response ->
                 val obj = JSONObject(response)
                 val name = obj.getString("name")
                 val accountId = obj.getString("account_id")
@@ -87,15 +125,16 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 val rating = obj.getString("rating")
                 val open = obj.getString("open")
                 val close = obj.getString("close")
-                tvOpenHours.text = getString(R.string.separate,open,close)
-                tvAddress.text = getString(R.string.separate,address,postcode)
+                tvOpenHours.text = getString(R.string.open_hours,getString(R.string.separate,open,close))
+                tvAddress.text = getString(R.string.comma,address,postcode)
                 val addressItem = AddressItem(addressId,"",postcode,"",address)
                 val accountItem = AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating)
                 styleItem.accountItem = accountItem },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) { @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String> { return HashMap() }}
+            override fun getParams(): Map<String, String> { val params = HashMap<String, String>()
+            params["account_id"] = accountItem.id
+            return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-
         llReviews.setOnClickListener { rvReviews.visibility = if (rvReviews.visibility == View.GONE){View.VISIBLE} else {View.GONE} }
         url = "http://192.168.1.102:8012/saloon/get_reviews.php"
         stringRequest = object : StringRequest(
@@ -124,13 +163,14 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
 
         btnBook.setOnClickListener{ val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
-            datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
-            datePickerDialog.show()}
-        rvMoreLike.adapter = PopularAdapter(similarStyles)
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show()}
+        rvMoreLike.adapter = SimilarAdapter(similarStyles)
         url = "http://192.168.1.102:8012/saloon/popular_styles.php"
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
+                Log.println(Log.ASSERT,"POP",response)
                 val arr = JSONArray(response)
+                if (arr.length() == 0){llMoreLikeThis.visibility = View.GONE}
                 for (x in 0 until arr.length()){
                     val obj = arr.getJSONObject(x)
                     val name = obj.getString("name")
@@ -144,11 +184,12 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     val accountItem = AccountItem(accountId,accountName)
                     val timeItem = TimeItem(time,maxTime)
                     similarStyles.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem)) }
-                rvMoreLike.adapter?.notifyItemRangeInserted(0,similarStyles.size)
-            },
+                rvMoreLike.adapter?.notifyItemRangeInserted(0,similarStyles.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String> { return HashMap() }}
+            override fun getParams(): Map<String, String> { val params = HashMap<String, String>()
+                params["gender"] = userItem.gender.toString()
+                return params  }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
         url = "http://192.168.1.102:8012/saloon/view_style.php"
         stringRequest = object : StringRequest(
@@ -171,12 +212,13 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val url = "http://192.168.1.102:8012/saloon/check_booking_day.php"
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
+                Log.println(Log.ASSERT,"DAY",response)
                 val arr = JSONArray(response)
                 for (i in 0 until arr.length()){
                     val obj = arr.getJSONObject(i)
                     val startHour = obj.getInt("s_hour") * 60
                     val startMinute = obj.getInt("s_min")
-                    val endHour = obj.getInt("s_hour") * 60
+                    val endHour = obj.getInt("e_hour") * 60
                     val endMinute = obj.getInt("e_min")
                     val startTime = startHour + startMinute
                     val endTime = endHour + endMinute
@@ -196,16 +238,14 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val dialog = Dialog(requireContext())
         var hour = 0
         var minute = 0
-        val minOptions = arrayOf("0","15","30","45")
+        val minOptions = arrayOf("00","15","30","45")
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.time_picker_layout)
         val numPickerHour = dialog.findViewById<NumberPicker>(R.id.numPickerHour)
         val numPickerMins = dialog.findViewById<NumberPicker>(R.id.numPickerMins)
-        val tvDate = dialog.findViewById<TextView>(R.id.tvDate)
         val save = dialog.findViewById<TextView>(R.id.save)
         val close = dialog.findViewById<TextView>(R.id.close)
-        tvDate.text = getString(R.string.separate,chosenDate,getString(R.string.time_mins,max))
 
         numPickerHour.minValue = 0
         numPickerHour.maxValue  = 23
@@ -215,7 +255,8 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         numPickerHour.setOnValueChangedListener { numberPicker, _, _ ->  hour = numberPicker.value}
         numPickerMins.setOnValueChangedListener { numberPicker, _, _ ->
             val x = minOptions[numberPicker.value] ;minute = x.toInt() }
-        close.setOnClickListener { dialog.dismiss(); DatePickerDialog(requireContext(),this,year,month,day).show() }
+        close.setOnClickListener { dialog.dismiss(); val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show() }
         save.setOnClickListener {
             var booked = false
             val currentMin = (hour * 60) + minute
@@ -229,17 +270,19 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 val url = "http://192.168.1.102:8012/saloon/book.php"
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
+                        Log.println(Log.ASSERT,"BOOK",response)
                         if (response == "0"){ dialog.dismiss()
-                            Toast.makeText(context,"Style Booked",Toast.LENGTH_SHORT).show() }
-                        else{Toast.makeText(context,"Invalid Time",Toast.LENGTH_SHORT).show()}
-                                                        },
+                            Toast.makeText(context,"Style Booked",Toast.LENGTH_SHORT).show()
+                            (activity as DefaultActivity).addNotification()
+                        }
+                        else{Toast.makeText(context,"Invalid Time",Toast.LENGTH_SHORT).show()} },
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) {
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String> {
                         val params = HashMap<String, String>()
                         params["account_id"] = accountItem.id
                         params["start"] = startDateTime
-                        params["diff"] = getString(R.string.clock,0,max.toFloat())
+                        params["diff"] = getString(R.string.clock,max.toInt() / 60,max.toInt() % 60)
                         params["style_id"] = styleItem.id
                         params["user_id"] = (activity as DefaultActivity).userItem.id
                         return params

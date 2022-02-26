@@ -23,12 +23,10 @@ class CategoryAdapter (private val groupList: List<List<String>>)
                 currentGroup=x;currentId=y;break@loop };i+=1 } }
             itemView.setOnClickListener { view ->
                 when (currentGroup) {
-                    0 -> {filter.gender.add(currentId)}
-                    1 -> {filter.length.add(currentId)}
-                    2 -> {filter.hairType.add(currentId)}
-                    3 -> {filter.styleType.add(currentId)} }
+                    0 -> {filter.gender = currentId}
+                    1 -> {filter.length.add(currentId)} }
                 val bundle = bundleOf(Pair("filterItem",filter))
-                view.findNavController().navigate(R.id.action_userFragment_to_filterStyleFragment,bundle)            }
+                view.findNavController().navigate(R.id.action_userFragment_to_filterStyleFragment,bundle)}
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {

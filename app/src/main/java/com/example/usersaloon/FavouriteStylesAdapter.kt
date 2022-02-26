@@ -20,13 +20,15 @@ class FavouriteStylesAdapter (private val styleItemList: MutableList<StyleItem>)
         private val price: TextView = itemView.findViewById(R.id.price)
         private val time: TextView = itemView.findViewById(R.id.time)
         private val rating: RatingBar = itemView.findViewById(R.id.rating)
+        private val tvAddress: TextView = itemView.findViewById(R.id.tvAddress)
 
         fun bind(index: Int){
             val currentItem = styleItemList[index]
             val timeItem = currentItem.time
             name.text = currentItem.name
             price.text = itemView.context.getString(R.string.money,currentItem.price)
-            if (currentItem.rating == "0") {rating.visibility = View.GONE} else {rating.rating = currentItem.rating.toFloat()}
+            tvAddress.text = currentItem.accountItem?.addressItem?.address
+            if (currentItem.rating == null) {rating.visibility = View.GONE} else {rating.rating = currentItem.rating.toFloat()}
             val timeValue = if (timeItem.maxTime.isNullOrEmpty()) timeItem.time
             else itemView.context.getString(R.string.time_distance,timeItem.time,timeItem.maxTime)
             time.text = itemView.context.getString(R.string.time_mins,timeValue)

@@ -12,7 +12,6 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
@@ -74,10 +73,9 @@ class LocationBottomSheet : BottomSheetDialogFragment(){
                         VolleySingleton.instance?.addToRequestQueue(stringRequest)
                         val updateLocation = activity as DefaultActivity
                         val locationText = getString(R.string.comma,address,postcode)
+                        (activity as DefaultActivity).chosenLocation=AddressItem("","",postcode,"",address,latitude,longitude)
                         updateLocation.update(LatLng(latitude, longitude),locationText)
-                        dismiss()}
-                    rgLocation.addView(radioButton)
-                }
+                        dismiss()}; rgLocation.addView(radioButton) }
                 if (chosenLocation == null){rbHere.isChecked = true} },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
@@ -87,7 +85,7 @@ class LocationBottomSheet : BottomSheetDialogFragment(){
                 return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
 
-        tvAddAddress.setOnClickListener { view ->
+        tvAddAddress.setOnClickListener {
             val bundle = bundleOf(Pair("setting",false),Pair("update",false))
             this.findNavController().navigate(R.id.action_userFragment_to_addressFragment,bundle)
             dismiss()

@@ -17,15 +17,7 @@
         android:textColor="@color/white"
         android:textSize="30sp"
         android:background="@drawable/border"
-        android:backgroundTint="@color/pink"/>
-    <TextView
-        android:paddingTop="5dp"
-        android:id="@+id/tvDate"
-        android:textAlignment="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/duration"
-        android:textSize="25sp"/>
+        android:backgroundTint="@color/teal_200"/>
     <LinearLayout
         android:textAlignment="center"
         android:layout_width="match_parent"
@@ -69,7 +61,7 @@
             android:layout_weight="1"
             android:background="@drawable/border"
             android:text="@string/save"
-            android:textColor="@color/pink"
+            android:textColor="@color/teal_200"
             android:textSize="30sp"
             android:paddingBottom="5dp"/>
     </LinearLayout>

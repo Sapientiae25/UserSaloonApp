@@ -6,6 +6,8 @@
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/border.xml" value="0.318" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/bottom_boder.xml" value="0.318" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/curved_sheet.xml" value="0.309" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.246" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.246" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/round_button.xml" value="0.2875" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/top_border.xml" value="0.318" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/activity_default.xml" value="0.26268115942028986" />
@@ -27,7 +29,7 @@
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_booking_bottom_sheet.xml" value="0.2545289855072464" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_category.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_details.xml" value="0.32083333333333336" />
-        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_explore.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_explore.xml" value="0.271304347826087" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_favourite_saloons.xml" value="0.2477355072463768" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_favourite_styles.xml" value="0.2477355072463768" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_favourites.xml" value="0.32083333333333336" />
@@ -42,6 +44,7 @@
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_register.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_result.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_review.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_saloon.xml" value="0.264" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_saloon_bottom_sheet.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_setting.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_style.xml" value="0.32083333333333336" />
@@ -49,10 +52,12 @@
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/layout_booked.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/map_saloon_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/no_results_layout.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/notification_layout.xml" value="0.536" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/popular_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/review_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/saloon_item_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/saloon_layout.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/similar_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/similiar_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/style_category_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/style_layout.xml" value="0.32083333333333336" />

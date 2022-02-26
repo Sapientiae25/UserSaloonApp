@@ -6,7 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 
-class SimilarAdapter (private val styleItemList: MutableList<StyleItem>,val activity: DefaultActivity)
+class SimilarAdapter (private val styleItemList: MutableList<StyleItem>)
     : RecyclerView.Adapter<SimilarAdapter.SimilarViewHolder>() {
 
     inner class SimilarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

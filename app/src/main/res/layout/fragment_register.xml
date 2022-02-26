@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="80dp"
             android:id="@+id/tlName"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -89,9 +89,9 @@
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/round_button"
             android:backgroundTint="@color/teal_200"
             android:text="@string/register"

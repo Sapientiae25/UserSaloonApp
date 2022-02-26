@@ -92,6 +92,7 @@ class AddressFragment : Fragment(){
                     val url = "http://192.168.1.102:8012/saloon/save_location.php"
                     val stringRequest = object : StringRequest(
                         Method.POST, url, Response.Listener { response ->
+                            Log.println(Log.ASSERT,"address",response)
                             val obj = JSONObject(response)
                             val id = obj.getString("address_id")
                             addressItem = AddressItem(id,city, postcode, country, address,lat.toDouble(),long.toDouble())
@@ -117,10 +118,7 @@ class AddressFragment : Fragment(){
     private fun getLocationFromAddress(strAddress: String?): LatLng? {
         val coder = Geocoder(context)
         try {
-            Log.println(Log.ASSERT,"ADD",strAddress.toString())
-            val address = coder.getFromLocationName(strAddress, 1)
-            Log.println(Log.ASSERT,"ADD",address.toString())
-            if (address == null) { return null }
+            val address = coder.getFromLocationName(strAddress, 1) ?: return null
             val location: Address = address[0]
             return LatLng(location.latitude, location.longitude)
         } catch (e: IOException) { e.printStackTrace() }

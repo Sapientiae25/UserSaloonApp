@@ -46,13 +46,12 @@ class BookedBottomSheet(): BottomSheetDialogFragment(){
         tvAddress.text = addressItem.address
         tvDate.text = styleItem.date
 
-        btnReview.setOnClickListener { view ->
+        btnReview.setOnClickListener {
             val bundle = bundleOf(Pair("styleItem",styleItem))
-            view.findNavController().navigate(R.id.action_oldBookingFragment_to_reviewFragment,bundle)
-        }
-        btnGoToStyle.setOnClickListener { view ->
+            activity?.findNavController(R.id.activityFragment)?.navigate(R.id.action_oldBookingFragment_to_reviewFragment,bundle) }
+        btnGoToStyle.setOnClickListener {
             val bundle = bundleOf(Pair("styleItem",styleItem))
-            view.findNavController().navigate(R.id.action_oldBookingFragment_to_styleFragment,bundle) }
+            activity?.findNavController(R.id.activityFragment)?.navigate(R.id.action_oldBookingFragment_to_styleFragment,bundle)}
 
 
         return rootView

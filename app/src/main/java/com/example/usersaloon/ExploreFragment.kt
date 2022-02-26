@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
@@ -21,7 +22,7 @@ class ExploreFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView =  inflater.inflate(R.layout.fragment_payment, container, false)
+        val rootView =  inflater.inflate(R.layout.fragment_explore, container, false)
         requireActivity().title = "Explore"
         val userItem = (activity as DefaultActivity).userItem
         val svExplore = rootView.findViewById<SearchView>(R.id.svExplore)
@@ -30,7 +31,8 @@ class ExploreFragment : Fragment(){
         val displayStyleList = mutableListOf<StyleItem>()
         rvExplore.layoutManager = GridLayoutManager(context,3)
         rvExplore.adapter = StyleImageAdapter(displayStyleList)
-
+        rvExplore.addItemDecoration(DividerItemDecoration(context,GridLayoutManager.HORIZONTAL))
+        rvExplore.addItemDecoration(DividerItemDecoration(context,GridLayoutManager.VERTICAL))
         val url = "http://192.168.1.102:8012/saloon/popular_styles.php"
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
@@ -48,6 +50,9 @@ class ExploreFragment : Fragment(){
                     val accountItem = AccountItem(accountId,accountName)
                     val timeItem = TimeItem(time,maxTime)
                     styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem))
+                    styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem))
+                    styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem))
+                    // TODO BITCH
                     displayStyleList.addAll(styleList)}
                 rvExplore.adapter?.notifyItemRangeInserted(0,displayStyleList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {

@@ -9,14 +9,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
+import com.denzcoskun.imageslider.ImageSlider
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.interfaces.ItemClickListener
+import com.denzcoskun.imageslider.models.SlideModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
@@ -29,7 +34,7 @@ class UserFragment : Fragment(), UpdateLocation {
     private val length = listOf("Long","Medium","Short")
     private var currentLat: Double? = null
     private var currentLong: Double? = null
-    private val filters = listOf(gender,length,hairType,styleType)
+    private val filters = listOf(gender,length)
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var updateLocation: UpdateLocation
 
@@ -44,7 +49,6 @@ class UserFragment : Fragment(), UpdateLocation {
         val rvCategories = rootView.findViewById<RecyclerView>(R.id.rvCategories)
         val rvRecent = rootView.findViewById<RecyclerView>(R.id.rvRecent)
         val llRecent = rootView.findViewById<LinearLayout>(R.id.llRecent)
-        val imageSlider = rootView.findViewById<SliderView>(R.id.imageSlider)
         val recentList = mutableListOf<StyleItem>()
         val popularList = mutableListOf<StyleItem>()
         val saloonList = mutableListOf<AccountItem>()
@@ -62,18 +66,6 @@ class UserFragment : Fragment(), UpdateLocation {
         for (i in filters){filterSize += i.size}
         rvCategories.adapter?.notifyItemRangeInserted(0,filterSize)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity as DefaultActivity)
-        val styleList = mutableListOf<FilterItem>()
-        styleList.add(FilterItem(mutableSetOf(0),text="For Men"))
-        styleList.add(FilterItem(mutableSetOf(1),text="For Women"))
-        styleList.add(FilterItem(length=mutableSetOf(0),text="For Long Hair"))
-        styleList.add(FilterItem(length=mutableSetOf(1),text="For Medium Hair"))
-        styleList.add(FilterItem(length=mutableSetOf(2),text="For Short Hair"))
-
-        val adapter = StyleSlideAdapter()
-        adapter.renewItems(images)
-        imageSlider.setSliderAdapter(adapter)
-        imageSlider.isAutoCycle = true
-        imageSlider.startAutoCycle()
 
         var url = "http://192.168.1.102:8012/saloon/get_chosen_locations.php"
         var stringRequest: StringRequest = object : StringRequest(
@@ -84,7 +76,7 @@ class UserFragment : Fragment(), UpdateLocation {
                     val obj = arr.getJSONObject(x)
                     val address = obj.getString("address")
                     val postcode = obj.getString("postcode")
-                    val latitude = obj.getDouble("postcode")
+                    val latitude = obj.getDouble("latitude")
                     val longitude = obj.getDouble("longitude")
                     currentLong = longitude
                     currentLat = longitude
@@ -154,8 +146,9 @@ class UserFragment : Fragment(), UpdateLocation {
         url = "http://192.168.1.102:8012/saloon/get_recently_viewed.php"
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
+                Log.println(Log.ASSERT,"RVW",response)
                 val arr = JSONArray(response)
-                if (arr.length() < 2){llRecent.visibility = View.GONE}
+                if (arr.length() == 0){llRecent.visibility = View.GONE}
                 for (x in 0 until arr.length()){
                     val obj = arr.getJSONObject(x)
                     val name = obj.getString("name")

@@ -4,7 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_200"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
+    </androidx.appcompat.widget.Toolbar>
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/icon"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_baseline_account_circle_24"
+        android:layout_marginTop="20dp"/>
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"

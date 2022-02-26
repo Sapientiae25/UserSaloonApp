@@ -84,7 +84,11 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        fetchLocation() }
+        val chosenLocation = (activity as DefaultActivity).chosenLocation
+        currentLat = chosenLocation.latitude; currentLong= chosenLocation.longitude
+        btnHome.setOnClickListener{mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(currentLat, currentLong),14f))}
+        location = LatLng(currentLat, currentLong)
+        findSaloons()}
     private fun fetchLocation(){
         val task = fusedLocationProviderClient.lastLocation
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -100,7 +104,7 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
             findSaloons()} }
     private fun findSaloons(){
         val saloonList = mutableListOf<AccountItem>()
-        mMap.addMarker(MarkerOptions().position(location).title("Here"))?.alpha = 1f
+//        mMap.addMarker(MarkerOptions().position(location).title("Here"))?.alpha = 1f
         val url = "http://192.168.1.102:8012/saloon/find_near_saloons.php"
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
@@ -120,10 +124,10 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
                     val longitude = obj.getDouble("longitude")
                     val distance = obj.getString("distance")
                     val addressItem = AddressItem(addressId,"",postcode,"",address,latitude,longitude,distance)
-                    for (i in 0 until 5){
-                        saloonList.add(AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating))}
+                    saloonList.add(AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating))
                     val marker = mMap.addMarker(MarkerOptions().position(LatLng(latitude,longitude)).title(name))
-                    marker?.tag = x }
+                    marker?.tag = x
+                }
                 rvSaloons.adapter = MapSaloonAdapter(saloonList,this)
                 rvSaloons.adapter?.notifyItemRangeInserted(0,saloonList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
@@ -136,8 +140,10 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,14f))
         mMap.setOnMarkerClickListener { mark ->
-            rvSaloons.smoothScrollToPosition(mark.tag as Int)
-            rvSaloons.findViewHolderForAdapterPosition(mark.tag as Int)?.itemView?.performClick()
+            Log.println(Log.ASSERT,"MA",mark.toString())
+            if (mark.tag != null){
+                rvSaloons.smoothScrollToPosition(mark.tag as Int)
+                rvSaloons.findViewHolderForAdapterPosition(mark.tag as Int)?.itemView?.performClick()}
             true
         }
     }

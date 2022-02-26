@@ -11,13 +11,11 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 
 
-class StyleCategoryAdapter (private val categories: MutableList<CategoryItem>,val activity: DefaultActivity)
+class StyleCategoryAdapter (private val categories: MutableList<CategoryItem>)
     : RecyclerView.Adapter<StyleCategoryAdapter.StyleCategoryViewHolder>(){
 
     inner class StyleCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
-        private val cvCategory: CardView = itemView.findViewById(R.id.cvCategory)
-        private val ivCategory: ImageView = itemView.findViewById(R.id.ivCategory)
 
         fun bind(index: Int){val currentItem = categories[index]
             tvCategory.text = currentItem.category

@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,40 +32,18 @@ class BookingBottomSheet(): BottomSheetDialogFragment(){
         val bookingItem = arguments?.getParcelable<BookingItem>("bookingItem")!!
         val tvStyle = rootView.findViewById<TextView>(R.id.tvStyle)
         val tvCost = rootView.findViewById<TextView>(R.id.tvCost)
-        val tvDuration = rootView.findViewById<TextView>(R.id.tvDuration)
+        val tvTime = rootView.findViewById<TextView>(R.id.tvTime)
         val tvCode = rootView.findViewById<TextView>(R.id.tvCode)
+        val styleItem = bookingItem.styleItem
 
         val btnGoToStyle = rootView.findViewById<AppCompatButton>(R.id.btnGoToStyle)
-        tvStyle.text = bookingItem.name
-        tvCost.text = bookingItem.cost
-        tvDuration.text = getString(R.string.time_distance,bookingItem.start,bookingItem.end)
+        tvStyle.text = styleItem.name
+        tvCost.text = getString(R.string.money,styleItem.price)
+        tvTime.text = getString(R.string.separate,bookingItem.time,bookingItem.date)
         tvCode.text = getString(R.string.your_code,"69420")
-        btnGoToStyle.setOnClickListener { view ->
-            val url = "http://192.168.1.102:8012/saloon/get_recently_viewed.php"
-            val stringRequest = object : StringRequest(
-                Method.POST, url, Response.Listener { response ->
-                    val obj = JSONObject(response)
-                    val name = obj.getString("name")
-                    val price = obj.getString("price").toFloat()
-                    val time = obj.getString("time")
-                    val styleId = obj.getString("style_id")
-                    val maxTime = obj.getString("max_time")
-                    val info = obj.getString("info")
-                    val accountId = obj.getString("account_id")
-                    val accountName = obj.getString("account_name")
-                    val accountItem = AccountItem(accountId,accountName)
-                    val timeItem = TimeItem(time,maxTime)
-                    val styleItem = StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem)
-                    val bundle = bundleOf(Pair("styleItem",styleItem))
-                    view.findNavController().navigate(R.id.action_bookingFragment_to_styleFragment,bundle)},
-                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
-                @Throws(AuthFailureError::class)
-                override fun getParams(): Map<String, String> {
-                    val params = java.util.HashMap<String, String>()
-                    params["style_id"] = bookingItem.styleId
-                    return params }}
-            VolleySingleton.instance?.addToRequestQueue(stringRequest)
-
+        btnGoToStyle.setOnClickListener {
+            val bundle = bundleOf(Pair("styleItem",styleItem))
+            activity?.findNavController(R.id.activityFragment)?.navigate(R.id.action_bookingFragment_to_styleFragment,bundle)
         }
         return rootView
     }

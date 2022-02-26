@@ -1,6 +1,7 @@
 package com.example.usersaloon
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,7 @@ class ReviewFragment : Fragment(){
         var url = "http://192.168.1.102:8012/saloon/check_review.php"
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
+                Log.println(Log.ASSERT,"REV",response)
                 if (response.isNotEmpty()){
                     val obj = JSONObject(response)
                     etReview.text = obj.getString("review")

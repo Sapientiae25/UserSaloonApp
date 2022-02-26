@@ -10,30 +10,31 @@
     android:paddingBottom="10dp">
     <TextView
         android:id="@+id/tvStyle"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="18dp"
+        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/style_name"
-        android:textSize="30sp"/>
+        android:textSize="35sp"/>
     <TextView
         android:id="@+id/tvCost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/cost"
-        android:textSize="30sp"/>
+        android:textSize="23sp"/>
     <TextView
-        android:id="@+id/tvDuration"
+        android:id="@+id/tvTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/duration"
-        android:textSize="30sp"/>
+        android:textSize="23sp"/>
 
     <TextView
         android:id="@+id/tvCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/code"
-        android:textSize="30sp" />
+        android:textSize="23sp" />
 
     <ImageView
         android:layout_marginTop="15dp"
@@ -47,9 +48,10 @@
         android:id="@+id/btnGoToStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/teal_200"
-        android:text="Go To Style"
-        android:textSize="30sp"
+        android:backgroundTint="@color/teal_200"
+        android:background="@drawable/round_button"
+        android:text="@string/go_to_style"
+        android:textSize="23sp"
         android:layout_margin="8dp"/>
 
 </LinearLayout>

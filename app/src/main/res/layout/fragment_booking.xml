@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/border"
     tools:context=".BookingFragment"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvNoStyles"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -16,6 +18,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBooking"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
