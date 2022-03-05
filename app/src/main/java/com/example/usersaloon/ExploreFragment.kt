@@ -33,7 +33,7 @@ class ExploreFragment : Fragment(){
         rvExplore.adapter = StyleImageAdapter(displayStyleList)
         rvExplore.addItemDecoration(DividerItemDecoration(context,GridLayoutManager.HORIZONTAL))
         rvExplore.addItemDecoration(DividerItemDecoration(context,GridLayoutManager.VERTICAL))
-        val url = "http://192.168.1.102:8012/saloon/popular_styles.php"
+        val url = getString(R.string.url,"popular_styles.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 val arr = JSONArray(response)

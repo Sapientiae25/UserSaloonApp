@@ -32,8 +32,7 @@ class FavouriteStylesFragment : Fragment(){
         val llNoFavourites = rootView.findViewById<LinearLayout>(R.id.llNoFavourites)
         rvStyles.layoutManager = LinearLayoutManager(context)
         rvStyles.adapter = FavouriteStylesAdapter(styleList)
-
-        val url = "http://192.168.1.102:8012/saloon/get_style_likes.php"
+        val url = getString(R.string.url,"get_style_likes.php")
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 val arr = JSONArray(response)

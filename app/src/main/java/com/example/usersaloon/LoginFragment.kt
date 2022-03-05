@@ -25,7 +25,7 @@ class LoginFragment : Fragment() {
     private lateinit var btnLogin: Button
     private lateinit var tvRegisterAccount: TextView
 
-    fun fill(){
+    private fun fill(){
         etEmail.setText("test@gmail.com")
         etPassword.setText("pass") }
 
@@ -49,7 +49,7 @@ class LoginFragment : Fragment() {
             if (etEmail.text!!.isEmpty()){filled=false;etEmail.error="This field must be filled"}
             if (etPassword.text!!.isEmpty()){filled=false;etPassword.error="This field must be filled"}
             if (filled){
-                val url = "http://192.168.1.102:8012/saloon/user_login.php"
+                val url = getString(R.string.url,"user_login.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
                         Log.println(Log.ASSERT,"SUI",response)
@@ -57,10 +57,9 @@ class LoginFragment : Fragment() {
                         val exist = obj.getInt("exist")
                         if (exist == 1){
                             val accountId = obj.getString("account_id")
-                            val name = obj.getString("name")
                             val number = obj.getString("number")
                             val gender = obj.getInt("gender")
-                            val userItem = UserItem(accountId,etEmail.text.toString(),etPassword.text.toString(),name,number,gender)
+                            val userItem = UserItem(accountId,etEmail.text.toString(),etPassword.text.toString(),number,gender)
                             val intent = Intent(context, DefaultActivity::class.java)
                             intent.putExtra("userItem", userItem)
                             startActivity(intent)

@@ -21,7 +21,7 @@ class CardAdapter (private val cardList: MutableList<CardItem>)
             val currentItem = cardList[index]
             tvCardNumber.text = itemView.context.getString(R.string.card_ending,currentItem.number.takeLast(4))
             ivDelete.setOnClickListener {
-                val url = "http://192.168.1.102:8012/saloon/delete_card.php"
+                val url = itemView.context.getString(R.string.url,"delete_card.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { },
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) {

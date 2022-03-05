@@ -23,7 +23,7 @@ class SearchAdapter (private val searchList: MutableList<StyleItem>, val activit
             val currentItem = searchList[index]
             name.text = currentItem.name
             itemView.setOnClickListener { view ->
-                val url = "http://192.168.1.102:8012/saloon/popular_styles.php"
+                val url = itemView.context.getString(R.string.url,"popular_styles.php")
                 val stringRequest: StringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
                         Log.println(Log.ASSERT,"STM",response)

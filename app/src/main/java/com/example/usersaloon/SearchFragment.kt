@@ -53,7 +53,7 @@ class SearchFragment : Fragment(), SearchDb {
         val count = displayStyleList.size
         displayStyleList.clear()
         rvStyles.adapter?.notifyItemRangeRemoved(0,count)
-        var url = "http://192.168.1.102:8012/saloon/filter_search.php"
+        var url = getString(R.string.url,"filter_search.php")
         Log.println(Log.ASSERT,"STM",text)
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
@@ -86,7 +86,7 @@ class SearchFragment : Fragment(), SearchDb {
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
         tvAll.setOnClickListener { view ->
             val styleList = mutableListOf<StyleItem>()
-            url = "http://192.168.1.102:8012/saloon/filter_word_search.php"
+            url = getString(R.string.url,"filter_word_search.php")
             Log.println(Log.ASSERT,"STM",text)
             stringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener { response ->
@@ -121,7 +121,7 @@ class SearchFragment : Fragment(), SearchDb {
         val count = displayStyleList.size
         displayStyleList.clear()
         rvStyles.adapter?.notifyItemRangeRemoved(0,count)
-        val url = "http://192.168.1.102:8012/saloon/popular_searches.php"
+        val url = getString(R.string.url,"popular_searches.php")
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"STM",response)

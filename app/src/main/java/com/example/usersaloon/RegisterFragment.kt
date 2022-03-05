@@ -19,11 +19,9 @@ class RegisterFragment : Fragment() {
     private lateinit var etEmail: TextInputEditText
     private lateinit var btnRegister: Button
     private lateinit var tvLoginInstead: TextView
-    private lateinit var etName: TextInputEditText
     private lateinit var acGender: AutoCompleteTextView
 
     private fun fill(){
-        etName.setText("Jared")
         etEmail.setText("test@gmail.com")
         etPassword.setText("pass")
         acGender.setText("Male")
@@ -36,7 +34,6 @@ class RegisterFragment : Fragment() {
         etEmail = rootView.findViewById(R.id.etEmail)
         etPassword = rootView.findViewById(R.id.etPassword)
         btnRegister = rootView.findViewById(R.id.btnRegister)
-        etName = rootView.findViewById(R.id.etName)
         tvLoginInstead = rootView.findViewById(R.id.tvLoginInstead)
         acGender = rootView.findViewById(R.id.acGender)
         var gender: Int? = null
@@ -49,10 +46,9 @@ class RegisterFragment : Fragment() {
             var filled = true
             if (etEmail.text!!.isEmpty()){filled=false;etEmail.error="This field must be filled"}
             if (etPassword.text!!.isEmpty()){filled=false;etPassword.error="This field must be filled"}
-            if (etName.text!!.isEmpty()){filled=false;etName.error="This field must be filled"}
             if (gender == null){filled=false;acGender.error="This field must be filled"}
             if (filled){
-                val url = "http://192.168.1.102:8012/saloon/user_register.php"
+                val url = getString(R.string.url,"user_register.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
                         val obj = JSONObject(response)
@@ -71,7 +67,6 @@ class RegisterFragment : Fragment() {
                         val params = HashMap<String, String>()
                         params["email"] = etEmail.text.toString()
                         params["password"] = etPassword.text.toString()
-                        params["name"] = etName.text.toString()
                         params["gender"] = gender.toString()
                         return params }}
                 VolleySingleton.instance?.addToRequestQueue(stringRequest) } }

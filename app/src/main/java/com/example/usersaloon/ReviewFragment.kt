@@ -35,7 +35,7 @@ class ReviewFragment : Fragment(){
         val rating = rootView.findViewById<RatingBar>(R.id.rating)
         val btnSubmit = rootView.findViewById<AppCompatButton>(R.id.btnSubmit)
         var empty = true
-        var url = "http://192.168.1.102:8012/saloon/check_review.php"
+        var url = getString(R.string.url,"check_review.php")
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"REV",response)
@@ -55,7 +55,7 @@ class ReviewFragment : Fragment(){
 
         btnSubmit.setOnClickListener { view ->
             if (etReview.text.isNotEmpty()){
-            url = if (empty) "http://192.168.1.102:8012/saloon/review.php" else "http://192.168.1.102:8012/saloon/update_review.php"
+            url = if (empty) getString(R.string.url,"review.php") else getString(R.string.url,"update_review.php")
             stringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener { }, Response.ErrorListener { volleyError -> println(volleyError.message) }) {
                 @Throws(AuthFailureError::class)

@@ -10,18 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.denzcoskun.imageslider.ImageSlider
-import com.denzcoskun.imageslider.constants.ScaleTypes
-import com.denzcoskun.imageslider.interfaces.ItemClickListener
-import com.denzcoskun.imageslider.models.SlideModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
@@ -66,8 +60,7 @@ class UserFragment : Fragment(), UpdateLocation {
         for (i in filters){filterSize += i.size}
         rvCategories.adapter?.notifyItemRangeInserted(0,filterSize)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity as DefaultActivity)
-
-        var url = "http://192.168.1.102:8012/saloon/get_chosen_locations.php"
+        var url = getString(R.string.url,"get_chosen_locations.php")
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 val arr = JSONArray(response)
@@ -89,8 +82,7 @@ class UserFragment : Fragment(), UpdateLocation {
                 params["user_id"] = userItem.id
                 return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-
-        url = "http://192.168.1.102:8012/saloon/popular_styles.php"
+        url = getString(R.string.url,"popular_styles.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 val arr = JSONArray(response)
@@ -114,8 +106,7 @@ class UserFragment : Fragment(), UpdateLocation {
                 params["gender"] = userItem.gender.toString()
                 return params  }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-
-        url = "http://192.168.1.102:8012/saloon/get_saloons.php"
+        url = getString(R.string.url,"get_saloons.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"ARR",response)
@@ -142,8 +133,7 @@ class UserFragment : Fragment(), UpdateLocation {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> { return HashMap() }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-
-        url = "http://192.168.1.102:8012/saloon/get_recently_viewed.php"
+        url = getString(R.string.url,"get_recently_viewed.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"RVW",response)

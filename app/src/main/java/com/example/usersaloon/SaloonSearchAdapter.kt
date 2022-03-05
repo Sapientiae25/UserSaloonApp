@@ -1,9 +1,9 @@
 package com.example.usersaloon
 
-import android.location.Location
 import android.util.Log
-import android.view.*
-import android.widget.RatingBar
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import org.json.JSONArray
 import org.json.JSONObject
 
 class SaloonSearchAdapter (private val saloonList: MutableList<AccountItem>)
@@ -24,7 +23,7 @@ class SaloonSearchAdapter (private val saloonList: MutableList<AccountItem>)
             val currentItem = saloonList[index]
             text.text = currentItem.name
             itemView.setOnClickListener { view ->
-                val url = "http://192.168.1.102:8012/saloon/get_saloon.php"
+                val url = itemView.context.getString(R.string.url,"get_saloon.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
                         Log.println(Log.ASSERT,"ARR",response)

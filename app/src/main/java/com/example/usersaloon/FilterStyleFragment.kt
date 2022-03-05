@@ -48,7 +48,7 @@ class FilterStyleFragment : Fragment() {
         val filterArr = JSONArray()
         filterArr.put(filterObj)
         Log.println(Log.ASSERT,"array",filterObj.toString())
-        val url = "http://192.168.1.102:8012/saloon/filter_styles.php"
+        val url = getString(R.string.url,"filter_styles.php")
         val jsonRequest = JsonArrayRequest(
             Request.Method.POST, url,filterArr, { arr ->
                 Log.println(Log.ASSERT,"Phil",arr.toString())

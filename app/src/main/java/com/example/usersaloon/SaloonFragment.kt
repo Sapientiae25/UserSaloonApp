@@ -73,7 +73,7 @@ class SaloonFragment : Fragment() {
                     ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_border_24))
                 }else {accountItem.like = true
                     ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_24)) }
-                val url = "http://192.168.1.102:8012/saloon/like_saloon.php"
+                val url = getString(R.string.url,"like_saloon.php")
                 val stringRequest: StringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener {},
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) {
@@ -84,7 +84,7 @@ class SaloonFragment : Fragment() {
                         params["user_id"] = userItem.id
                         return params }}
                 VolleySingleton.instance?.addToRequestQueue(stringRequest) }
-            var url = "http://192.168.1.102:8012/saloon/get_saloon_like.php"
+            var url = getString(R.string.url,"get_saloon_like.php")
             var stringRequest: StringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener { response ->
                     if (response == "true"){ accountItem.like = true
@@ -99,7 +99,7 @@ class SaloonFragment : Fragment() {
                     params["user_id"] = userItem.id
                     return params }}
             VolleySingleton.instance?.addToRequestQueue(stringRequest)
-            url = "http://192.168.1.102:8012/saloon/get_categories.php"
+            url = getString(R.string.url,"get_categories.php")
             stringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener { response ->
                     println(response)
@@ -118,7 +118,7 @@ class SaloonFragment : Fragment() {
                     return params }}
             VolleySingleton.instance?.addToRequestQueue(stringRequest)
             if (back == 0){
-                url = "http://192.168.1.102:8012/saloon/get_style.php"
+                url = getString(R.string.url,"get_style.php")
                 stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
                         Log.println(Log.ASSERT,"SUI", response)
@@ -155,7 +155,7 @@ class SaloonFragment : Fragment() {
                 filterObj.put("account_id",accountItem.id)
                 val filterArr = JSONArray()
                 filterArr.put(filterObj)
-                url = "http://192.168.1.102:8012/saloon/filter_account.php"
+                url = getString(R.string.url,"filter_account.php")
                 val jsonRequest = JsonArrayRequest(
                     Request.Method.POST, url,filterArr, { arr ->
                         Log.println(Log.ASSERT,"array",arr.toString())

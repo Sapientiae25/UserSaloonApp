@@ -71,7 +71,7 @@ class AddressFragment : Fragment(){
                 val lat = latLong?.latitude.toString()
                 val long = latLong?.longitude.toString()
                 if (update){
-                    val url = "http://192.168.1.102:8012/saloon/update_location.php"
+                    val url = getString(R.string.url,"update_location.php")
                     val stringRequest = object : StringRequest(
                         Method.POST, url, Response.Listener {  },
                         Response.ErrorListener { volleyError -> println(volleyError.message) }) {
@@ -89,7 +89,7 @@ class AddressFragment : Fragment(){
                             return params }}
                     VolleySingleton.instance?.addToRequestQueue(stringRequest)
                 }else {
-                    val url = "http://192.168.1.102:8012/saloon/save_location.php"
+                    val url = getString(R.string.url,"save_location.php")
                     val stringRequest = object : StringRequest(
                         Method.POST, url, Response.Listener { response ->
                             Log.println(Log.ASSERT,"address",response)

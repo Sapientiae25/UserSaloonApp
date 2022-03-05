@@ -29,7 +29,7 @@ class BookingFragment : Fragment() {
         rvBooking.layoutManager = LinearLayoutManager(context)
         (activity as DefaultActivity).clearNotification()
 
-        val url = "http://192.168.1.102:8012/saloon/get_booked.php"
+        val url = getString(R.string.url,"get_booked.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"BOOKED",response)

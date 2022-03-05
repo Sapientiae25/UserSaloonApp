@@ -41,8 +41,7 @@ class LocationBottomSheet : BottomSheetDialogFragment(){
         rbHere.id = 0
         rbHere.setOnClickListener{ fetchLocation()}
         rgLocation.addView(rbHere)
-
-        val url = "http://192.168.1.102:8012/saloon/get_locations.php"
+        val url = getString(R.string.url,"get_locations.php")
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"SUI",response)
@@ -60,7 +59,7 @@ class LocationBottomSheet : BottomSheetDialogFragment(){
                     if (chosen == 1){chosenLocation = i; radioButton.isChecked = true}
                     radioButton.id = i+1
                     radioButton.setOnClickListener{
-                        val url2 = "http://192.168.1.102:8012/saloon/choose_location.php"
+                        val url2 = getString(R.string.url,"choose_location.php")
                         val stringRequest: StringRequest = object : StringRequest(
                             Method.POST, url2, Response.Listener { },
                             Response.ErrorListener { volleyError -> println(volleyError.message) }) {

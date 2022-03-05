@@ -30,7 +30,7 @@ class OldBookingFragment : Fragment(){
         val tvNoBooking = rootView.findViewById<TextView>(R.id.tvNoBooking)
         rvBooking.adapter = BookedAdapter(bookedList,this)
         rvBooking.layoutManager = LinearLayoutManager(context)
-        val url = "http://192.168.1.102:8012/saloon/booked.php"
+        val url = getString(R.string.url,"booked.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"BKED",response)

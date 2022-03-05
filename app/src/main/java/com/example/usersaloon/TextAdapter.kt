@@ -24,7 +24,7 @@ class TextAdapter (private val textList: MutableList<String>)
             text.text = currentItem
             itemView.setOnClickListener { view ->
                 val styleList = mutableListOf<StyleItem>()
-                val url = "http://192.168.1.102:8012/saloon/filter_word_search.php"
+                val url = itemView.context.getString(R.string.url,"filter_word_search.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
                         Log.println(Log.ASSERT,"SYM",response)

@@ -42,7 +42,7 @@ class CategoryFragment : Fragment(){
         imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
         imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
         ivStoreFront.setImageList(imageList)
-        val url = "http://192.168.1.102:8012/saloon/get_category_styles.php"
+        val url = getString(R.string.url,"get_category_styles.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 println(response)

@@ -19,7 +19,7 @@ class CardFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView =  inflater.inflate(R.layout.fragment_payment, container, false)
+        val rootView =  inflater.inflate(R.layout.card_fragment, container, false)
         requireActivity().title = "Details"
         val userItem = (activity as DefaultActivity).userItem
         val etCVV = rootView.findViewById<TextInputEditText>(R.id.etCVV)
@@ -45,7 +45,7 @@ class CardFragment : Fragment(){
             if (expire?.substring(0,2)?.toInt()!! > 13 || expire.substring(2,4).toInt() > 31) {filled = false
                 etExpiry.error = "Please Fill This Field Out Correctly"}
             if (filled){
-                val url = "http://192.168.1.102:8012/saloon/get_recently_viewed.php"
+                val url = getString(R.string.url,"add_card.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { },
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) {
@@ -55,6 +55,7 @@ class CardFragment : Fragment(){
                         params["number"] = etNumber.text.toString()
                         params["cvv"] = etCVV.text.toString()
                         params["expiry"] = etExpiry.text.toString()
+                        params["user_id"] = userItem.id
                         return params }}
                 VolleySingleton.instance?.addToRequestQueue(stringRequest)
                 view.findNavController().navigate(R.id.action_cardFragment_to_paymentFragment)

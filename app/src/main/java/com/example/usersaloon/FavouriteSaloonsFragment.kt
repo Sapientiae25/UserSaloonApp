@@ -32,8 +32,7 @@ class FavouriteSaloonsFragment : Fragment(){
         val llNoFavourites = rootView.findViewById<LinearLayout>(R.id.llNoFavourites)
         rvSaloons.layoutManager = LinearLayoutManager(context)
         rvSaloons.adapter = FavouriteSaloonAdapter(saloonList)
-
-        val url = "http://192.168.1.102:8012/saloon/get_liked_saloons.php"
+        val url = getString(R.string.url,"get_liked_saloons.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 val arr = JSONArray(response)

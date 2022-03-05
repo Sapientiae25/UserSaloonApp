@@ -87,7 +87,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_border_24))
             }else {styleItem.like = true
                 ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_24)) }
-            val url = "http://192.168.1.102:8012/saloon/like_style.php"
+            val url = getString(R.string.url,"like_style.php")
             val stringRequest: StringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener {},
                 Response.ErrorListener { volleyError -> println(volleyError.message) }) {
@@ -98,7 +98,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     params["user_id"] = userItem.id
                     return params }}
             VolleySingleton.instance?.addToRequestQueue(stringRequest) }
-        var url = "http://192.168.1.102:8012/saloon/get_saloon_like.php"
+        var url = getString(R.string.url,"get_saloon_like.php")
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 if (response == "true"){ styleItem.like = true
@@ -113,7 +113,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 params["user_id"] = userItem.id
                 return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-        url = "http://192.168.1.102:8012/saloon/get_saloon.php"
+        url = getString(R.string.url,"get_saloon.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 val obj = JSONObject(response)
@@ -136,7 +136,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
         llReviews.setOnClickListener { rvReviews.visibility = if (rvReviews.visibility == View.GONE){View.VISIBLE} else {View.GONE} }
-        url = "http://192.168.1.102:8012/saloon/get_reviews.php"
+        url = getString(R.string.url,"get_reviews.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 val arr = JSONArray(response)
@@ -165,7 +165,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         btnBook.setOnClickListener{ val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
             datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show()}
         rvMoreLike.adapter = SimilarAdapter(similarStyles)
-        url = "http://192.168.1.102:8012/saloon/popular_styles.php"
+        url = getString(R.string.url,"popular_styles.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"POP",response)
@@ -191,7 +191,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 params["gender"] = userItem.gender.toString()
                 return params  }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-        url = "http://192.168.1.102:8012/saloon/view_style.php"
+        url = getString(R.string.url,"view_style.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
@@ -209,7 +209,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         bookedTimes.clear()
         year=newYear;month=newMonth;day=newDay
         chosenDate = getString(R.string.datetime,newYear,(newMonth+1),newDay)
-        val url = "http://192.168.1.102:8012/saloon/check_booking_day.php"
+        val url = getString(R.string.url,"check_booking_day.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"DAY",response)
@@ -267,7 +267,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             if (!booked){
                 val chosenTime = getString(R.string.clock,hour,minute)
                 val startDateTime = getString(R.string.make_datetime,chosenDate,chosenTime)
-                val url = "http://192.168.1.102:8012/saloon/book.php"
+                val url = getString(R.string.url,"book.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
                         Log.println(Log.ASSERT,"BOOK",response)

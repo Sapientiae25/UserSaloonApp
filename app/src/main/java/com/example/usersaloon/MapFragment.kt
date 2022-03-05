@@ -104,8 +104,8 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
             findSaloons()} }
     private fun findSaloons(){
         val saloonList = mutableListOf<AccountItem>()
-//        mMap.addMarker(MarkerOptions().position(location).title("Here"))?.alpha = 1f
-        val url = "http://192.168.1.102:8012/saloon/find_near_saloons.php"
+        mMap.addMarker(MarkerOptions().position(location).title("Here"))?.alpha = 1f
+        val url = getString(R.string.url,"find_near_saloons.php")
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"RES",response)

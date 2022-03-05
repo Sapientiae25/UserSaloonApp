@@ -35,7 +35,7 @@ class AddressAdapter (private val addressList: MutableList<AddressItem>)
                 dialog.setContentView(R.layout.delete_layout)
                 val delete = dialog.findViewById<TextView>(R.id.delete)
                 delete.setOnClickListener { dialog.dismiss()
-                    val url = "http://192.168.1.102:8012/saloon/delete_location.php"
+                    val url = itemView.context.getString(R.string.url,"delete_location.php")
                     val stringRequest: StringRequest = object : StringRequest(
                         Method.POST, url, Response.Listener {},
                         Response.ErrorListener { volleyError -> println(volleyError.message) }) {

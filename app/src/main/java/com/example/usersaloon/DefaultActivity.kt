@@ -55,7 +55,7 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.activityFragment) as NavHostFragment
         navController = navHostFragment.navController
         setupActionBarWithNavController(navController)
-        notification.setOnClickListener { findNavController(R.id.activityFragment).navigate(R.id.bookingFragment) }
+        notification.setOnClickListener { findNavController(R.id.activityFragment).navigate(R.id.action_global_bookingFragment) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

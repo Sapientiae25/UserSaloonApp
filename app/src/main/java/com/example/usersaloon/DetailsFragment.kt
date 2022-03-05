@@ -37,7 +37,7 @@ class DetailsFragment : Fragment(){
         rvAddress.adapter = AddressAdapter(addressList)
         etNumber.setText(userItem.number)
         name.setText(userItem.name)
-        var url = "http://192.168.1.102:8012/saloon/get_locations.php"
+        var url = getString(R.string.url,"get_locations.php")
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 val arr = JSONArray(response)
@@ -68,7 +68,7 @@ class DetailsFragment : Fragment(){
             if (name.text.isNullOrEmpty()){filled=false; name.error = "Please Fill Out This Field"}
             if (filled){
                 (activity as DefaultActivity).userItem.name = name.text.toString()
-                url = "http://192.168.1.102:8012/saloon/update_name.php"
+                url = getString(R.string.url,"update_name.php")
                 stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener {},
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) {
