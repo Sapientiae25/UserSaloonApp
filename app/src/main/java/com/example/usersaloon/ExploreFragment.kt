@@ -23,7 +23,7 @@ class ExploreFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_explore, container, false)
-        requireActivity().title = "Explore"
+        (activity as DefaultActivity).supportActionBar?.title = "Explore"
         val userItem = (activity as DefaultActivity).userItem
         val svExplore = rootView.findViewById<SearchView>(R.id.svExplore)
         val rvExplore = rootView.findViewById<RecyclerView>(R.id.rvExplore)

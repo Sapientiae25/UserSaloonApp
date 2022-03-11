@@ -1,22 +1,17 @@
 package com.example.usersaloon
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
-import java.util.*
 
 class FavouriteStylesFragment : Fragment(){
 
@@ -25,7 +20,7 @@ class FavouriteStylesFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_favourite_styles, container, false)
-        requireActivity().title = "Favourite Styles"
+        (activity as DefaultActivity).supportActionBar?.title = "Favourite Styles"
         val userItem = (activity as DefaultActivity).userItem
         val styleList = mutableListOf<StyleItem>()
         val rvStyles = rootView.findViewById<RecyclerView>(R.id.rvStyles)

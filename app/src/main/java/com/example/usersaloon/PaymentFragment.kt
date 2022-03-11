@@ -25,8 +25,8 @@ class PaymentFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_payment, container, false)
-        requireActivity().title = "Payment Methods"
-        val rvCards = rootView.findViewById<RecyclerView>(R.id.rvAddress)
+        (activity as DefaultActivity).supportActionBar?.title = "Payment Methods"
+        val rvCards = rootView.findViewById<RecyclerView>(R.id.rvCards)
         val tvAddCard = rootView.findViewById<TextView>(R.id.tvAddCard)
         val cardList = mutableListOf<CardItem>()
         rvCards.layoutManager = LinearLayoutManager(context)

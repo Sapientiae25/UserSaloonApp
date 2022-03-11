@@ -43,6 +43,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_style, container, false)
         styleItem = arguments?.getParcelable("styleItem")!!
+        (activity as DefaultActivity).supportActionBar?.title = styleItem.name
         val userItem = (activity as DefaultActivity).userItem
         accountItem = styleItem.accountItem!!
         val tvDuration = rootView.findViewById<TextView>(R.id.tvDuration)

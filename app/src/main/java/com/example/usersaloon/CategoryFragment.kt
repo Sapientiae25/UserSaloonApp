@@ -30,7 +30,7 @@ class CategoryFragment : Fragment(){
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_category, container, false)
         categoryItem = arguments?.getParcelable("categoryItem")!!
-        requireActivity().title = categoryItem.category
+        (activity as DefaultActivity).supportActionBar?.title = categoryItem.category
         val styleItemList = mutableListOf<StyleItem>()
         val rvCategoryStyleItems = rootView.findViewById<RecyclerView>(R.id.rvCategoryStyleItems)
         val tvNoStyles = rootView.findViewById<TextView>(R.id.tvNoStyles)

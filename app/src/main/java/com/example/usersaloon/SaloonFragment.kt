@@ -37,12 +37,14 @@ class SaloonFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
-            val rootView =  inflater.inflate(R.layout.fragment_saloon, container, false)
+            val rootView =  inflater.inflate(R.layout.test, container, false)
             val userItem = (activity as DefaultActivity).userItem
-            back = arguments?.getInt("back")!!
             accountItem = arguments?.getParcelable("accountItem")!!
+            (activity as DefaultActivity).supportActionBar?.title = accountItem.name
+            back = arguments?.getInt("back")!!
             rvStyleItems = rootView.findViewById(R.id.rvStyleItems)
             val rvStyleCategories = rootView.findViewById<RecyclerView>(R.id.rvStyleCategories)
+            val rvToolbarCategories = rootView.findViewById<RecyclerView>(R.id.rvToolbarCategories)
             val tvAddress = rootView.findViewById<TextView>(R.id.tvAddress)
             val tvOpen = rootView.findViewById<TextView>(R.id.tvOpen)
             val tvRating = rootView.findViewById<TextView>(R.id.tvRating)
@@ -53,9 +55,10 @@ class SaloonFragment : Fragment() {
             rvStyleCategories.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
             rvStyleItems.adapter = SaloonStyleAdapter(displayStyleList)
             rvStyleItems.layoutManager = LinearLayoutManager(context)
+            rvToolbarCategories.adapter = ToolbarCategoryAdapter(categoryList)
+            rvToolbarCategories.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
             val btnFilter = rootView.findViewById<FloatingActionButton>(R.id.btnFilter)
             tvNoStyles = rootView.findViewById(R.id.tvNoStyles)
-            activity?.title = accountItem.name
             tvRating.text = accountItem.rating
             tvAddress.text = getString(R.string.comma,accountItem.addressItem?.address,accountItem.addressItem?.postcode)
             tvOpen.text = getString(R.string.separate,accountItem.open,accountItem.close)

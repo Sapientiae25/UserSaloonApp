@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.navigation.findNavController
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -40,9 +41,7 @@ class LoginFragment : Fragment() {
         tvRegisterAccount = rootView.findViewById(R.id.tvRegisterAccount)
         fill()
 
-        tvRegisterAccount.setOnClickListener {
-            val fm = parentFragmentManager
-            fm.commit { replace(R.id.fragmentContainer,RegisterFragment()) } }
+        tvRegisterAccount.setOnClickListener {view -> view.findNavController().navigate(R.id.action_loginFragment_to_registerFragment) }
 
         btnLogin.setOnClickListener {
             var filled = true

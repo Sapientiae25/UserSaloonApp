@@ -50,6 +50,7 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_map, container, false)
+        (activity as DefaultActivity).supportActionBar?.title = "Map"
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity as DefaultActivity)
         saloonList = mutableListOf()
         rvSaloons = rootView.findViewById(R.id.rvSaloons)
@@ -58,7 +59,6 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
         svLocation = rootView.findViewById(R.id.svLocation)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
         svLocation.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val chosenLocation = getLocationFromAddress(query)

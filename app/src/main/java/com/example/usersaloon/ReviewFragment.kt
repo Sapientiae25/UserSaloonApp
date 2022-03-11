@@ -30,7 +30,7 @@ class ReviewFragment : Fragment(){
         val rootView =  inflater.inflate(R.layout.fragment_review, container, false)
         val userItem = (activity as DefaultActivity).userItem
         val styleItem = arguments?.getParcelable<StyleItem>("styleItem")!!
-        requireActivity().title = "Review"
+        (activity as DefaultActivity).supportActionBar?.title = "Review"
         val etReview = rootView.findViewById<TextView>(R.id.etReview)
         val rating = rootView.findViewById<RatingBar>(R.id.rating)
         val btnSubmit = rootView.findViewById<AppCompatButton>(R.id.btnSubmit)

@@ -36,8 +36,9 @@ class UserFragment : Fragment(), UpdateLocation {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView =  inflater.inflate(R.layout.activity_user, container, false)
+        val rootView =  inflater.inflate(R.layout.fragment_user, container, false)
         val userItem = (activity as DefaultActivity).userItem
+        (activity as DefaultActivity).supportActionBar?.title = "Sapientiae"
         val rvPopular = rootView.findViewById<RecyclerView>(R.id.rvPopular)
         val rvSaloons = rootView.findViewById<RecyclerView>(R.id.rvSaloons)
         val rvCategories = rootView.findViewById<RecyclerView>(R.id.rvCategories)
@@ -54,7 +55,6 @@ class UserFragment : Fragment(), UpdateLocation {
         rvCategories.layoutManager = LinearLayoutManager(context,RecyclerView.HORIZONTAL,false)
         rvRecent.adapter = PopularAdapter(recentList)
         rvRecent.layoutManager = LinearLayoutManager(context,RecyclerView.HORIZONTAL,false)
-        activity?.title = "Sapientiae"
         var filterSize=0
         updateLocation = activity as DefaultActivity
         for (i in filters){filterSize += i.size}

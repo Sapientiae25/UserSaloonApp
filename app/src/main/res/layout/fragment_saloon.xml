@@ -9,22 +9,26 @@
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/rvToolbarCategories">
+
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
-                android:visibility="gone"
                 android:id="@+id/tvNoStyles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:text="@string/no_styles"
                 android:textSize="25sp"
-                android:layout_marginTop="20dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/llCategory" />
+
             <com.denzcoskun.imageslider.ImageSlider
                 android:id="@+id/ivStoreFront"
                 android:layout_width="match_parent"
@@ -39,12 +43,15 @@
                 app:iss_unselected_dot="@drawable/default_unselected_dot"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cvInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/ivStoreFront">
+
                 <LinearLayout
+                    android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -76,56 +83,62 @@
                         android:drawablePadding="3dp"
                         android:text="@string/rating"
                         android:textSize="18sp"
-                        app:drawableStartCompat="@drawable/ic_baseline_star_24"/>
+                        app:drawableStartCompat="@drawable/ic_baseline_star_24"
+                        app:drawableTint="@color/yellow" />
                 </LinearLayout>
+
                 <ImageView
                     android:id="@+id/ivLike"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="15dp"
                     android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
                     android:contentDescription="@string/favourites"
                     android:src="@drawable/ic_baseline_favorite_border_24"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-            <SearchView
-                android:id="@+id/svStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cvInfo"
-                android:iconifiedByDefault="false"
-                android:background="@drawable/border"
-                android:queryHint="Search Style" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <LinearLayout
                 android:id="@+id/llCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="15dp"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/svStyle">
+                app:layout_constraintTop_toBottomOf="@+id/cvInfo">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvStyleCategories"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
             </LinearLayout>
+
+            <SearchView
+                android:id="@+id/svStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border"
+                android:iconifiedByDefault="false"
+                android:queryHint="Search Style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llCategory" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvStyleItems"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/llCategory" />
+                app:layout_constraintTop_toBottomOf="@+id/svStyle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -133,9 +146,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
+        app:backgroundTint="@color/loginColor"
         android:src="@drawable/ic_baseline_filter_alt_24"
         android:contentDescription="@string/add_item"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvToolbarCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

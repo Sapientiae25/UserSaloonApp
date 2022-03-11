@@ -13,7 +13,7 @@ import com.android.volley.toolbox.StringRequest
 import org.json.JSONArray
 import org.json.JSONObject
 
-class SearchAdapter (private val searchList: MutableList<StyleItem>, val activity: DefaultActivity)
+class SearchAdapter (private val searchList: MutableList<StyleItem>)
     : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
     inner class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

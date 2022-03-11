@@ -29,7 +29,7 @@ class AddressFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_address, container, false)
-        requireActivity().title = "Details"
+        (activity as DefaultActivity).supportActionBar?.title = "Address"
         val update = arguments?.getBoolean("update")!!
         val setting = arguments?.getBoolean("setting")!!
         var addressItem = arguments?.getParcelable<AddressItem>("addressItem")

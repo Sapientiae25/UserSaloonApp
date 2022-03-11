@@ -15,8 +15,7 @@ data class AccountItem(val id: String="",var name: String="", var password: Stri
                        val filterItem: FilterItem=FilterItem(),val rating:String="",var clicked: Boolean = false,
                        var like: Boolean = false): Parcelable
 @Parcelize
-data class UserItem(val id: String,val email: String="",val password: String="",var number: String="",
-                    val gender: Int = 2): Parcelable
+data class UserItem(val id: String,var email: String="",val password: String="",var number: String="", val gender: Int = 2): Parcelable
 @Parcelize
 data class AddressItem(var id:String="",var city: String="",var postcode: String="",var country: String="",var address: String="",
                        var latitude:Double=0.toDouble(),var longitude:Double=0.toDouble(),val distance:String?=null,

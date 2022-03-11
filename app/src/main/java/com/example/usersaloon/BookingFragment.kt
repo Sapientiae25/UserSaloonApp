@@ -21,6 +21,7 @@ class BookingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_booking, container, false)
+        (activity as DefaultActivity).supportActionBar?.title = "Bookings"
         val userItem = (activity as DefaultActivity).userItem
         val tvNoStyles = rootView.findViewById<TextView>(R.id.tvNoStyles)
         val rvBooking = rootView.findViewById<RecyclerView>(R.id.rvBooking)

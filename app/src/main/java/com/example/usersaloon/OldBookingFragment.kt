@@ -24,7 +24,7 @@ class OldBookingFragment : Fragment(){
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_old_booking, container, false)
         val userItem = (activity as DefaultActivity).userItem
-        requireActivity().title = "Bookings"
+        (activity as DefaultActivity).supportActionBar?.title = "Bookings"
         val bookedList = mutableListOf<StyleItem>()
         val rvBooking = rootView.findViewById<RecyclerView>(R.id.rvBooking)
         val tvNoBooking = rootView.findViewById<TextView>(R.id.tvNoBooking)

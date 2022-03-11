@@ -152,6 +152,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginBottom="30dp"
         android:text="@string/register_new_account"
         android:textColor="@color/loginColor"
         android:textSize="18sp"

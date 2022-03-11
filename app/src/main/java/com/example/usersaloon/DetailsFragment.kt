@@ -24,10 +24,10 @@ class DetailsFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView =  inflater.inflate(R.layout.fragment_setting, container, false)
-        requireActivity().title = "Details"
+        val rootView =  inflater.inflate(R.layout.fragment_details, container, false)
+        (activity as DefaultActivity).supportActionBar?.title = "Details"
         val userItem = (activity as DefaultActivity).userItem
-        val name = rootView.findViewById<TextInputEditText>(R.id.etName)
+        val etEmail = rootView.findViewById<TextInputEditText>(R.id.etEmail)
         val etNumber = rootView.findViewById<TextInputEditText>(R.id.etNumber)
         val rvAddress = rootView.findViewById<RecyclerView>(R.id.rvAddress)
         val btnSave = rootView.findViewById<AppCompatButton>(R.id.btnSave)
@@ -36,7 +36,6 @@ class DetailsFragment : Fragment(){
         rvAddress.layoutManager = LinearLayoutManager(context)
         rvAddress.adapter = AddressAdapter(addressList)
         etNumber.setText(userItem.number)
-        name.setText(userItem.name)
         var url = getString(R.string.url,"get_locations.php")
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
@@ -65,9 +64,9 @@ class DetailsFragment : Fragment(){
             var filled = true
             if (etNumber.text?.length != 11 || !(etNumber.text.isNullOrEmpty() && userItem.number.isEmpty())) { filled=false
                 etNumber.error = "Please Fill Out This Field"}
-            if (name.text.isNullOrEmpty()){filled=false; name.error = "Please Fill Out This Field"}
+            if (etEmail.text.isNullOrEmpty()){filled=false; etEmail.error = "Please Fill Out This Field"}
             if (filled){
-                (activity as DefaultActivity).userItem.name = name.text.toString()
+                (activity as DefaultActivity).userItem.email = etEmail.text.toString()
                 url = getString(R.string.url,"update_name.php")
                 stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener {},
@@ -76,7 +75,8 @@ class DetailsFragment : Fragment(){
                     override fun getParams(): Map<String, String> {
                         val params = HashMap<String, String>()
                         params["user_id"] = userItem.id
-                        params["name"] = name.text.toString()
+                        params["name"] = etEmail.text.toString()
+                        params["number"] = etNumber.text.toString()
                         return params }}
                 VolleySingleton.instance?.addToRequestQueue(stringRequest)
                 view.findNavController().navigate(R.id.action_detailsFragment_to_settingFragment)}

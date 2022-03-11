@@ -71,9 +71,7 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation {
                     return true } }) }
         return true }
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.searchFragment -> { item.onNavDestinationSelected(navController) }
-//        R.id.bookingFragment -> { item.onNavDestinationSelected(navController) }
-        else -> { super.onOptionsItemSelected(item) } }
+        R.id.searchFragment -> { item.onNavDestinationSelected(navController) } else -> { super.onOptionsItemSelected(item) } }
     fun addNotification(){ if (notificationCount < 100){
             notificationCount += 1; cvCount.visibility = View.VISIBLE; tvCount.text = notificationCount.toString() } }
     fun clearNotification(){ cvCount.visibility = View.GONE; notificationCount = 0 }

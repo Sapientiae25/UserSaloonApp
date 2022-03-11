@@ -20,7 +20,7 @@ class CardFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.card_fragment, container, false)
-        requireActivity().title = "Details"
+        (activity as DefaultActivity).supportActionBar?.title = "Card"
         val userItem = (activity as DefaultActivity).userItem
         val etCVV = rootView.findViewById<TextInputEditText>(R.id.etCVV)
         val etExpiry = rootView.findViewById<TextInputEditText>(R.id.etExpiry)

@@ -25,7 +25,7 @@ class FavouriteSaloonsFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_favourite_saloons, container, false)
-        requireActivity().title = "Favourite Saloons"
+        (activity as DefaultActivity).supportActionBar?.title = "Favourite Saloons"
         val userItem = (activity as DefaultActivity).userItem
         val saloonList = mutableListOf<AccountItem>()
         val rvSaloons = rootView.findViewById<RecyclerView>(R.id.rvSaloons)

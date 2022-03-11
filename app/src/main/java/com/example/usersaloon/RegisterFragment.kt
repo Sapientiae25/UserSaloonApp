@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import androidx.navigation.findNavController
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -71,10 +71,7 @@ class RegisterFragment : Fragment() {
                         return params }}
                 VolleySingleton.instance?.addToRequestQueue(stringRequest) } }
 
-        tvLoginInstead.setOnClickListener {
-            val fm = parentFragmentManager
-            fm.commit { replace(R.id.fragmentContainer,LoginFragment()) }
-        }
+        tvLoginInstead.setOnClickListener {view->view.findNavController().navigate(R.id.action_registerFragment_to_loginFragment) }
 
         return rootView
     }

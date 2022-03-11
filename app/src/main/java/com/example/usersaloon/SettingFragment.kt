@@ -17,7 +17,7 @@ class SettingFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_setting, container, false)
-        requireActivity().title = "Account"
+        (activity as DefaultActivity).supportActionBar?.title = "Account"
         val tvBooked = rootView.findViewById<TextView>(R.id.tvBooked)
         val tvFavouriteStyles = rootView.findViewById<TextView>(R.id.tvFavouriteStyles)
         val tvFavouriteSaloons = rootView.findViewById<TextView>(R.id.tvFavouriteSaloons)

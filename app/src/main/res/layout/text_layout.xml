@@ -3,9 +3,9 @@
     android:id="@+id/text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border"
-    android:padding="12dp"
+    android:padding="10dp"
+    android:textColor="@color/black"
     android:text="@string/name"
-    android:textSize="20sp">
+    android:textSize="17sp">
 
 </TextView>
