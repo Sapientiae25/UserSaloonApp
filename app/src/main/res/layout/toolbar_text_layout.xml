@@ -6,8 +6,8 @@
     android:text="@string/categories"
     android:paddingStart="15dp"
     android:paddingEnd="15dp"
-    android:paddingTop="7dp"
-    android:paddingBottom="7dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="12dp"
     android:background="@color/loginColor"
     android:textColor="@color/black"
     />

@@ -1,5 +1,6 @@
 package com.example.usersaloon
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ class ToolbarCategoryAdapter (private val categoryList: MutableList<CategoryItem
         fun bind(index: Int){
             val currentItem = categoryList[index]
             name.text = currentItem.category
+            Log.println(Log.ASSERT,"TOOL","tool")
             itemView.setOnClickListener { view -> val bundle = bundleOf(Pair("categoryItem",currentItem))
                 view.findNavController().navigate(R.id.action_userFragment_to_categoryFragment,bundle) } } }
 

@@ -37,7 +37,7 @@ class SaloonFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View? {
-            val rootView =  inflater.inflate(R.layout.test, container, false)
+            val rootView =  inflater.inflate(R.layout.fragment_saloon, container, false)
             val userItem = (activity as DefaultActivity).userItem
             accountItem = arguments?.getParcelable("accountItem")!!
             (activity as DefaultActivity).supportActionBar?.title = accountItem.name
@@ -112,7 +112,8 @@ class SaloonFragment : Fragment() {
                         val category = obj.getString("category")
                         val categoryId = obj.getString("id")
                         categoryList.add(CategoryItem(categoryId,category,accountItem)) }
-                    rvStyleCategories.adapter?.notifyItemRangeInserted(1,categoryList.size)},
+                    rvStyleCategories.adapter?.notifyItemRangeInserted(1,categoryList.size)
+                    rvToolbarCategories.adapter?.notifyItemRangeInserted(1,categoryList.size)},
                 Response.ErrorListener { volleyError -> println(volleyError.message) }) {
                 @Throws(AuthFailureError::class)
                 override fun getParams(): Map<String, String> {
