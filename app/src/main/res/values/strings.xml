@@ -204,5 +204,7 @@
     <string name="url">http://192.168.1.102:8012/saloon/%1$s</string>
     <string name="salon_s_near_you">Salon\'s Near You</string>
     <string name="recently_viewed">Recently Viewed</string>
+    <string name="select_payment_method">Select Payment Method:</string>
+    <string name="go_to_store"><u>Go To Store</u></string>
 
 </resources>

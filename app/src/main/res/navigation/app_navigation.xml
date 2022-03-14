@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_styleFragment_self"
             app:destination="@id/styleFragment" />
+        <action
+            android:id="@+id/action_styleFragment_to_addCardFragment"
+            app:destination="@id/addCardFragment" />
     </fragment>
     <fragment
         android:id="@+id/saloonFragment"
@@ -81,6 +84,9 @@
         <action
             android:id="@+id/action_saloonFragment_to_styleFragment"
             app:destination="@id/styleFragment" />
+        <action
+            android:id="@+id/action_saloonFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
@@ -122,6 +128,11 @@
         <action
             android:id="@+id/action_mapFragment_to_saloonFragment"
             app:destination="@id/saloonFragment" />
+        <argument
+            android:name="addressItem"
+            app:argType="com.example.usersaloon.AddressItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <action android:id="@+id/action_global_mapFragment"
         app:destination="@id/mapFragment" />
@@ -249,4 +260,15 @@
             app:destination="@id/styleFragment" />
     </fragment>
     <action android:id="@+id/action_global_exploreFragment" app:destination="@id/exploreFragment" />
+    <fragment
+        android:id="@+id/addCardFragment"
+        android:name="com.example.usersaloon.AddCardFragment"
+        android:label="AddCardFragment" >
+        <action
+            android:id="@+id/action_addCardFragment_to_styleFragment"
+            app:destination="@id/styleFragment" />
+        <argument
+            android:name="bookingItem"
+            app:argType="com.example.usersaloon.BookingItem" />
+    </fragment>
 </navigation>

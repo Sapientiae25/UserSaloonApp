@@ -130,7 +130,6 @@ class SearchFragment : Fragment(), SearchDb {
                 val styles = obj.getJSONArray("styles")
                 if (styles.length() == 0){ llStyles.visibility = View.GONE}
                 if (saloons.length() == 0){ llSaloons.visibility = View.GONE}
-                tvAll.visibility = View.GONE
                 if (styles.length() == 0 && saloons.length() == 0) { tvNoStyles.visibility = View.VISIBLE
                 } else { tvNoStyles.visibility = View.GONE}
                 for (i in 0 until styles.length()){

@@ -40,6 +40,7 @@ class SaloonFragment : Fragment() {
             val rootView =  inflater.inflate(R.layout.fragment_saloon, container, false)
             val userItem = (activity as DefaultActivity).userItem
             accountItem = arguments?.getParcelable("accountItem")!!
+            val addressItem = accountItem.addressItem
             (activity as DefaultActivity).supportActionBar?.title = accountItem.name
             back = arguments?.getInt("back")!!
             rvStyleItems = rootView.findViewById(R.id.rvStyleItems)
@@ -48,6 +49,7 @@ class SaloonFragment : Fragment() {
             val tvAddress = rootView.findViewById<TextView>(R.id.tvAddress)
             val tvOpen = rootView.findViewById<TextView>(R.id.tvOpen)
             val tvRating = rootView.findViewById<TextView>(R.id.tvRating)
+            val tvMap = rootView.findViewById<TextView>(R.id.tvMap)
             val categoryList = mutableListOf<CategoryItem>()
             val svStyle = rootView.findViewById<SearchView>(R.id.svStyle)
             val ivLike = rootView.findViewById<ImageView>(R.id.ivLike)
@@ -60,7 +62,7 @@ class SaloonFragment : Fragment() {
             val btnFilter = rootView.findViewById<FloatingActionButton>(R.id.btnFilter)
             tvNoStyles = rootView.findViewById(R.id.tvNoStyles)
             tvRating.text = accountItem.rating
-            tvAddress.text = getString(R.string.comma,accountItem.addressItem?.address,accountItem.addressItem?.postcode)
+            tvAddress.text = getString(R.string.comma,addressItem?.address,addressItem?.postcode)
             tvOpen.text = getString(R.string.separate,accountItem.open,accountItem.close)
             btnFilter.setOnClickListener { view ->
                 val bundle = bundleOf(Pair("accountItem",accountItem))
@@ -198,6 +200,9 @@ class SaloonFragment : Fragment() {
                         rvStyleItems.adapter?.notifyItemRangeInserted(0,displayStyleList.size)
                     }
                     return true } })
+            tvMap.setOnClickListener { view -> val bundle = bundleOf(Pair("addressItem",addressItem))
+                (activity as DefaultActivity).goToMap(bundle)
+            }
             return rootView
         }
 }

@@ -142,8 +142,16 @@ class UserFragment : Fragment(), UpdateLocation {
                 for (x in 0 until arr.length()){
                     val obj = arr.getJSONObject(x)
                     val name = obj.getString("name")
-                    val styleId = obj.getString("style_fk")
-                    recentList.add(StyleItem(name,id=styleId)) }
+                    val price = obj.getString("price").toFloat()
+                    val time = obj.getString("time")
+                    val styleId = obj.getString("style_id")
+                    val maxTime = obj.getString("max_time")
+                    val info = obj.getString("info")
+                    val accountId = obj.getString("account_id")
+                    val accountName = obj.getString("account_name")
+                    val accountItem = AccountItem(accountId,accountName)
+                    val timeItem = TimeItem(time,maxTime)
+                    recentList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem)) }
                 rvRecent.adapter?.notifyItemRangeInserted(0,recentList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)

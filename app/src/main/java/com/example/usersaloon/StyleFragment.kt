@@ -11,7 +11,9 @@ import android.view.Window
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
@@ -36,6 +38,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var chosenDate: String
     private  var bookedTimes = mutableListOf<Pair<Int,Int>>()
     private lateinit var timeValue: String
+    private lateinit var addressItem: AddressItem
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +54,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val tvInfo = rootView.findViewById<TextView>(R.id.tvInfo)
         val tvPrice = rootView.findViewById<TextView>(R.id.tvPrice)
         val tvAddress = rootView.findViewById<TextView>(R.id.tvAddress)
+        val tvMap = rootView.findViewById<TextView>(R.id.tvMap)
         val tvOpenHours = rootView.findViewById<TextView>(R.id.tvOpenHours)
         val llReviews = rootView.findViewById<LinearLayout>(R.id.llReviews)
         val styleRating = rootView.findViewById<RatingBar>(R.id.styleRating)
@@ -123,12 +127,14 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 val addressId = obj.getString("address_id")
                 val address = obj.getString("address")
                 val postcode = obj.getString("postcode")
+                val lat = obj.getDouble("latitude")
+                val long = obj.getDouble("longitude")
                 val rating = obj.getString("rating")
                 val open = obj.getString("open")
                 val close = obj.getString("close")
                 tvOpenHours.text = getString(R.string.open_hours,getString(R.string.separate,open,close))
                 tvAddress.text = getString(R.string.comma,address,postcode)
-                val addressItem = AddressItem(addressId,"",postcode,"",address)
+                addressItem = AddressItem(addressId,"",postcode,"",address,lat,long)
                 val accountItem = AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating)
                 styleItem.accountItem = accountItem },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) { @Throws(AuthFailureError::class)
@@ -194,7 +200,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
         url = getString(R.string.url,"view_style.php")
         stringRequest = object : StringRequest(
-            Method.POST, url, Response.Listener { },
+            Method.POST, url, Response.Listener { res -> Log.println(Log.ASSERT,"VIEW",res)},
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
@@ -203,6 +209,9 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 params["style_fk"] = styleItem.id
                 return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
+        tvMap.setOnClickListener { view -> val bundle = bundleOf(Pair("addressItem",addressItem))
+            view.findNavController().navigate(R.id.action_saloonFragment_to_mapFragment,bundle)
+        }
         return rootView
     }
 
@@ -256,8 +265,8 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         numPickerHour.setOnValueChangedListener { numberPicker, _, _ ->  hour = numberPicker.value}
         numPickerMins.setOnValueChangedListener { numberPicker, _, _ ->
             val x = minOptions[numberPicker.value] ;minute = x.toInt() }
-        close.setOnClickListener { dialog.dismiss(); val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
-            datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show() }
+        close.setOnClickListener {val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show();dialog.dismiss() }
         save.setOnClickListener {
             var booked = false
             val currentMin = (hour * 60) + minute
@@ -268,13 +277,17 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             if (!booked){
                 val chosenTime = getString(R.string.clock,hour,minute)
                 val startDateTime = getString(R.string.make_datetime,chosenDate,chosenTime)
-                val url = getString(R.string.url,"book.php")
+                val url = getString(R.string.url,"check_booked_time.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
                         Log.println(Log.ASSERT,"BOOK",response)
                         if (response == "0"){ dialog.dismiss()
-                            Toast.makeText(context,"Style Booked",Toast.LENGTH_SHORT).show()
-                            (activity as DefaultActivity).addNotification()
+                            val paymentBottomSheet = PaymentBottomSheet()
+                            val bookingItem = BookingItem("",startDateTime,
+                                getString(R.string.clock,max.toInt() / 60,max.toInt() % 60),"",styleItem,accountItem)
+                            val bundle = bundleOf(Pair("bookingItem",bookingItem))
+                            paymentBottomSheet.arguments = bundle
+                            paymentBottomSheet.show(childFragmentManager,"paymentBottomSheet")
                         }
                         else{Toast.makeText(context,"Invalid Time",Toast.LENGTH_SHORT).show()} },
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) {

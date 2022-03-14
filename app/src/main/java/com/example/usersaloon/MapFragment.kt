@@ -44,6 +44,7 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
     private lateinit var rvSaloons: RecyclerView
     private lateinit var btnHome: FloatingActionButton
     private lateinit var svLocation: SearchView
+    var addressItem: AddressItem? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +52,7 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_map, container, false)
         (activity as DefaultActivity).supportActionBar?.title = "Map"
+        addressItem = arguments?.getParcelable("addressItem")
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity as DefaultActivity)
         saloonList = mutableListOf()
         rvSaloons = rootView.findViewById(R.id.rvSaloons)
@@ -138,7 +140,8 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
                 params["lat"] = currentLong.toString()
                 return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,14f))
+        if (addressItem == null){ mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,14f))}
+        else {mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(addressItem!!.latitude, addressItem!!.longitude),14f))}
         mMap.setOnMarkerClickListener { mark ->
             Log.println(Log.ASSERT,"MA",mark.toString())
             if (mark.tag != null){

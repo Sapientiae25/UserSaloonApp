@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="bottom"
+    android:elevation="20dp">
+
+    <TextView
+        android:id="@+id/tvPaymentMethod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/black"
+        android:text="@string/select_payment_method"
+        android:textSize="25sp" />
+
+    <RadioGroup
+        android:id="@+id/rbCards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnAddCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/round_button"
+        android:text="@string/add_a_payment_method"
+        android:textColor="@color/white" />
+
+
+</LinearLayout>

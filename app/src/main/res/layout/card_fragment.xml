@@ -2,18 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
     android:orientation="vertical">
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="50dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etNumber"
             android:layout_width="match_parent"
-            android:focusable="false"
             android:inputType="number"
             android:layout_height="wrap_content"
             android:hint="Card Number"
@@ -34,7 +33,6 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etExpiry"
                 android:layout_width="match_parent"
-                android:focusable="false"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
                 android:maxLength="5"
@@ -50,7 +48,6 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etCVV"
                 android:layout_width="match_parent"
-                android:focusable="false"
                 android:inputType="number"
                 android:layout_height="wrap_content"
                 android:hint="@string/cvv"
@@ -62,8 +59,7 @@
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_style"
-        android:backgroundTint="@color/light_grey"
+        android:background="@drawable/round_button"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="20dp"

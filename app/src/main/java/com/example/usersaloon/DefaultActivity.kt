@@ -5,9 +5,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -30,13 +30,16 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation {
     private lateinit var cvCount: CardView
     private lateinit var tvCount: TextView
     lateinit var chosenLocation: AddressItem
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var mapFragment: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_default)
         userItem = intent.getParcelableExtra("userItem")!!
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        mapFragment = bottomNavigationView.menu.findItem(R.id.mapFragment)
         setSupportActionBar(toolbar)
         notification = findViewById(R.id.notification)
         tvLocation = findViewById(R.id.tvLocation)
@@ -46,16 +49,16 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation {
         val locationBottomSheet = LocationBottomSheet()
         locationBottomSheet.show(supportFragmentManager,"locationBottomSheet")}
         searchFragment = SearchFragment()
-        bottomNavigationView.setOnItemSelectedListener { when (it.itemId){R.id.userFragment -> it.onNavDestinationSelected(navController)
-            R.id.mapFragment -> it.onNavDestinationSelected(navController)
-            R.id.settingFragment -> it.onNavDestinationSelected(navController)
-            R.id.exploreFragment -> it.onNavDestinationSelected(navController)
-        }
+        bottomNavigationView.setOnItemSelectedListener { when (it.itemId){
+            R.id.userFragment -> findNavController(R.id.activityFragment).navigate(R.id.action_global_userFragment)
+            R.id.settingFragment -> findNavController(R.id.activityFragment).navigate(R.id.action_global_settingFragment)
+            R.id.exploreFragment -> findNavController(R.id.activityFragment).navigate(R.id.action_global_exploreFragment) }
             true }
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.activityFragment) as NavHostFragment
         navController = navHostFragment.navController
         setupActionBarWithNavController(navController)
         notification.setOnClickListener { findNavController(R.id.activityFragment).navigate(R.id.action_global_bookingFragment) }
+        mapFragment.setOnMenuItemClickListener{goToMap(); true}
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -75,6 +78,9 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation {
     fun addNotification(){ if (notificationCount < 100){
             notificationCount += 1; cvCount.visibility = View.VISIBLE; tvCount.text = notificationCount.toString() } }
     fun clearNotification(){ cvCount.visibility = View.GONE; notificationCount = 0 }
+    fun goToMap(bundle: Bundle? = null){mapFragment.isChecked = true
+        findNavController(R.id.activityFragment).navigate(R.id.action_global_mapFragment,bundle)
+    }
 
     override fun onSupportNavigateUp(): Boolean { return navController.navigateUp() || super.onSupportNavigateUp() }
     override fun update(location: LatLng, address: String) { chosenLocation.latitude = location.latitude
