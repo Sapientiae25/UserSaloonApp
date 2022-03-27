@@ -27,7 +27,7 @@ class FavouriteStylesFragment : Fragment(){
         val llNoFavourites = rootView.findViewById<LinearLayout>(R.id.llNoFavourites)
         rvStyles.layoutManager = LinearLayoutManager(context)
         rvStyles.adapter = FavouriteStylesAdapter(styleList)
-        val url = getString(R.string.url,"get_style_likes.php")
+        val url = getString(R.string.url,"get_liked_styles.php")
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 val arr = JSONArray(response)
@@ -44,7 +44,8 @@ class FavouriteStylesFragment : Fragment(){
                     val accountName = obj.getString("account_name")
                     val accountItem = AccountItem(accountId,accountName)
                     val timeItem = TimeItem(time,maxTime)
-                    styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem)) }
+                    val imageId = obj.getString("image_id")
+                    styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,imageId=imageId)) }
                 rvStyles.adapter?.notifyItemRangeInserted(0,styleList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,7 +50,9 @@ class OldBookingFragment : Fragment(){
                     val accountFk = obj.getString("account_fk")
                     val accountItem = AccountItem(accountFk,accountName,addressItem=AddressItem(address=address))
                     val timeItem = TimeItem(time,maxTime)
-                    bookedList.add(StyleItem(name,price,timeItem,info,id=styleId,date=start,accountItem=accountItem,rating=rating)) }
+                    val imageId = obj.getString("image_id")
+                    bookedList.add(StyleItem(name,price,timeItem,info,id=styleId,date=start,accountItem=accountItem,rating=rating,
+                        imageId=imageId)) }
                 rvBooking.adapter?.notifyItemRangeInserted(0,bookedList.size)},
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)

@@ -30,10 +30,10 @@ class ExploreFragment : Fragment(){
         val styleList = mutableListOf<StyleItem>()
         val displayStyleList = mutableListOf<StyleItem>()
         rvExplore.layoutManager = GridLayoutManager(context,3)
-        rvExplore.adapter = StyleImageAdapter(displayStyleList)
+        rvExplore.adapter = ExploreImageAdapter(displayStyleList)
         rvExplore.addItemDecoration(DividerItemDecoration(context,GridLayoutManager.HORIZONTAL))
         rvExplore.addItemDecoration(DividerItemDecoration(context,GridLayoutManager.VERTICAL))
-        val url = getString(R.string.url,"popular_styles.php")
+        val url = getString(R.string.url,"get_explore_styles.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 val arr = JSONArray(response)
@@ -47,12 +47,10 @@ class ExploreFragment : Fragment(){
                     val info = obj.getString("info")
                     val accountId = obj.getString("account_id")
                     val accountName = obj.getString("account_name")
+                    val imageId = obj.getString("image_id")
                     val accountItem = AccountItem(accountId,accountName)
                     val timeItem = TimeItem(time,maxTime)
-                    styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem))
-                    styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem))
-                    styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem))
-                    // TODO BITCH
+                    styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,imageId=imageId))
                     displayStyleList.addAll(styleList)}
                 rvExplore.adapter?.notifyItemRangeInserted(0,displayStyleList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {

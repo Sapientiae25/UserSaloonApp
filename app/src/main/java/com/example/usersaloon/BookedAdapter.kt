@@ -3,10 +3,12 @@ package com.example.usersaloon
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 class BookedAdapter (private val styleItemList: MutableList<StyleItem>,val fragment: OldBookingFragment)
     : RecyclerView.Adapter<BookedAdapter.BookedViewHolder>() {
@@ -17,6 +19,7 @@ class BookedAdapter (private val styleItemList: MutableList<StyleItem>,val fragm
         private val time: TextView = itemView.findViewById(R.id.time)
         private val rating: RatingBar = itemView.findViewById(R.id.rating)
         private val tvAddress: TextView = itemView.findViewById(R.id.tvAddress)
+        private val image: ImageView = itemView.findViewById(R.id.image)
 
         fun bind(index: Int){
             val currentItem = styleItemList[index]
@@ -33,7 +36,11 @@ class BookedAdapter (private val styleItemList: MutableList<StyleItem>,val fragm
                 val bundle = bundleOf(Pair("styleItem",currentItem))
                 bookedBottomSheet.arguments = bundle
                 bookedBottomSheet.show(fragment.childFragmentManager,"bookedBottomSheet")
-            } } }
+            }
+            if (currentItem.imageId.isNotEmpty()){
+            Picasso.get().load(itemView.context.getString(
+                    R.string.url,"style_images/${currentItem.imageId}.jpeg")).fit().centerCrop().into(image)}
+        } }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookedViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.style_layout,
             parent, false)

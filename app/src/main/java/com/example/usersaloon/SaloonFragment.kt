@@ -1,6 +1,8 @@
 package com.example.usersaloon
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -10,20 +12,25 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
-import com.denzcoskun.imageslider.ImageSlider
-import com.denzcoskun.imageslider.constants.ScaleTypes
-import com.denzcoskun.imageslider.models.SlideModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
+import kotlin.math.abs
 
 class SaloonFragment : Fragment() {
 
@@ -33,6 +40,9 @@ class SaloonFragment : Fragment() {
         lateinit var tvNoStyles: TextView
         lateinit var accountItem: AccountItem
         private var back = 0
+        private lateinit var vpImages: ViewPager2
+        private val imageUrls = mutableListOf<String>()
+
         override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -57,6 +67,7 @@ class SaloonFragment : Fragment() {
             rvStyleCategories.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
             rvStyleItems.adapter = SaloonStyleAdapter(displayStyleList)
             rvStyleItems.layoutManager = LinearLayoutManager(context)
+            rvStyleItems.addItemDecoration(DividerItemDecoration(context, RecyclerView.HORIZONTAL))
             rvToolbarCategories.adapter = ToolbarCategoryAdapter(categoryList)
             rvToolbarCategories.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
             val btnFilter = rootView.findViewById<FloatingActionButton>(R.id.btnFilter)
@@ -67,12 +78,6 @@ class SaloonFragment : Fragment() {
             btnFilter.setOnClickListener { view ->
                 val bundle = bundleOf(Pair("accountItem",accountItem))
                 view.findNavController().navigate(R.id.action_saloonFragment_to_filterFragment,bundle) }
-            val ivStoreFront = rootView.findViewById<ImageSlider>(R.id.ivStoreFront)
-            val imageList = ArrayList<SlideModel>()
-            imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
-            imageList.add(SlideModel(R.drawable.trim,ScaleTypes.FIT))
-            imageList.add(SlideModel(R.drawable.trim,ScaleTypes.FIT))
-            ivStoreFront.setImageList(imageList)
             ivLike.setOnClickListener {
                 if (accountItem.like){ accountItem.like = false
                     ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_border_24))
@@ -113,7 +118,8 @@ class SaloonFragment : Fragment() {
                         val obj = arr.getJSONObject(x)
                         val category = obj.getString("category")
                         val categoryId = obj.getString("id")
-                        categoryList.add(CategoryItem(categoryId,category,accountItem)) }
+                        val imageId = obj.getString("image_id")
+                        categoryList.add(CategoryItem(categoryId,category,accountItem,imageId)) }
                     rvStyleCategories.adapter?.notifyItemRangeInserted(1,categoryList.size)
                     rvToolbarCategories.adapter?.notifyItemRangeInserted(1,categoryList.size)},
                 Response.ErrorListener { volleyError -> println(volleyError.message) }) {
@@ -140,7 +146,9 @@ class SaloonFragment : Fragment() {
                             val info = obj.getString("info")
                             val rating = obj.getString("rating").toFloatOrNull()
                             val timeItem = TimeItem(time,maxTime)
-                            styleItemList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,rating=rating)) }
+                            val imageId = obj.getString("image_id")
+                            styleItemList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,rating=rating,
+                                imageId=imageId)) }
                         displayStyleList.addAll(styleItemList)
                         rvStyleItems.adapter?.notifyItemRangeInserted(0,displayStyleList.size)},
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) {
@@ -175,7 +183,8 @@ class SaloonFragment : Fragment() {
                             val maxTime = obj.getString("max_time")
                             val info = obj.getString("info")
                             val timeItem = TimeItem(time,maxTime)
-                            styleItemList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem)) }
+                            val imageId = obj.getString("image_id")
+                            styleItemList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,imageId=imageId)) }
                         displayStyleList.addAll(styleItemList)
                         rvStyleItems.adapter?.notifyItemRangeInserted(0,displayStyleList.size) },
                     { volleyError -> println(volleyError.message) })
@@ -200,9 +209,55 @@ class SaloonFragment : Fragment() {
                         rvStyleItems.adapter?.notifyItemRangeInserted(0,displayStyleList.size)
                     }
                     return true } })
-            tvMap.setOnClickListener { view -> val bundle = bundleOf(Pair("addressItem",addressItem))
-                (activity as DefaultActivity).goToMap(bundle)
-            }
+            tvMap.setOnClickListener {
+                val bundle = bundleOf(Pair("addressItem",addressItem))
+                (activity as DefaultActivity).goToMap(bundle) }
+
+            vpImages = rootView.findViewById(R.id.vpImages)
+            val sliderHandler = Handler(Looper.getMainLooper())
+            val tabLayout = rootView.findViewById<TabLayout>(R.id.tabLayout)
+            val adapter = SaloonImageAdapter(imageUrls)
+            vpImages.adapter = adapter
+            vpImages.clipChildren = false
+            vpImages.clipToPadding = false
+            vpImages.offscreenPageLimit = 3
+            vpImages.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+            val compositePageTransformer = CompositePageTransformer()
+            compositePageTransformer.addTransformer(MarginPageTransformer(40))
+            compositePageTransformer.addTransformer(MarginPageTransformer(40))
+            compositePageTransformer.addTransformer { page, position -> val r = 1 - abs(position)
+                page.scaleY = 0.85f + r * 0.15f }
+
+            vpImages.setPageTransformer(compositePageTransformer)
+            val sliderRunnable = Runnable {vpImages.currentItem = if(vpImages.currentItem+1 == imageUrls.size) 0
+            else vpImages.currentItem+1}
+
+            TabLayoutMediator(tabLayout,vpImages) { _, _ -> }.attach()
+
+            vpImages.registerOnPageChangeCallback( object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    sliderHandler.removeCallbacks(sliderRunnable)
+                    sliderHandler.postDelayed(sliderRunnable, 4000) } })
+
+            loadImages()
             return rootView
         }
+    private fun loadImages(){
+        val url = getString(R.string.url,"get_saloon_images.php")
+        val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
+            val arr = JSONArray(response)
+            if (arr.length() == 0) vpImages.visibility = View.GONE
+            for (i in 0 until arr.length()){
+                val imageId = arr.getString(i)
+                imageUrls.add(imageId)}
+            vpImages.adapter?.notifyItemRangeInserted(0,imageUrls.size)},
+            Response.ErrorListener { volleyError -> println(volleyError.message) }) { @Throws(AuthFailureError::class)
+        override fun getParams(): Map<String, String> {
+            val params = HashMap<String, String>()
+            params["account_id"] = accountItem.id
+            return params }}
+        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+    }
 }

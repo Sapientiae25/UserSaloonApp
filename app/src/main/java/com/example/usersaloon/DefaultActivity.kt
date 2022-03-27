@@ -22,7 +22,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class DefaultActivity : AppCompatActivity(),UpdateLocation {
 
     lateinit var userItem: UserItem
-    private lateinit var searchFragment: SearchFragment
     private lateinit var navController: NavController
     private lateinit var tvLocation: TextView
     private var notificationCount = 0
@@ -30,14 +29,14 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation {
     private lateinit var cvCount: CardView
     private lateinit var tvCount: TextView
     lateinit var chosenLocation: AddressItem
-    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var mapFragment: MenuItem
+    lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_default)
         userItem = intent.getParcelableExtra("userItem")!!
-        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         mapFragment = bottomNavigationView.menu.findItem(R.id.mapFragment)
         setSupportActionBar(toolbar)
@@ -48,7 +47,6 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation {
         tvLocation.setOnClickListener{
         val locationBottomSheet = LocationBottomSheet()
         locationBottomSheet.show(supportFragmentManager,"locationBottomSheet")}
-        searchFragment = SearchFragment()
         bottomNavigationView.setOnItemSelectedListener { when (it.itemId){
             R.id.userFragment -> findNavController(R.id.activityFragment).navigate(R.id.action_global_userFragment)
             R.id.settingFragment -> findNavController(R.id.activityFragment).navigate(R.id.action_global_settingFragment)
@@ -65,13 +63,9 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         val item = menu.findItem(R.id.searchFragment)
         if (item != null){
-            val searchView = item.actionView as SearchView
+            searchView = item.actionView as SearchView
             searchView.queryHint = "Search Styles"
-            searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-                override fun onQueryTextSubmit(query: String?): Boolean { return true }
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText.isNullOrEmpty()){ searchFragment.emptyDb() }else{searchFragment.searchDb(newText) }
-                    return true } }) }
+        }
         return true }
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.searchFragment -> { item.onNavDestinationSelected(navController) } else -> { super.onOptionsItemSelected(item) } }

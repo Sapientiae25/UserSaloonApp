@@ -6,9 +6,12 @@
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/border.xml" value="0.318" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/bottom_boder.xml" value="0.318" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/curved_sheet.xml" value="0.309" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/default_dot.xml" value="0.259" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.246" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.246" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/round_button.xml" value="0.2875" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/selected_dot.xml" value="0.259" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/tab_selector.xml" value="0.259" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/drawable/top_border.xml" value="0.318" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/activity_default.xml" value="0.26268115942028986" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/activity_main.xml" value="0.303125" />
@@ -23,6 +26,7 @@
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/choose_card.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/curved_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/delete_layout.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/explore_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/favourite_saloon_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_address.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_booked_bottom_sheet.xml" value="0.32083333333333336" />

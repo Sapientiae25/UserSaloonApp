@@ -3,11 +3,13 @@ package com.example.usersaloon
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 class FavouriteSaloonAdapter (private val saloonList: MutableList<AccountItem>)
     : RecyclerView.Adapter<FavouriteSaloonAdapter.FavouriteSaloonViewHolder>() {
@@ -17,6 +19,7 @@ class FavouriteSaloonAdapter (private val saloonList: MutableList<AccountItem>)
         private val tvAddress: TextView = itemView.findViewById(R.id.tvAddress)
         private val tvOpenHours: TextView = itemView.findViewById(R.id.tvOpenHours)
         private val rating: RatingBar = itemView.findViewById(R.id.rating)
+        private val image: ImageView = itemView.findViewById(R.id.image)
 
         fun bind(index: Int){
             val currentItem = saloonList[index]
@@ -28,6 +31,9 @@ class FavouriteSaloonAdapter (private val saloonList: MutableList<AccountItem>)
             itemView.setOnClickListener {view ->
                 val bundle = bundleOf(Pair("accountItem",currentItem))
                 view.findNavController().navigate(R.id.action_favouriteSaloonsFragment_to_saloonFragment,bundle)  }
+            if (currentItem.imageId.isNotEmpty()){
+                Picasso.get().load(itemView.context.getString(
+                    R.string.url,"saloon_images/${currentItem.imageId}.jpeg")).fit().centerCrop().into(image)}
         }}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteSaloonViewHolder {

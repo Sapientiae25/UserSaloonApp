@@ -125,8 +125,9 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
                     val latitude = obj.getDouble("latitude")
                     val longitude = obj.getDouble("longitude")
                     val distance = obj.getString("distance")
+                    val imageId = obj.getString("image_id")
                     val addressItem = AddressItem(addressId,"",postcode,"",address,latitude,longitude,distance)
-                    saloonList.add(AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating))
+                    saloonList.add(AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating,imageId=imageId))
                     val marker = mMap.addMarker(MarkerOptions().position(LatLng(latitude,longitude)).title(name))
                     marker?.tag = x
                 }

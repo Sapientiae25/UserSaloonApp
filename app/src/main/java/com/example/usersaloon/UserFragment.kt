@@ -28,7 +28,7 @@ class UserFragment : Fragment(), UpdateLocation {
     private val length = listOf("Long","Medium","Short")
     private var currentLat: Double? = null
     private var currentLong: Double? = null
-    private val filters = listOf(gender,length)
+    private val filters = mutableListOf<Pair<String,String>>()
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var updateLocation: UpdateLocation
 
@@ -55,10 +55,7 @@ class UserFragment : Fragment(), UpdateLocation {
         rvCategories.layoutManager = LinearLayoutManager(context,RecyclerView.HORIZONTAL,false)
         rvRecent.adapter = PopularAdapter(recentList)
         rvRecent.layoutManager = LinearLayoutManager(context,RecyclerView.HORIZONTAL,false)
-        var filterSize=0
         updateLocation = activity as DefaultActivity
-        for (i in filters){filterSize += i.size}
-        rvCategories.adapter?.notifyItemRangeInserted(0,filterSize)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity as DefaultActivity)
         var url = getString(R.string.url,"get_chosen_locations.php")
         var stringRequest: StringRequest = object : StringRequest(
@@ -98,7 +95,8 @@ class UserFragment : Fragment(), UpdateLocation {
                     val accountName = obj.getString("account_name")
                     val accountItem = AccountItem(accountId,accountName)
                     val timeItem = TimeItem(time,maxTime)
-                    popularList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem)) }
+                    val imageId = obj.getString("image_id")
+                    popularList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,imageId=imageId)) }
                 rvPopular.adapter?.notifyItemRangeInserted(0,popularList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
@@ -123,11 +121,13 @@ class UserFragment : Fragment(), UpdateLocation {
                     val longitude = obj.getDouble("longitude")
                     val open = obj.getString("open")
                     val close = obj.getString("close")
+                    val imageId = obj.getString("image_id")
                     var distance: String? = null
                     if (currentLat != null){distance = String.format("%.2f",getDistance(currentLat!!,
                         currentLong!!,latitude,longitude))}
                     val addressItem = AddressItem(addressId,"",postcode,"",address,latitude,longitude,distance)
-                    saloonList.add(AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating)) }
+                    saloonList.add(AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating,
+                        imageId=imageId)) }
                 rvSaloons.adapter?.notifyItemRangeInserted(0,saloonList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
@@ -151,7 +151,8 @@ class UserFragment : Fragment(), UpdateLocation {
                     val accountName = obj.getString("account_name")
                     val accountItem = AccountItem(accountId,accountName)
                     val timeItem = TimeItem(time,maxTime)
-                    recentList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem)) }
+                    val imageId = obj.getString("image_id")
+                    recentList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,imageId=imageId)) }
                 rvRecent.adapter?.notifyItemRangeInserted(0,recentList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
@@ -160,7 +161,34 @@ class UserFragment : Fragment(), UpdateLocation {
                 params["user_fk"] = userItem.id
                 return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-
+        for (i in gender.indices){
+            url = getString(R.string.url,"get_gender_images.php")
+            stringRequest = object : StringRequest(
+                Method.POST, url, Response.Listener { response ->
+                    Log.println(Log.ASSERT,"GEN",response)
+                    filters.add(Pair(gender[i],response))
+                    rvCategories.adapter?.notifyItemInserted(filters.size)},
+                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String> {
+                    val params = java.util.HashMap<String, String>()
+                    params["gender"] = i.toString()
+                    return params }}
+            VolleySingleton.instance?.addToRequestQueue(stringRequest)}
+        for (i in length.indices){
+            url = getString(R.string.url,"get_length_images.php")
+            stringRequest = object : StringRequest(
+                Method.POST, url, Response.Listener { response ->
+                    Log.println(Log.ASSERT,"LEN",response)
+                    filters.add(Pair(length[i],response))
+                    rvCategories.adapter?.notifyItemInserted(filters.size)},
+                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String> {
+                    val params = java.util.HashMap<String, String>()
+                    params["length"] = i.toString()
+                    return params }}
+            VolleySingleton.instance?.addToRequestQueue(stringRequest)}
         return rootView
     }
     private fun fetchLocation(){

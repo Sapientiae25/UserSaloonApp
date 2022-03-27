@@ -8,12 +8,13 @@ data class TimeItem(val time: String="", val maxTime: String? = null): Parcelabl
 @Parcelize
 data class StyleItem(val name: String="",val price: Float=0.0.toFloat(), val time: TimeItem=TimeItem(),val info: String="",
                      val id: String = "",val bookingId:String="",val filterItem: StyleFilterItem=StyleFilterItem(),
-                     var accountItem: AccountItem? = null,val date: String="",val rating:Float?=null,var like: Boolean=false): Parcelable
+                     var accountItem: AccountItem? = null,val date: String="",val rating:Float?=null,var like: Boolean=false,
+                     val imageId: String=""): Parcelable
 @Parcelize
 data class AccountItem(val id: String="",var name: String="", var password: String? = null,var number: String="",
                        var open: String? = null,var close: String? = null,var addressItem: AddressItem? = null,
                        val filterItem: FilterItem=FilterItem(),val rating:String="",var clicked: Boolean = false,
-                       var like: Boolean = false): Parcelable
+                       var like: Boolean = false,val imageId: String=""): Parcelable
 @Parcelize
 data class UserItem(val id: String,var email: String="",val password: String="",var number: String="", val gender: Int = 2): Parcelable
 @Parcelize
@@ -22,7 +23,7 @@ data class AddressItem(var id:String="",var city: String="",var postcode: String
                        val town: String=""): Parcelable
 data class ReviewItem(val review: String,val rating: Int ,val date: String)
 @Parcelize
-data class CategoryItem(val id: String,val category: String,val accountItem: AccountItem? = null): Parcelable
+data class CategoryItem(val id: String,val category: String,val accountItem: AccountItem? = null,val imageId: String=""): Parcelable
 @Parcelize
 data class BookingItem(val bookingId: String,val time: String="", val date: String="",val duration: String="",
                        val styleItem: StyleItem=StyleItem(),val accountItem: AccountItem=AccountItem()): Parcelable

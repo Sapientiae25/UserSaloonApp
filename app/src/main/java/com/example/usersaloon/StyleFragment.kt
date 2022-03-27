@@ -3,6 +3,8 @@ package com.example.usersaloon
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,15 +18,18 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.denzcoskun.imageslider.ImageSlider
-import com.denzcoskun.imageslider.constants.ScaleTypes
-import com.denzcoskun.imageslider.models.SlideModel
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
+import kotlin.math.abs
 
 class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
@@ -39,6 +44,8 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private  var bookedTimes = mutableListOf<Pair<Int,Int>>()
     private lateinit var timeValue: String
     private lateinit var addressItem: AddressItem
+    private lateinit var vpImages: ViewPager2
+    private val imageUrls = mutableListOf("")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,14 +71,8 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val rvReviews = rootView.findViewById<RecyclerView>(R.id.rvReviews)
         val reviewList = mutableListOf<ReviewItem>()
         val cal: Calendar = Calendar.getInstance()
-        val ivStyleImage = rootView.findViewById<ImageSlider>(R.id.ivStyleImage)
-        val imageList = ArrayList<SlideModel>()
         val ivLike = rootView.findViewById<ImageView>(R.id.ivLike)
         val llMoreLikeThis = rootView.findViewById<LinearLayout>(R.id.llMoreLikeThis)
-        imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
-        imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
-        imageList.add(SlideModel(R.drawable.trim, ScaleTypes.FIT))
-        ivStyleImage.setImageList(imageList)
         day = cal.get(Calendar.DAY_OF_MONTH)
         month = cal.get(Calendar.MONTH)
         year = cal.get(Calendar.YEAR)
@@ -135,7 +136,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 tvOpenHours.text = getString(R.string.open_hours,getString(R.string.separate,open,close))
                 tvAddress.text = getString(R.string.comma,address,postcode)
                 addressItem = AddressItem(addressId,"",postcode,"",address,lat,long)
-                val accountItem = AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating)
+                accountItem = AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating)
                 styleItem.accountItem = accountItem },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) { @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> { val params = HashMap<String, String>()
@@ -172,7 +173,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         btnBook.setOnClickListener{ val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
             datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show()}
         rvMoreLike.adapter = SimilarAdapter(similarStyles)
-        url = getString(R.string.url,"popular_styles.php")
+        url = getString(R.string.url,"similar_styles.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"POP",response)
@@ -195,7 +196,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> { val params = HashMap<String, String>()
-                params["gender"] = userItem.gender.toString()
+                params["style_id"] = styleItem.id
                 return params  }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
         url = getString(R.string.url,"view_style.php")
@@ -210,9 +211,54 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
         tvMap.setOnClickListener { view -> val bundle = bundleOf(Pair("addressItem",addressItem))
-            view.findNavController().navigate(R.id.action_saloonFragment_to_mapFragment,bundle)
-        }
+            view.findNavController().navigate(R.id.action_saloonFragment_to_mapFragment,bundle) }
+
+        vpImages = rootView.findViewById(R.id.vpImages)
+        val sliderHandler = Handler(Looper.getMainLooper())
+        val tabLayout = rootView.findViewById<TabLayout>(R.id.tabLayout)
+        val adapter = StyleImageAdapter(imageUrls)
+        vpImages.adapter = adapter
+        vpImages.clipChildren = false
+        vpImages.clipToPadding = false
+        vpImages.offscreenPageLimit = 3
+        vpImages.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(MarginPageTransformer(40))
+        compositePageTransformer.addTransformer(MarginPageTransformer(40))
+        compositePageTransformer.addTransformer { page, position -> val r = 1 - abs(position)
+            page.scaleY = 0.85f + r * 0.15f }
+
+        vpImages.setPageTransformer(compositePageTransformer)
+        val sliderRunnable = Runnable {vpImages.currentItem = if(vpImages.currentItem+1 == imageUrls.size) 0
+        else vpImages.currentItem+1}
+
+        TabLayoutMediator(tabLayout,vpImages) { _, _ -> }.attach()
+
+        vpImages.registerOnPageChangeCallback( object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                sliderHandler.removeCallbacks(sliderRunnable)
+                sliderHandler.postDelayed(sliderRunnable, 2000) } })
+
+        loadImages()
         return rootView
+    }
+    private fun loadImages(){
+        val url = getString(R.string.url,"get_style_images.php")
+        val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
+            val arr = JSONArray(response)
+            if (arr.length() == 0) vpImages.visibility = View.GONE
+            for (i in 0 until arr.length()){
+                val imageId = arr.getString(i)
+                imageUrls.add(imageId)}
+            vpImages.adapter?.notifyItemRangeInserted(1,imageUrls.size)},
+            Response.ErrorListener { volleyError -> println(volleyError.message) }) { @Throws(AuthFailureError::class)
+        override fun getParams(): Map<String, String> {
+            val params = HashMap<String, String>()
+            params["style_id"] = styleItem.id
+            return params }}
+        VolleySingleton.instance?.addToRequestQueue(stringRequest)
     }
 
     override fun onDateSet(view: DatePicker?, newYear: Int, newMonth: Int, newDay: Int) {

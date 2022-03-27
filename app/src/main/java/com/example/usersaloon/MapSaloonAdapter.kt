@@ -1,9 +1,9 @@
 package com.example.usersaloon
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
@@ -11,6 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
+import com.squareup.picasso.Picasso
 
 class MapSaloonAdapter (private val saloonList: MutableList<AccountItem>,val parentFragment: MapFragment)
     : RecyclerView.Adapter<MapSaloonAdapter.MapSaloonViewHolder>() {
@@ -22,6 +23,7 @@ class MapSaloonAdapter (private val saloonList: MutableList<AccountItem>,val par
         private val rating: RatingBar = itemView.findViewById(R.id.rating)
         private val tvDistance: TextView = itemView.findViewById(R.id.tvDistance)
         private val btnGoToSaloon: AppCompatButton = itemView.findViewById(R.id.btnGoToSaloon)
+        private val image: ImageView = itemView.findViewById(R.id.image)
 
         fun bind(index: Int){
             val currentItem = saloonList[index]
@@ -42,7 +44,9 @@ class MapSaloonAdapter (private val saloonList: MutableList<AccountItem>,val par
             btnGoToSaloon.setOnClickListener {view ->
                 val bundle = bundleOf(Pair("accountItem",currentItem))
                 view.findNavController().navigate(R.id.action_mapFragment_to_saloonFragment,bundle)  }
-
+            if (currentItem.imageId.isNotEmpty()){
+                Picasso.get().load(itemView.context.getString(
+                    R.string.url,"style_images/${currentItem.imageId}.jpeg")).fit().centerCrop().into(image)}
          }}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MapSaloonViewHolder {

@@ -13,4 +13,5 @@
     <color name="yellow">#FFE500</color>
     <color name="loginColor">#1566e0</color>
     <color name="registerColor">#1566e0</color>
+    <color name="dark_grey">#757272</color>
 </resources>

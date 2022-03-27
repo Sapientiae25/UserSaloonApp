@@ -49,8 +49,10 @@ class FavouriteSaloonsFragment : Fragment(){
                     val longitude = obj.getDouble("longitude")
                     val open = obj.getString("open")
                     val close = obj.getString("close")
+                    val imageId = obj.getString("image_id")
                     val addressItem = AddressItem(addressId,postcode,address,latitude=latitude,longitude=longitude)
-                    saloonList.add(AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating)) }
+                    saloonList.add(AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating,
+                        imageId=imageId)) }
                 rvSaloons.adapter?.notifyItemRangeInserted(0,saloonList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)

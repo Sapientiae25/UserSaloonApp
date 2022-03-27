@@ -8,23 +8,22 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 
-class CategoryAdapter (private val groupList: List<List<String>>)
+class CategoryAdapter (private val groupList: List<Pair<String,String>>)
     : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        var currentId = 0
         private var currentGroup = 0
         var filter =  FilterItem()
+        private val name: TextView = itemView.findViewById(R.id.name)
+        private val filters = listOf("Male","Female","Long","Medium","Short")
 
         fun bind(index: Int){
-            val name: TextView = itemView.findViewById(R.id.name)
-            var i = 0
-            loop@ for (x in groupList.indices){ for (y in groupList[x].indices) { if (index == i) { name.text = groupList[x][y]
-                currentGroup=x;currentId=y;break@loop };i+=1 } }
+            name.text = filters[index]
+            currentGroup = if (index > 2) 1 else 0
             itemView.setOnClickListener { view ->
                 when (currentGroup) {
-                    0 -> {filter.gender = currentId}
-                    1 -> {filter.length.add(currentId)} }
+                    0 -> {filter.gender = index - (currentGroup * 2)}
+                    1 -> {filter.length.add(index - (currentGroup * 2))} }
                 val bundle = bundleOf(Pair("filterItem",filter))
                 view.findNavController().navigate(R.id.action_userFragment_to_filterStyleFragment,bundle)}
         }
@@ -36,9 +35,5 @@ class CategoryAdapter (private val groupList: List<List<String>>)
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) { holder.bind(position) }
-    override fun getItemCount(): Int {
-        var x=0
-        for (i in groupList){x += i.size}
-        return x
-    }
+    override fun getItemCount() = groupList.size
 }
