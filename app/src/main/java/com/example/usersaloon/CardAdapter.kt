@@ -35,7 +35,7 @@ class CardAdapter (private val cardList: MutableList<CardItem>)
         }}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.address_layout,
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.card_layout,
             parent, false)
         return CardViewHolder(itemView)
     }

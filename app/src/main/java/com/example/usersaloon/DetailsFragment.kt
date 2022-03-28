@@ -35,6 +35,7 @@ class DetailsFragment : Fragment(){
         val addressList = mutableListOf<AddressItem>()
         rvAddress.layoutManager = LinearLayoutManager(context)
         rvAddress.adapter = AddressAdapter(addressList)
+        etEmail.setText(userItem.email)
         etNumber.setText(userItem.number)
         var url = getString(R.string.url,"get_locations.php")
         var stringRequest: StringRequest = object : StringRequest(
@@ -47,7 +48,7 @@ class DetailsFragment : Fragment(){
                     val town = obj.getString("town")
                     val country = obj.getString("country")
                     val postcode = obj.getString("postcode")
-                    val id = obj.getString("id")
+                    val id = obj.getString("location_id")
                     addressList.add(AddressItem(id,city, postcode, country, address,town=town)) }
                 rvAddress.adapter?.notifyItemRangeInserted(0,arr.length()) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {

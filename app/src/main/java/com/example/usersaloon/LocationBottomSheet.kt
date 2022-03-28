@@ -50,10 +50,10 @@ class LocationBottomSheet : BottomSheetDialogFragment(){
                     val obj = arr.getJSONObject(i)
                     val address = obj.getString("address")
                     val postcode = obj.getString("postcode")
-                    val latitude = obj.getDouble("postcode")
+                    val latitude = obj.getDouble("latitude")
                     val longitude = obj.getDouble("longitude")
                     val chosen = obj.getInt("chosen")
-                    val id = obj.getString("id")
+                    val id = obj.getString("location_id")
                     addressList.add(AddressItem(id,"", postcode, "", address,latitude,longitude))
                     val radioButton = RadioButton(context)
                     if (chosen == 1){chosenLocation = i; radioButton.isChecked = true}

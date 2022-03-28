@@ -1,22 +1,19 @@
 package com.example.usersaloon
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
-import java.util.*
 
 class FavouriteSaloonsFragment : Fragment(){
 
@@ -32,9 +29,11 @@ class FavouriteSaloonsFragment : Fragment(){
         val llNoFavourites = rootView.findViewById<LinearLayout>(R.id.llNoFavourites)
         rvSaloons.layoutManager = LinearLayoutManager(context)
         rvSaloons.adapter = FavouriteSaloonAdapter(saloonList)
+        rvSaloons.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         val url = getString(R.string.url,"get_liked_saloons.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
+                Log.println(Log.ASSERT,"FAV",response)
                 val arr = JSONArray(response)
                 if (arr.length() == 0){llNoFavourites.visibility = View.VISIBLE}
                 for (x in 0 until arr.length()){
@@ -50,7 +49,7 @@ class FavouriteSaloonsFragment : Fragment(){
                     val open = obj.getString("open")
                     val close = obj.getString("close")
                     val imageId = obj.getString("image_id")
-                    val addressItem = AddressItem(addressId,postcode,address,latitude=latitude,longitude=longitude)
+                    val addressItem = AddressItem(addressId,postcode=postcode,address=address,latitude=latitude,longitude=longitude)
                     saloonList.add(AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating,
                         imageId=imageId)) }
                 rvSaloons.adapter?.notifyItemRangeInserted(0,saloonList.size) },

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ class SaloonStyleAdapter (private val styleItemList: MutableList<StyleItem>)
         private val tvAddress: TextView = itemView.findViewById(R.id.tvAddress)
         private val rating: RatingBar = itemView.findViewById(R.id.rating)
         private val image: ImageView = itemView.findViewById(R.id.image)
+        private val card: CardView = itemView.findViewById(R.id.card)
 
         fun bind(index: Int){
             val currentItem = styleItemList[index]
@@ -32,9 +34,10 @@ class SaloonStyleAdapter (private val styleItemList: MutableList<StyleItem>)
             val timeValue = if (timeItem.maxTime.isNullOrEmpty()) timeItem.time
             else itemView.context.getString(R.string.time_distance,timeItem.time,timeItem.maxTime)
             time.text = itemView.context.getString(R.string.time_mins,timeValue)
-            if (currentItem.imageId.isNotEmpty()){
-            Picasso.get().load(itemView.context.getString(
-                R.string.url,"style_images/${currentItem.imageId}.jpeg")).fit().centerCrop().into(image)}
+            if (currentItem.imageId.isNotEmpty() && currentItem.imageId != "null"){
+                Picasso.get().load(itemView.context.getString(
+                    R.string.url,"style_images/${currentItem.imageId}.jpeg")).fit().centerCrop().into(image)}
+            else{ card.visibility = View.GONE }
             itemView.setOnClickListener { view ->
                 val bundle = bundleOf(Pair("styleItem",currentItem))
                 view.findNavController().navigate(R.id.action_saloonFragment_to_styleFragment,bundle) }

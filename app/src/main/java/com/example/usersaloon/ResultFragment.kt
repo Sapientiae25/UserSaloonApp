@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -17,6 +18,7 @@ class ResultFragment : Fragment() {
         val rootView =  inflater.inflate(R.layout.fragment_result, container, false)
         val rvResult = rootView.findViewById<RecyclerView>(R.id.rvResult)
         rvResult.layoutManager = LinearLayoutManager(context)
+        rvResult.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         val styleList = arguments?.getParcelableArrayList<StyleItem>("styleList")!!
         rvResult.adapter = ResultAdapter(styleList.toMutableList())
         rvResult.adapter?.notifyItemRangeInserted(0,styleList.size)

@@ -29,6 +29,9 @@ class SearchFragment : Fragment(), SearchDb {
     private var displayStyleList = mutableListOf<String>()
     private var displaySaloonList = mutableListOf<AccountItem>()
     private lateinit var rootView: View
+    private lateinit var tvSaloons: TextView
+    private lateinit var tvStyles: TextView
+    var currentText = ""
 
 
     override fun onCreateView(
@@ -41,6 +44,8 @@ class SearchFragment : Fragment(), SearchDb {
         llStyles = rootView.findViewById(R.id.llStyles)
         llSaloons = rootView.findViewById(R.id.llSaloons)
         tvNoStyles = rootView.findViewById(R.id.tvNoStyles)
+        tvStyles = rootView.findViewById(R.id.tvStyles)
+        tvSaloons = rootView.findViewById(R.id.tvSaloons)
         rvSaloons = rootView.findViewById(R.id.rvSaloons)
         rvSaloons.layoutManager = LinearLayoutManager(context)
         rvSaloons.adapter = SaloonSearchAdapter(displaySaloonList)
@@ -50,10 +55,53 @@ class SearchFragment : Fragment(), SearchDb {
         val searchView = (activity as DefaultActivity).searchView
         empty()
 
+        tvSaloons.setOnClickListener {
+            val url = getString(R.string.url,"search_saloons.php")
+            val stringRequest: StringRequest = object : StringRequest(
+                Method.POST, url, Response.Listener { response ->
+                    Log.println(Log.ASSERT,"FSAL",response)
+                    val arr = JSONArray(response)
+                    val count = displaySaloonList.size
+                    displaySaloonList.clear()
+                    rvStyles.adapter?.notifyItemRangeRemoved(0,count)
+                    for (i in 0 until arr.length()){
+                        val saloon = arr.getJSONObject(i)
+                        val name = saloon.getString("name")
+                        val id = saloon.getString("id")
+                        displaySaloonList.add(AccountItem(id,name)) }
+                    rvStyles.adapter?.notifyItemRangeInserted(0,displaySaloonList.size) },
+                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String> {
+                    val params = HashMap<String, String>()
+                    params["text"] = currentText
+                    return params }}
+            VolleySingleton.instance?.addToRequestQueue(stringRequest)
+        }
+        tvStyles.setOnClickListener {
+            val url = getString(R.string.url,"search_styles.php")
+            val stringRequest: StringRequest = object : StringRequest(
+                Method.POST, url, Response.Listener { response ->
+                    Log.println(Log.ASSERT,"FSTY",response)
+                    val arr = JSONArray(response)
+                    val count = displayStyleList.size
+                    displayStyleList.clear()
+                    rvStyles.adapter?.notifyItemRangeRemoved(0,count)
+                    for (i in 0 until arr.length()){ displayStyleList.add(arr.getString(i)) }
+                    rvStyles.adapter?.notifyItemRangeInserted(0,displayStyleList.size) },
+                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String> {
+                    val params = HashMap<String, String>()
+                    params["text"] = currentText
+                    return params }}
+            VolleySingleton.instance?.addToRequestQueue(stringRequest)
+        }
+
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean { return true }
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText.isNullOrEmpty()){empty() }else{ search(newText)}
+                if (newText.isNullOrEmpty()){currentText = ""; empty()}else{ currentText = newText;search(newText)}
                 return true } })
 
         return rootView }

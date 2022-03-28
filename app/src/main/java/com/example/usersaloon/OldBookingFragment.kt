@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
@@ -23,12 +24,13 @@ class OldBookingFragment : Fragment(){
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_old_booking, container, false)
         val userItem = (activity as DefaultActivity).userItem
-        (activity as DefaultActivity).supportActionBar?.title = "Bookings"
+        (activity as DefaultActivity).supportActionBar?.title = "Booked"
         val bookedList = mutableListOf<StyleItem>()
         val rvBooking = rootView.findViewById<RecyclerView>(R.id.rvBooking)
         val tvNoBooking = rootView.findViewById<TextView>(R.id.tvNoBooking)
         rvBooking.adapter = BookedAdapter(bookedList,this)
         rvBooking.layoutManager = LinearLayoutManager(context)
+        rvBooking.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         val url = getString(R.string.url,"booked.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->

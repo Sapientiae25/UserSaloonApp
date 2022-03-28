@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
@@ -58,6 +59,7 @@ class MapFragment : Fragment(),OnMapReadyCallback,MoveMarker {
         rvSaloons = rootView.findViewById(R.id.rvSaloons)
         btnHome = rootView.findViewById(R.id.btnHome)
         rvSaloons.layoutManager = LinearLayoutManager(context)
+        rvSaloons.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         svLocation = rootView.findViewById(R.id.svLocation)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -40,6 +41,7 @@ class CategoryFragment : Fragment(){
         val tvNoStyles = rootView.findViewById<TextView>(R.id.tvNoStyles)
         rvCategoryStyleItems.adapter = CategoryItemAdapter(styleItemList)
         rvCategoryStyleItems.layoutManager = LinearLayoutManager(context)
+        rvCategoryStyleItems.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         val url = getString(R.string.url,"get_category_styles.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->

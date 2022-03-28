@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ class MapSaloonAdapter (private val saloonList: MutableList<AccountItem>,val par
         private val tvDistance: TextView = itemView.findViewById(R.id.tvDistance)
         private val btnGoToSaloon: AppCompatButton = itemView.findViewById(R.id.btnGoToSaloon)
         private val image: ImageView = itemView.findViewById(R.id.image)
+        private val card: CardView = itemView.findViewById(R.id.card)
 
         fun bind(index: Int){
             val currentItem = saloonList[index]
@@ -44,9 +46,10 @@ class MapSaloonAdapter (private val saloonList: MutableList<AccountItem>,val par
             btnGoToSaloon.setOnClickListener {view ->
                 val bundle = bundleOf(Pair("accountItem",currentItem))
                 view.findNavController().navigate(R.id.action_mapFragment_to_saloonFragment,bundle)  }
-            if (currentItem.imageId.isNotEmpty()){
+            if (currentItem.imageId.isNotEmpty() && currentItem.imageId != "null"){
                 Picasso.get().load(itemView.context.getString(
                     R.string.url,"style_images/${currentItem.imageId}.jpeg")).fit().centerCrop().into(image)}
+            else{ card.visibility = View.GONE }
          }}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MapSaloonViewHolder {

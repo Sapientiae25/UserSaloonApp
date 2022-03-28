@@ -171,7 +171,7 @@
     <string name="country_">Country:</string>
     <string name="add_a_payment_method">Add A Payment Method</string>
     <string name="card">Card</string>
-    <string name="card_ending">Card Ending in …%1$s</string>
+    <string name="card_ending">Card Ending in … %1$s</string>
     <string name="cvv">CVV</string>
     <string name="expiry">Expiry</string>
     <string name="expiry_format">%1$s/</string>
@@ -206,5 +206,6 @@
     <string name="recently_viewed">Recently Viewed</string>
     <string name="select_payment_method">Select Payment Method:</string>
     <string name="go_to_store"><u>Go To Store</u></string>
+    <string name="go_to_saloon">Go To Saloon</string>
 
 </resources>

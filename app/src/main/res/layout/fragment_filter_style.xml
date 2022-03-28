@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,12 +20,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/tvSaloons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/saloons"
             android:padding="10dp"
             android:textColor="@color/light_grey"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            app:drawableEndCompat="@drawable/ic_baseline_arrow_drop_down_24" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSaloons"
             android:layout_width="match_parent"
@@ -40,12 +43,14 @@
         android:orientation="vertical"
         android:paddingBottom="10dp">
         <TextView
+            android:id="@+id/tvStyles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/styles"
             android:padding="10dp"
             android:textColor="@color/light_grey"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            app:drawableEndCompat="@drawable/ic_baseline_arrow_drop_down_24" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvStyles"
             android:layout_width="match_parent"

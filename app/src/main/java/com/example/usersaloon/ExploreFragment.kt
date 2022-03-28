@@ -1,6 +1,7 @@
 package com.example.usersaloon
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,9 +34,10 @@ class ExploreFragment : Fragment(){
         rvExplore.adapter = ExploreImageAdapter(displayStyleList)
         rvExplore.addItemDecoration(DividerItemDecoration(context,GridLayoutManager.HORIZONTAL))
         rvExplore.addItemDecoration(DividerItemDecoration(context,GridLayoutManager.VERTICAL))
-        val url = getString(R.string.url,"get_explore_styles.php")
+        val url = getString(R.string.url,"get_explore_images.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
+                Log.println(Log.ASSERT,"EXP",response)
                 val arr = JSONArray(response)
                 for (x in 0 until arr.length()){
                     val obj = arr.getJSONObject(x)

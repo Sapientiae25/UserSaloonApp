@@ -1,24 +1,27 @@
 package com.example.usersaloon
 
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 class CategoryAdapter (private val groupList: List<Pair<String,String>>)
     : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         private var currentGroup = 0
-        var filter =  FilterItem()
+        private var filter =  FilterItem()
         private val name: TextView = itemView.findViewById(R.id.name)
-        private val filters = listOf("Male","Female","Long","Medium","Short")
+        private val image: ImageView = itemView.findViewById(R.id.image)
 
         fun bind(index: Int){
-            name.text = filters[index]
+            val currentItem = groupList[index]
+            name.text = currentItem.first
             currentGroup = if (index > 2) 1 else 0
             itemView.setOnClickListener { view ->
                 when (currentGroup) {
@@ -26,6 +29,9 @@ class CategoryAdapter (private val groupList: List<Pair<String,String>>)
                     1 -> {filter.length.add(index - (currentGroup * 2))} }
                 val bundle = bundleOf(Pair("filterItem",filter))
                 view.findNavController().navigate(R.id.action_userFragment_to_filterStyleFragment,bundle)}
+            if (currentItem.second.isNotEmpty()){
+                Picasso.get().load(itemView.context.getString(
+                    R.string.url,"style_images/${currentItem.second}.jpeg")).fit().centerCrop().into(image)}
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {

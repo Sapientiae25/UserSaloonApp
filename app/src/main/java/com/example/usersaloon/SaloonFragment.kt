@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
@@ -13,7 +15,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -67,7 +68,7 @@ class SaloonFragment : Fragment() {
             rvStyleCategories.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
             rvStyleItems.adapter = SaloonStyleAdapter(displayStyleList)
             rvStyleItems.layoutManager = LinearLayoutManager(context)
-            rvStyleItems.addItemDecoration(DividerItemDecoration(context, RecyclerView.HORIZONTAL))
+            rvStyleItems.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
             rvToolbarCategories.adapter = ToolbarCategoryAdapter(categoryList)
             rvToolbarCategories.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
             val btnFilter = rootView.findViewById<FloatingActionButton>(R.id.btnFilter)

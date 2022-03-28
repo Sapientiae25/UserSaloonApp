@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ class ResultAdapter (private val resultList: MutableList<StyleItem>)
         private val rating: RatingBar = itemView.findViewById(R.id.rating)
         private val tvAddress: TextView = itemView.findViewById(R.id.tvAddress)
         private val image: ImageView = itemView.findViewById(R.id.image)
+        private val card: CardView = itemView.findViewById(R.id.card)
 
         fun bind(index: Int){
             val currentItem = resultList[index]
@@ -35,9 +37,10 @@ class ResultAdapter (private val resultList: MutableList<StyleItem>)
             itemView.setOnClickListener { view ->
                 val bundle = bundleOf(Pair("styleItem",currentItem))
                 view.findNavController().navigate(R.id.action_resultFragment_to_styleFragment,bundle) }
-            if (currentItem.imageId.isNotEmpty()){
-            Picasso.get().load(itemView.context.getString(
-                R.string.url,"style_images/${currentItem.imageId}.jpeg")).fit().centerCrop().into(image)}
+            if (currentItem.imageId.isNotEmpty() && currentItem.imageId != "null"){
+                Picasso.get().load(itemView.context.getString(
+                    R.string.url,"style_images/${currentItem.imageId}.jpeg")).fit().centerCrop().into(image)}
+            else{ card.visibility = View.GONE }
         } }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.style_layout,

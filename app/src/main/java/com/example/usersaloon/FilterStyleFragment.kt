@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -43,6 +44,7 @@ class FilterStyleFragment : Fragment() {
         val rvCategoryStyleItems = rootView.findViewById<RecyclerView>(R.id.rvCategoryStyleItems)
         rvCategoryStyleItems.layoutManager = LinearLayoutManager(context)
         rvCategoryStyleItems.adapter = CategoryStyleAdapter(displayStyleList)
+        rvCategoryStyleItems.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         filterObj.put("length",length)
         filterObj.put("gender",gender)
         val filterArr = JSONArray()

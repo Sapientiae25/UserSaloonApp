@@ -165,9 +165,24 @@ class UserFragment : Fragment(), UpdateLocation {
             url = getString(R.string.url,"get_gender_images.php")
             stringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener { response ->
-                    Log.println(Log.ASSERT,"GEN",response)
                     filters.add(Pair(gender[i],response))
-                    rvCategories.adapter?.notifyItemInserted(filters.size)},
+                    rvCategories.adapter?.notifyItemInserted(filters.size)
+                    if (i == gender.size-1){
+                        for (x in length.indices){
+                            url = getString(R.string.url,"get_length_images.php")
+                            stringRequest = object : StringRequest(
+                                Method.POST, url, Response.Listener { response ->
+                                    filters.add(Pair(length[x],response))
+                                    rvCategories.adapter?.notifyItemInserted(filters.size)},
+                                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+                                @Throws(AuthFailureError::class)
+                                override fun getParams(): Map<String, String> {
+                                    val params = java.util.HashMap<String, String>()
+                                    params["length"] = x.toString()
+                                    return params }}
+                            VolleySingleton.instance?.addToRequestQueue(stringRequest)}
+                    }
+                                                    },
                 Response.ErrorListener { volleyError -> println(volleyError.message) }) {
                 @Throws(AuthFailureError::class)
                 override fun getParams(): Map<String, String> {
@@ -175,20 +190,7 @@ class UserFragment : Fragment(), UpdateLocation {
                     params["gender"] = i.toString()
                     return params }}
             VolleySingleton.instance?.addToRequestQueue(stringRequest)}
-        for (i in length.indices){
-            url = getString(R.string.url,"get_length_images.php")
-            stringRequest = object : StringRequest(
-                Method.POST, url, Response.Listener { response ->
-                    Log.println(Log.ASSERT,"LEN",response)
-                    filters.add(Pair(length[i],response))
-                    rvCategories.adapter?.notifyItemInserted(filters.size)},
-                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
-                @Throws(AuthFailureError::class)
-                override fun getParams(): Map<String, String> {
-                    val params = java.util.HashMap<String, String>()
-                    params["length"] = i.toString()
-                    return params }}
-            VolleySingleton.instance?.addToRequestQueue(stringRequest)}
+
         return rootView
     }
     private fun fetchLocation(){

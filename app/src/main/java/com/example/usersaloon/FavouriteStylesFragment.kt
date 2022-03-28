@@ -1,11 +1,13 @@
 package com.example.usersaloon
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
@@ -27,9 +29,11 @@ class FavouriteStylesFragment : Fragment(){
         val llNoFavourites = rootView.findViewById<LinearLayout>(R.id.llNoFavourites)
         rvStyles.layoutManager = LinearLayoutManager(context)
         rvStyles.adapter = FavouriteStylesAdapter(styleList)
+        rvStyles.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         val url = getString(R.string.url,"get_liked_styles.php")
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
+                Log.println(Log.ASSERT,"FAV",response)
                 val arr = JSONArray(response)
                 if (arr.length() == 0){llNoFavourites.visibility = View.VISIBLE}
                 for (x in 0 until arr.length()){

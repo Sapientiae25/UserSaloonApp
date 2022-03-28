@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
@@ -28,6 +29,7 @@ class BookingFragment : Fragment() {
         val bookingList = mutableListOf<BookingItem>()
         rvBooking.adapter = BookingAdapter(bookingList,this)
         rvBooking.layoutManager = LinearLayoutManager(context)
+        rvBooking.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         (activity as DefaultActivity).clearNotification()
 
         val url = getString(R.string.url,"get_booked.php")

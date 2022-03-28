@@ -32,6 +32,7 @@
             android:textSize="15sp"
             android:text="@string/opens"/>
     </LinearLayout>
+
     <ImageView
         android:id="@+id/ivStoreFront"
         android:layout_width="100dp"
