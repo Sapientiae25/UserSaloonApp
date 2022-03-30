@@ -92,7 +92,6 @@ class AddressFragment : Fragment(){
                     val url = getString(R.string.url,"save_location.php")
                     val stringRequest = object : StringRequest(
                         Method.POST, url, Response.Listener { response ->
-                            Log.println(Log.ASSERT,"address",response)
                             val obj = JSONObject(response)
                             val id = obj.getString("address_id")
                             addressItem = AddressItem(id,city, postcode, country, address,lat.toDouble(),long.toDouble())

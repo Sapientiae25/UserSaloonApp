@@ -66,7 +66,6 @@ class SaloonFragment : Fragment() {
             val ivLike = rootView.findViewById<ImageView>(R.id.ivLike)
             rvStyleCategories.adapter = StyleCategoryAdapter(categoryList)
             rvStyleCategories.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
-            rvStyleItems.adapter = SaloonStyleAdapter(displayStyleList)
             rvStyleItems.layoutManager = LinearLayoutManager(context)
             rvStyleItems.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
             rvToolbarCategories.adapter = ToolbarCategoryAdapter(categoryList)
@@ -151,7 +150,7 @@ class SaloonFragment : Fragment() {
                             styleItemList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,rating=rating,
                                 imageId=imageId)) }
                         displayStyleList.addAll(styleItemList)
-                        rvStyleItems.adapter?.notifyItemRangeInserted(0,displayStyleList.size)},
+                        rvStyleItems.adapter = SaloonStyleAdapter(displayStyleList)},
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) {
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String> {
@@ -187,7 +186,7 @@ class SaloonFragment : Fragment() {
                             val imageId = obj.getString("image_id")
                             styleItemList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,imageId=imageId)) }
                         displayStyleList.addAll(styleItemList)
-                        rvStyleItems.adapter?.notifyItemRangeInserted(0,displayStyleList.size) },
+                        rvStyleItems.adapter = SaloonStyleAdapter(displayStyleList) },
                     { volleyError -> println(volleyError.message) })
                 VolleySingleton.instance?.addToRequestQueue(jsonRequest) }
 

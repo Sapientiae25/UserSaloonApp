@@ -28,7 +28,6 @@ class ClickStyleImageAdapter(private var images: MutableList<Pair<String,String>
                 val url = itemView.context.getString(R.string.url,"find_style.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
-                    Log.println(Log.ASSERT,"CLICK",response)
                         val obj = JSONObject(response)
                         val name = obj.getString("name")
                         val price = obj.getString("price").toFloat()

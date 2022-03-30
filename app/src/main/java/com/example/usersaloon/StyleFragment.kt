@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,8 +94,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 ivLike.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_24)) }
             val url = getString(R.string.url,"like_style.php")
             val stringRequest: StringRequest = object : StringRequest(
-                Method.POST, url, Response.Listener {},
-                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+                Method.POST, url, Response.Listener {}, Response.ErrorListener { volleyError -> println(volleyError.message) }) {
                 @Throws(AuthFailureError::class)
                 override fun getParams(): Map<String, String> {
                     val params = HashMap<String, String>()
@@ -176,7 +174,6 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         url = getString(R.string.url,"similar_styles.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                Log.println(Log.ASSERT,"POP",response)
                 val arr = JSONArray(response)
                 if (arr.length() == 0){llMoreLikeThis.visibility = View.GONE}
                 for (x in 0 until arr.length()){
@@ -201,7 +198,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
         url = getString(R.string.url,"view_style.php")
         stringRequest = object : StringRequest(
-            Method.POST, url, Response.Listener { res -> Log.println(Log.ASSERT,"VIEW",res)},
+            Method.POST, url, Response.Listener {},
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
@@ -268,7 +265,6 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val url = getString(R.string.url,"check_booking_day.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                Log.println(Log.ASSERT,"DAY",response)
                 val arr = JSONArray(response)
                 for (i in 0 until arr.length()){
                     val obj = arr.getJSONObject(i)
@@ -326,7 +322,6 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 val url = getString(R.string.url,"check_booked_time.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
-                        Log.println(Log.ASSERT,"BOOK",response)
                         if (response == "0"){ dialog.dismiss()
                             val paymentBottomSheet = PaymentBottomSheet()
                             val bookingItem = BookingItem("",startDateTime,

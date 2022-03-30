@@ -271,4 +271,5 @@
             android:name="bookingItem"
             app:argType="com.example.usersaloon.BookingItem" />
     </fragment>
+    <action android:id="@+id/action_global_resultFragment" app:destination="@id/resultFragment" />
 </navigation>

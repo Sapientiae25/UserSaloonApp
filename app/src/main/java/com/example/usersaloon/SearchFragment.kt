@@ -18,7 +18,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 
-class SearchFragment : Fragment(), SearchDb {
+class SearchFragment : Fragment() {
 
     private lateinit var rvStyles: RecyclerView
     private lateinit var rvSaloons: RecyclerView
@@ -50,16 +50,16 @@ class SearchFragment : Fragment(), SearchDb {
         rvSaloons.layoutManager = LinearLayoutManager(context)
         rvSaloons.adapter = SaloonSearchAdapter(displaySaloonList)
         rvStyles = rootView.findViewById(R.id.rvStyles)
-        rvStyles.adapter = TextAdapter(displayStyleList)
+        rvStyles.adapter = TextAdapter(displayStyleList,activity as DefaultActivity)
         rvStyles.layoutManager = LinearLayoutManager(context)
         val searchView = (activity as DefaultActivity).searchView
+
         empty()
 
         tvSaloons.setOnClickListener {
             val url = getString(R.string.url,"search_saloons.php")
             val stringRequest: StringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener { response ->
-                    Log.println(Log.ASSERT,"FSAL",response)
                     val arr = JSONArray(response)
                     val count = displaySaloonList.size
                     displaySaloonList.clear()
@@ -82,7 +82,6 @@ class SearchFragment : Fragment(), SearchDb {
             val url = getString(R.string.url,"search_styles.php")
             val stringRequest: StringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener { response ->
-                    Log.println(Log.ASSERT,"FSTY",response)
                     val arr = JSONArray(response)
                     val count = displayStyleList.size
                     displayStyleList.clear()
@@ -107,6 +106,7 @@ class SearchFragment : Fragment(), SearchDb {
         return rootView }
 
     private fun search(text: String){
+        tvAll.visibility = View.VISIBLE
         val saloonCount = displaySaloonList.size
         displaySaloonList.clear()
         val count = displayStyleList.size
@@ -114,7 +114,6 @@ class SearchFragment : Fragment(), SearchDb {
         var url = getString(R.string.url,"filter_search.php")
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                Log.println(Log.ASSERT,"SYM",response)
                 val obj = JSONObject(response)
                 val saloons = obj.getJSONArray("saloons")
                 val styles = obj.getJSONArray("styles")
@@ -148,7 +147,6 @@ class SearchFragment : Fragment(), SearchDb {
             url = getString(R.string.url,"filter_word_search.php")
             stringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener { response ->
-                    Log.println(Log.ASSERT,"SYM",response)
                     val arr = JSONArray(response)
                     for (i in 0 until arr.length()){
                         val obj = arr.getJSONObject(i)
@@ -177,6 +175,7 @@ class SearchFragment : Fragment(), SearchDb {
         tvAll.text = getString(R.string.see_all_results_for,text)
     }
     private fun empty(){
+        tvAll.visibility = View.GONE
         val saloonCount = displaySaloonList.size
         displaySaloonList.clear()
         val count = displayStyleList.size
@@ -184,12 +183,11 @@ class SearchFragment : Fragment(), SearchDb {
         val url = getString(R.string.url,"popular_searches.php")
         val stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                Log.println(Log.ASSERT,"STM",response)
                 val obj = JSONObject(response)
                 val saloons = obj.getJSONArray("saloons")
                 val styles = obj.getJSONArray("styles")
-                if (styles.length() == 0){ llStyles.visibility = View.GONE}
-                if (saloons.length() == 0){ llSaloons.visibility = View.GONE}
+                llStyles.visibility = if (styles.length() == 0) View.GONE else View.VISIBLE
+                llSaloons.visibility = if (saloons.length() == 0) View.GONE else View.VISIBLE
                 if (styles.length() == 0 && saloons.length() == 0) { tvNoStyles.visibility = View.VISIBLE
                 } else { tvNoStyles.visibility = View.GONE}
                 rvStyles.adapter?.notifyItemRangeRemoved(0,count)
@@ -210,7 +208,4 @@ class SearchFragment : Fragment(), SearchDb {
             override fun getParams(): Map<String, String> { return HashMap() }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
     }
-    override fun emptyDb() {empty()}
-
-    override fun searchDb(text: String) { search(text) }
 }

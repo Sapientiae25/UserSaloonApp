@@ -13,7 +13,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import org.json.JSONArray
 
-class TextAdapter (private val textList: MutableList<String>)
+class TextAdapter (private val textList: MutableList<String>,val activity: DefaultActivity)
     : RecyclerView.Adapter<TextAdapter.TextViewHolder>() {
 
     inner class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -27,7 +27,7 @@ class TextAdapter (private val textList: MutableList<String>)
                 val url = itemView.context.getString(R.string.url,"filter_word_search.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
-                        Log.println(Log.ASSERT,"SYM",response)
+
                         val arr = JSONArray(response)
                         for (i in 0 until arr.length()){
                             val obj = arr.getJSONObject(i)
@@ -40,11 +40,14 @@ class TextAdapter (private val textList: MutableList<String>)
                             val accountId = obj.getString("account_fk")
                             val rating = obj.getString("rating").toFloatOrNull()
                             val accountName = obj.getString("account_name")
-                            val accountItem = AccountItem(accountId,accountName)
+                            val address = obj.getString("address")
+                            val imageId = obj.getString("image_id")
+                            val accountItem = AccountItem(accountId,accountName,addressItem=AddressItem(address=address))
                             val timeItem = TimeItem(time,maxTime)
-                            styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,rating=rating))}
-                        val bundle = bundleOf(Pair("styleItem",styleList))
-                        view.findNavController().navigate(R.id.action_searchFragment_to_resultFragment,bundle)
+                            styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,rating=rating,imageId=imageId))}
+                        activity.closeSearch()
+                        val bundle = bundleOf(Pair("styleList",styleList))
+                        activity.findNavController(R.id.activityFragment).navigate(R.id.action_global_resultFragment,bundle)
                     },
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) {
                     @Throws(AuthFailureError::class)

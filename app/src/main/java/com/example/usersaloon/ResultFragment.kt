@@ -1,6 +1,7 @@
 package com.example.usersaloon
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,11 @@ class ResultFragment : Fragment() {
         val styleList = arguments?.getParcelableArrayList<StyleItem>("styleList")!!
         rvResult.adapter = ResultAdapter(styleList.toMutableList())
         rvResult.adapter?.notifyItemRangeInserted(0,styleList.size)
+
+
         return rootView
     }
+
+
+
 }

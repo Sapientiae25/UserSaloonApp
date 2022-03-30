@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,14 +42,25 @@ class UserFragment : Fragment(), UpdateLocation {
         val rvSaloons = rootView.findViewById<RecyclerView>(R.id.rvSaloons)
         val rvCategories = rootView.findViewById<RecyclerView>(R.id.rvCategories)
         val rvRecent = rootView.findViewById<RecyclerView>(R.id.rvRecent)
+        val rvFavouriteStyles = rootView.findViewById<RecyclerView>(R.id.rvFavouriteStyles)
+        val rvFavouriteSaloons = rootView.findViewById<RecyclerView>(R.id.rvFavouriteSaloons)
+        val llFavouriteStyles = rootView.findViewById<LinearLayout>(R.id.llFavouriteStyles)
+        val llFavouriteSaloons = rootView.findViewById<LinearLayout>(R.id.llFavouriteSaloons)
         val llRecent = rootView.findViewById<LinearLayout>(R.id.llRecent)
         val recentList = mutableListOf<StyleItem>()
         val popularList = mutableListOf<StyleItem>()
         val saloonList = mutableListOf<AccountItem>()
+        val likedSaloonList = mutableListOf<AccountItem>()
+        val likedStyleList = mutableListOf<StyleItem>()
+
         rvPopular.adapter = PopularAdapter(popularList)
         rvPopular.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
+        rvFavouriteStyles.adapter = PopularAdapter(likedStyleList)
+        rvFavouriteStyles.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
         rvSaloons.adapter = SaloonAdapter(saloonList)
         rvSaloons.layoutManager = LinearLayoutManager(context,RecyclerView.HORIZONTAL,false)
+        rvFavouriteSaloons.adapter = SaloonAdapter(likedSaloonList)
+        rvFavouriteSaloons.layoutManager = LinearLayoutManager(context,RecyclerView.HORIZONTAL,false)
         rvCategories.adapter = CategoryAdapter(filters)
         rvCategories.layoutManager = LinearLayoutManager(context,RecyclerView.HORIZONTAL,false)
         rvRecent.adapter = PopularAdapter(recentList)
@@ -107,7 +117,6 @@ class UserFragment : Fragment(), UpdateLocation {
         url = getString(R.string.url,"get_saloons.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                Log.println(Log.ASSERT,"ARR",response)
                 val arr = JSONArray(response)
                 for (x in 0 until arr.length()){
                     val obj = arr.getJSONObject(x)
@@ -133,12 +142,70 @@ class UserFragment : Fragment(), UpdateLocation {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> { return HashMap() }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
+        url = getString(R.string.url,"get_liked_saloons.php")
+        stringRequest = object : StringRequest(
+            Method.POST, url, Response.Listener { response ->
+                val arr = JSONArray(response)
+                llFavouriteSaloons.visibility = if (arr.length() == 0) View.GONE else View.VISIBLE
+                for (x in 0 until arr.length()){
+                    val obj = arr.getJSONObject(x)
+                    val name = obj.getString("name")
+                    val accountId = obj.getString("account_id")
+                    val addressId = obj.getString("address_id")
+                    val address = obj.getString("address")
+                    val postcode = obj.getString("postcode")
+                    val rating = obj.getString("rating")
+                    val latitude = obj.getDouble("latitude")
+                    val longitude = obj.getDouble("longitude")
+                    val open = obj.getString("open")
+                    val close = obj.getString("close")
+                    val imageId = obj.getString("image_id")
+                    var distance: String? = null
+                    if (currentLat != null){distance = String.format("%.2f",getDistance(currentLat!!,
+                        currentLong!!,latitude,longitude))}
+                    val addressItem = AddressItem(addressId,"",postcode,"",address,latitude,longitude,distance)
+                    likedSaloonList.add(AccountItem(accountId,name,open=open,close=close,addressItem=addressItem,rating=rating,
+                        imageId=imageId)) }
+                rvFavouriteSaloons.adapter?.notifyItemRangeInserted(0,likedSaloonList.size) },
+            Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val params = java.util.HashMap<String, String>()
+                params["user_id"] = userItem.id
+                return params }}
+        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+        url = getString(R.string.url,"get_liked_styles.php")
+        stringRequest = object : StringRequest(
+            Method.POST, url, Response.Listener { response ->
+                val arr = JSONArray(response)
+                llFavouriteStyles.visibility = if (arr.length() == 0) View.GONE else View.VISIBLE
+                for (x in 0 until arr.length()){
+                    val obj = arr.getJSONObject(x)
+                    val name = obj.getString("name")
+                    val price = obj.getString("price").toFloat()
+                    val time = obj.getString("time")
+                    val styleId = obj.getString("style_id")
+                    val maxTime = obj.getString("max_time")
+                    val info = obj.getString("info")
+                    val accountId = obj.getString("account_id")
+                    val accountName = obj.getString("account_name")
+                    val accountItem = AccountItem(accountId,accountName)
+                    val timeItem = TimeItem(time,maxTime)
+                    val imageId = obj.getString("image_id")
+                    likedStyleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,imageId=imageId)) }
+                rvFavouriteStyles.adapter?.notifyItemRangeInserted(0,likedStyleList.size) },
+            Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val params = java.util.HashMap<String, String>()
+                params["user_id"] = userItem.id
+                return params }}
+        VolleySingleton.instance?.addToRequestQueue(stringRequest)
         url = getString(R.string.url,"get_recently_viewed.php")
         stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                Log.println(Log.ASSERT,"RVW",response)
                 val arr = JSONArray(response)
-                if (arr.length() == 0){llRecent.visibility = View.GONE}
+                llRecent.visibility = if (arr.length() == 0) View.GONE else View.VISIBLE
                 for (x in 0 until arr.length()){
                     val obj = arr.getJSONObject(x)
                     val name = obj.getString("name")

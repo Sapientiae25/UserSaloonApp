@@ -14,15 +14,17 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class DefaultActivity : AppCompatActivity(),UpdateLocation {
+class DefaultActivity : AppCompatActivity(),UpdateLocation,CloseSearch {
 
     lateinit var userItem: UserItem
-    private lateinit var navController: NavController
+    lateinit var navController: NavController
     private lateinit var tvLocation: TextView
     private var notificationCount = 0
     private lateinit var notification:  ConstraintLayout
@@ -47,16 +49,14 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation {
         tvLocation.setOnClickListener{
         val locationBottomSheet = LocationBottomSheet()
         locationBottomSheet.show(supportFragmentManager,"locationBottomSheet")}
-        bottomNavigationView.setOnItemSelectedListener { when (it.itemId){
-            R.id.userFragment -> findNavController(R.id.activityFragment).navigate(R.id.action_global_userFragment)
-            R.id.settingFragment -> findNavController(R.id.activityFragment).navigate(R.id.action_global_settingFragment)
-            R.id.exploreFragment -> findNavController(R.id.activityFragment).navigate(R.id.action_global_exploreFragment) }
-            true }
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.activityFragment) as NavHostFragment
         navController = navHostFragment.navController
         setupActionBarWithNavController(navController)
         notification.setOnClickListener { findNavController(R.id.activityFragment).navigate(R.id.action_global_bookingFragment) }
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.mapFragment,R.id.userFragment,R.id.settingFragment,R.id.exploreFragment))
         mapFragment.setOnMenuItemClickListener{goToMap(); true}
+        NavigationUI.setupWithNavController(bottomNavigationView,navController)
+        NavigationUI.setupActionBarWithNavController(this,navController,appBarConfiguration)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -68,15 +68,23 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation {
         }
         return true }
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.searchFragment -> { item.onNavDestinationSelected(navController) } else -> { super.onOptionsItemSelected(item) } }
+        R.id.searchFragment -> {item.onNavDestinationSelected(navController) }
+        android.R.id.home -> {
+            val queue = navController.backQueue
+            val index = if (queue.size > 1) queue.size-2 else 0
+            if (queue[index].destination.id == R.id.searchFragment){ navController.popBackStack(); navController.popBackStack() }
+            else{ super.onOptionsItemSelected(item)} }
+        else -> { super.onOptionsItemSelected(item) } }
     fun addNotification(){ if (notificationCount < 100){
-            notificationCount += 1; cvCount.visibility = View.VISIBLE; tvCount.text = notificationCount.toString() } }
+        notificationCount += 1; cvCount.visibility = View.VISIBLE; tvCount.text = notificationCount.toString() } }
     fun clearNotification(){ cvCount.visibility = View.GONE; notificationCount = 0 }
     fun goToMap(bundle: Bundle? = null){mapFragment.isChecked = true
-        findNavController(R.id.activityFragment).navigate(R.id.action_global_mapFragment,bundle)
-    }
-
+        findNavController(R.id.activityFragment).navigate(R.id.action_global_mapFragment,bundle) }
     override fun onSupportNavigateUp(): Boolean { return navController.navigateUp() || super.onSupportNavigateUp() }
     override fun update(location: LatLng, address: String) { chosenLocation.latitude = location.latitude
-        chosenLocation.longitude = location.longitude; tvLocation.text = address; Log.println(Log.ASSERT,"TOM","UPDATED") }
+        chosenLocation.longitude = location.longitude; tvLocation.text = address }
+
+    override fun closeSearch() {
+        searchView.isIconified = true
+        searchView.onActionViewCollapsed() }
 }

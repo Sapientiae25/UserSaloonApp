@@ -35,7 +35,6 @@ class PaymentFragment : Fragment(){
         val url = getString(R.string.url,"get_cards.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                Log.println(Log.ASSERT,"BOOK",response)
                 val arr = JSONArray(response)
                 for (i in 0 until arr.length()) {
                     val obj = arr.getJSONObject(i)
