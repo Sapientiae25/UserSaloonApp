@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -17,20 +18,30 @@ import org.json.JSONArray
 
 class OldBookingFragment : Fragment(){
 
+    private lateinit var tvNoBooking: TextView
+    private lateinit var rvBooking: RecyclerView
+    val bookedList = mutableListOf<StyleItem>()
+    private lateinit var userItem: UserItem
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_old_booking, container, false)
-        val userItem = (activity as DefaultActivity).userItem
+        userItem = (activity as DefaultActivity).userItem
         (activity as DefaultActivity).supportActionBar?.title = "Booked"
-        val bookedList = mutableListOf<StyleItem>()
-        val rvBooking = rootView.findViewById<RecyclerView>(R.id.rvBooking)
-        val tvNoBooking = rootView.findViewById<TextView>(R.id.tvNoBooking)
+        rvBooking = rootView.findViewById(R.id.rvBooking)
+        tvNoBooking = rootView.findViewById(R.id.tvNoBooking)
         rvBooking.adapter = BookedAdapter(bookedList,this)
         rvBooking.layoutManager = LinearLayoutManager(context)
         rvBooking.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+        val swipeRefresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
+
+        loadData()
+        swipeRefresh.setOnRefreshListener { loadData();swipeRefresh.isRefreshing = false }
+        return rootView
+    }
+    private fun loadData(){
         val url = getString(R.string.url,"booked.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
@@ -51,9 +62,8 @@ class OldBookingFragment : Fragment(){
                     val rating = obj.getString("rating").toFloatOrNull()
                     val accountFk = obj.getString("account_fk")
                     val accountItem = AccountItem(accountFk,accountName,addressItem=AddressItem(address=address))
-                    val timeItem = TimeItem(time,maxTime)
                     val imageId = obj.getString("image_id")
-                    bookedList.add(StyleItem(name,price,timeItem,info,id=styleId,date=start,accountItem=accountItem,rating=rating,
+                    bookedList.add(StyleItem(name,price,time,info,id=styleId,date=start,accountItem=accountItem,rating=rating,
                         imageId=imageId)) }
                 rvBooking.adapter?.notifyItemRangeInserted(0,bookedList.size)},
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
@@ -61,9 +71,7 @@ class OldBookingFragment : Fragment(){
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
                 params["user_id"] = userItem.id
-                return params
-            }}
+                return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-        return rootView
     }
 }

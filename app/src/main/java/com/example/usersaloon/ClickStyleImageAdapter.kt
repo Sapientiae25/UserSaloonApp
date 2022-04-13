@@ -32,11 +32,9 @@ class ClickStyleImageAdapter(private var images: MutableList<Pair<String,String>
                         val name = obj.getString("name")
                         val price = obj.getString("price").toFloat()
                         val time = obj.getString("time")
-                        val maxTime = obj.getString("max_time")
                         val info = obj.getString("info")
                         val rating = obj.getString("rating").toFloatOrNull()
-                        val timeItem = TimeItem(time,maxTime)
-                        val styleItem = StyleItem(name,price,timeItem,info,styleId,rating=rating)
+                        val styleItem = StyleItem(name,price,time,info,styleId,rating=rating)
                         val bundle = bundleOf(Pair("styleItem",styleItem))
                         view.findNavController().navigate(R.id.action_userFragment_to_styleFragment,bundle) },
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) { @Throws(

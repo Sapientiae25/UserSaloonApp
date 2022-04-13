@@ -95,7 +95,7 @@
     <string name="end">End:</string>
     <string name="month">Month</string>
     <string name="make_datetime">%1$s %2$s</string>
-    <string name="book_show">%1$s: %2$s</string>
+    <string name="time_colon">%1$s:%2$s</string>
     <string name="next_day">Next day</string>
     <string name="previous_day">Previous day</string>
     <string name="break_word">Break</string>

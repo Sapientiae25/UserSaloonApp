@@ -43,8 +43,7 @@ class TextAdapter (private val textList: MutableList<String>,val activity: Defau
                             val address = obj.getString("address")
                             val imageId = obj.getString("image_id")
                             val accountItem = AccountItem(accountId,accountName,addressItem=AddressItem(address=address))
-                            val timeItem = TimeItem(time,maxTime)
-                            styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,rating=rating,imageId=imageId))}
+                            styleList.add(StyleItem(name,price,time,info,styleId,accountItem=accountItem,rating=rating,imageId=imageId))}
                         activity.closeSearch()
                         val bundle = bundleOf(Pair("styleList",styleList))
                         activity.findNavController(R.id.activityFragment).navigate(R.id.action_global_resultFragment,bundle)

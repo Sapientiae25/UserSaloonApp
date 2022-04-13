@@ -3,7 +3,6 @@ package com.example.usersaloon
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -28,6 +28,9 @@ class CategoryFragment : Fragment(){
     lateinit var categoryItem: CategoryItem
     private lateinit var vpImages: ViewPager2
     private lateinit var imageUrls: MutableList<Pair<String,String>>
+    private lateinit var rvCategoryStyleItems: RecyclerView
+    private lateinit var tvNoStyles: TextView
+    val styleItemList = mutableListOf<StyleItem>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,39 +39,12 @@ class CategoryFragment : Fragment(){
         val rootView =  inflater.inflate(R.layout.fragment_category, container, false)
         categoryItem = arguments?.getParcelable("categoryItem")!!
         (activity as DefaultActivity).supportActionBar?.title = categoryItem.category
-        val styleItemList = mutableListOf<StyleItem>()
-        val rvCategoryStyleItems = rootView.findViewById<RecyclerView>(R.id.rvCategoryStyleItems)
-        val tvNoStyles = rootView.findViewById<TextView>(R.id.tvNoStyles)
+        rvCategoryStyleItems = rootView.findViewById(R.id.rvCategoryStyleItems)
+        tvNoStyles = rootView.findViewById(R.id.tvNoStyles)
         rvCategoryStyleItems.adapter = CategoryItemAdapter(styleItemList)
         rvCategoryStyleItems.layoutManager = LinearLayoutManager(context)
         rvCategoryStyleItems.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
-        val url = getString(R.string.url,"get_category_styles.php")
-        val stringRequest = object : StringRequest(
-            Method.POST, url, Response.Listener { response ->
-                println(response)
-                val arr = JSONArray(response)
-                if (arr.length() == 0){tvNoStyles.visibility = View.VISIBLE}
-                for (x in 0 until arr.length()){
-                    val obj = arr.getJSONObject(x)
-                    val name = obj.getString("name")
-                    val price = obj.getString("price").toFloat()
-                    val time = obj.getString("time")
-                    val styleId = obj.getString("style_id")
-                    val maxTime = obj.getString("max_time")
-                    val info = obj.getString("info")
-                    val rating = obj.getString("rating").toFloatOrNull()
-                    val timeItem = TimeItem(time,maxTime)
-                    val imageId = obj.getString("image_id")
-                    styleItemList.add(StyleItem(name,price,timeItem,info,id=styleId,rating=rating,imageId=imageId)) }
-                rvCategoryStyleItems.adapter?.notifyItemRangeInserted(0,styleItemList.size)},
-            Response.ErrorListener { volleyError -> println(volleyError.message) }) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["category_id"] = categoryItem.id
-                return params
-            }}
-        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+        val swipeRefresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
 
         vpImages = rootView.findViewById(R.id.vpImages)
         val sliderHandler = Handler(Looper.getMainLooper())
@@ -98,13 +74,13 @@ class CategoryFragment : Fragment(){
                 sliderHandler.removeCallbacks(sliderRunnable)
                 sliderHandler.postDelayed(sliderRunnable, 4000) } })
 
+        loadData()
         loadImages()
-
+        swipeRefresh.setOnRefreshListener { loadData();loadImages();swipeRefresh.isRefreshing = false }
         return rootView }
     private fun loadImages(){
         val url = getString(R.string.url,"get_category_images.php")
         val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
-            Log.println(Log.ASSERT,"CATEG",response)
             val arr = JSONArray(response)
             if (arr.length() == 0) {vpImages.visibility = View.GONE}
             for (i in 0 until arr.length()){
@@ -119,6 +95,33 @@ class CategoryFragment : Fragment(){
             val params = java.util.HashMap<String, String>()
             params["category_id"] = categoryItem.id
             return params }}
+        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+    }
+    private fun loadData(){
+        val url = getString(R.string.url,"get_category_styles.php")
+        val stringRequest = object : StringRequest(
+            Method.POST, url, Response.Listener { response ->
+                println(response)
+                val arr = JSONArray(response)
+                if (arr.length() == 0){tvNoStyles.visibility = View.VISIBLE}
+                for (x in 0 until arr.length()){
+                    val obj = arr.getJSONObject(x)
+                    val name = obj.getString("name")
+                    val price = obj.getString("price").toFloat()
+                    val time = obj.getString("time")
+                    val styleId = obj.getString("style_id")
+                    val maxTime = obj.getString("max_time")
+                    val info = obj.getString("info")
+                    val rating = obj.getString("rating").toFloatOrNull()
+                    val imageId = obj.getString("image_id")
+                    styleItemList.add(StyleItem(name,price,time,info,id=styleId,rating=rating,imageId=imageId)) }
+                rvCategoryStyleItems.adapter?.notifyItemRangeInserted(0,styleItemList.size)},
+            Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["category_id"] = categoryItem.id
+                return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
     }
 }

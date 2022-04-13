@@ -160,9 +160,8 @@ class SearchFragment : Fragment() {
                         val accountId = obj.getString("account_fk")
                         val accountName = obj.getString("account_name")
                         val accountItem = AccountItem(accountId,accountName)
-                        val timeItem = TimeItem(time,maxTime)
                         val imageId = obj.getString("image_id")
-                        styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,rating=rating,imageId=imageId))}
+                        styleList.add(StyleItem(name,price,time,info,styleId,accountItem=accountItem,rating=rating,imageId=imageId))}
                     val bundle = bundleOf(Pair("styleItem",styleList))
                     view.findNavController().navigate(R.id.action_searchFragment_to_resultFragment,bundle) },
                 Response.ErrorListener { volleyError -> println(volleyError.message) }) {

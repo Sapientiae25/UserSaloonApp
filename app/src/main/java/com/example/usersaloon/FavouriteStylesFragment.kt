@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -17,21 +18,32 @@ import org.json.JSONArray
 
 class FavouriteStylesFragment : Fragment(){
 
+    lateinit var userItem: UserItem
+    private lateinit var rvStyles: RecyclerView
+    private lateinit var llNoFavourites: LinearLayout
+    val styleList = mutableListOf<StyleItem>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_favourite_styles, container, false)
         (activity as DefaultActivity).supportActionBar?.title = "Favourite Styles"
-        val userItem = (activity as DefaultActivity).userItem
-        val styleList = mutableListOf<StyleItem>()
-        val rvStyles = rootView.findViewById<RecyclerView>(R.id.rvStyles)
-        val llNoFavourites = rootView.findViewById<LinearLayout>(R.id.llNoFavourites)
+        userItem = (activity as DefaultActivity).userItem
+        rvStyles = rootView.findViewById(R.id.rvStyles)
+        llNoFavourites = rootView.findViewById(R.id.llNoFavourites)
         rvStyles.layoutManager = LinearLayoutManager(context)
         rvStyles.adapter = FavouriteStylesAdapter(styleList)
         rvStyles.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+        val swipeRefresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
+
+        loadData()
+        swipeRefresh.setOnRefreshListener { loadData();swipeRefresh.isRefreshing = false }
+        return rootView
+    }
+    private fun loadData(){
         val url = getString(R.string.url,"get_liked_styles.php")
-        val stringRequest: StringRequest = object : StringRequest(
+        val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"FAV",response)
                 val arr = JSONArray(response)
@@ -47,9 +59,8 @@ class FavouriteStylesFragment : Fragment(){
                     val accountId = obj.getString("account_id")
                     val accountName = obj.getString("account_name")
                     val accountItem = AccountItem(accountId,accountName)
-                    val timeItem = TimeItem(time,maxTime)
                     val imageId = obj.getString("image_id")
-                    styleList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,imageId=imageId)) }
+                    styleList.add(StyleItem(name,price,time,info,styleId,accountItem=accountItem,imageId=imageId)) }
                 rvStyles.adapter?.notifyItemRangeInserted(0,styleList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
@@ -57,6 +68,5 @@ class FavouriteStylesFragment : Fragment(){
                 params["user_id"] = userItem.id
                 return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-        return rootView
     }
 }

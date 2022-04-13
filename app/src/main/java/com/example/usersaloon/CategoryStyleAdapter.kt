@@ -26,14 +26,11 @@ class CategoryStyleAdapter (private val resultList: MutableList<StyleItem>)
 
         fun bind(index: Int){
             val currentItem = resultList[index]
-            val timeItem = currentItem.time
             name.text = currentItem.name
             price.text = itemView.context.getString(R.string.money,currentItem.price)
             tvAddress.text = currentItem.accountItem?.addressItem?.address
             if (currentItem.rating == null) {rating.visibility = View.GONE} else {rating.rating = currentItem.rating.toFloat()}
-            val timeValue = if (timeItem.maxTime.isNullOrEmpty()) timeItem.time
-            else itemView.context.getString(R.string.time_distance,timeItem.time,timeItem.maxTime)
-            time.text = itemView.context.getString(R.string.time_mins,timeValue)
+            time.text = itemView.context.getString(R.string.time_mins,currentItem.time)
             itemView.setOnClickListener { view ->
                 val bundle = bundleOf(Pair("styleItem",currentItem))
                 view.findNavController().navigate(R.id.action_filterStyleFragment_to_styleFragment,bundle) }

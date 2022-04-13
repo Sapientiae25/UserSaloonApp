@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -17,19 +18,30 @@ import org.json.JSONArray
 
 class FavouriteSaloonsFragment : Fragment(){
 
+    lateinit var userItem: UserItem
+    private lateinit var rvSaloons: RecyclerView
+    private lateinit var llNoFavourites: LinearLayout
+    val saloonList = mutableListOf<AccountItem>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_favourite_saloons, container, false)
         (activity as DefaultActivity).supportActionBar?.title = "Favourite Saloons"
-        val userItem = (activity as DefaultActivity).userItem
-        val saloonList = mutableListOf<AccountItem>()
-        val rvSaloons = rootView.findViewById<RecyclerView>(R.id.rvSaloons)
-        val llNoFavourites = rootView.findViewById<LinearLayout>(R.id.llNoFavourites)
+        userItem = (activity as DefaultActivity).userItem
+        rvSaloons = rootView.findViewById(R.id.rvSaloons)
+        llNoFavourites = rootView.findViewById(R.id.llNoFavourites)
         rvSaloons.layoutManager = LinearLayoutManager(context)
         rvSaloons.adapter = FavouriteSaloonAdapter(saloonList)
         rvSaloons.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+        val swipeRefresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
+
+        loadData()
+        swipeRefresh.setOnRefreshListener { loadData();swipeRefresh.isRefreshing = false }
+        return rootView
+    }
+    private fun loadData(){
         val url = getString(R.string.url,"get_liked_saloons.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
@@ -59,6 +71,5 @@ class FavouriteSaloonsFragment : Fragment(){
                 params["user_id"] = userItem.id
                 return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
-        return rootView
     }
 }

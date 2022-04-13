@@ -23,7 +23,7 @@ class StyleCategoryAdapter (private val categories: MutableList<CategoryItem>)
             tvCategory.text = currentItem.category
             itemView.setOnClickListener { view ->
                 val bundle = bundleOf(Pair("categoryItem",currentItem))
-                view.findNavController().navigate(R.id.action_userFragment_to_categoryFragment,bundle) }
+                view.findNavController().navigate(R.id.action_saloonFragment_to_categoryFragment,bundle) }
             if (currentItem.imageId.isNotEmpty()){
                 Picasso.get().load(itemView.context.getString(
                     R.string.url,"style_images/${currentItem.imageId}.jpeg")).fit().centerCrop().into(image)}

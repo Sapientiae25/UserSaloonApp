@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_styleFragment_to_addCardFragment"
             app:destination="@id/addCardFragment" />
+        <action
+            android:id="@+id/action_styleFragment_to_appointmentFragment"
+            app:destination="@id/appointmentFragment" />
     </fragment>
     <fragment
         android:id="@+id/saloonFragment"
@@ -87,6 +90,9 @@
         <action
             android:id="@+id/action_saloonFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_saloonFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
@@ -272,4 +278,12 @@
             app:argType="com.example.usersaloon.BookingItem" />
     </fragment>
     <action android:id="@+id/action_global_resultFragment" app:destination="@id/resultFragment" />
+    <fragment
+        android:id="@+id/appointmentFragment"
+        android:name="com.example.usersaloon.AppointmentFragment"
+        android:label="AppointmentFragment" >
+        <argument
+            android:name="styleItem"
+            app:argType="com.example.usersaloon.StyleItem" />
+    </fragment>
 </navigation>

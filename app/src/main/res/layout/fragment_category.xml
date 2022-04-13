@@ -35,11 +35,17 @@
         app:tabMode="scrollable"
         app:tabPaddingStart="2dp"
         app:tabPaddingEnd="2dp"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCategoryStyleItems"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vpImages"/>
+        app:layout_constraintTop_toBottomOf="@+id/vpImages">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategoryStyleItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

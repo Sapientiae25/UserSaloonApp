@@ -37,8 +37,7 @@ class SearchAdapter (private val searchList: MutableList<StyleItem>)
                         val accountId = obj.getString("account_id")
                         val accountName = obj.getString("account_name")
                         val accountItem = AccountItem(accountId,accountName)
-                        val timeItem = TimeItem(time,maxTime)
-                        val styleItem = StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem)
+                        val styleItem = StyleItem(name,price,time,info,styleId,accountItem=accountItem)
                     },
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) {
                     @Throws(AuthFailureError::class)

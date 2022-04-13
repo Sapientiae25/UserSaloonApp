@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -30,6 +31,9 @@ class FilterStyleFragment : Fragment() {
     private var styleItemList = mutableListOf<StyleItem>()
     private lateinit var vpImages: ViewPager2
     private lateinit var imageUrls: MutableList<Pair<String,String>>
+    private lateinit var tvNoStyles: TextView
+    private lateinit var rvCategoryStyleItems: RecyclerView
+    private val filterArr = JSONArray()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,22 +41,22 @@ class FilterStyleFragment : Fragment() {
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_category, container, false)
         filterItem = arguments?.getParcelable("filterItem")!!
-        val tvNoStyles = rootView.findViewById<TextView>(R.id.tvNoStyles)
+        tvNoStyles = rootView.findViewById(R.id.tvNoStyles)
         val filterObj = JSONObject()
         val length = JSONArray(filterItem.length)
         val gender = filterItem.gender
-        val rvCategoryStyleItems = rootView.findViewById<RecyclerView>(R.id.rvCategoryStyleItems)
+        rvCategoryStyleItems = rootView.findViewById(R.id.rvCategoryStyleItems)
         rvCategoryStyleItems.layoutManager = LinearLayoutManager(context)
         rvCategoryStyleItems.adapter = CategoryStyleAdapter(displayStyleList)
         rvCategoryStyleItems.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         filterObj.put("length",length)
         filterObj.put("gender",gender)
-        val filterArr = JSONArray()
         filterArr.put(filterObj)
 
         vpImages = rootView.findViewById(R.id.vpImages)
         val sliderHandler = Handler(Looper.getMainLooper())
         val tabLayout = rootView.findViewById<TabLayout>(R.id.tabLayout)
+        val swipeRefresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
         val adapter = ClickStyleImageAdapter(imageUrls)
         vpImages.adapter = adapter
         vpImages.clipChildren = false
@@ -78,6 +82,11 @@ class FilterStyleFragment : Fragment() {
                 sliderHandler.removeCallbacks(sliderRunnable)
                 sliderHandler.postDelayed(sliderRunnable, 4000) } })
 
+        loadData()
+        swipeRefresh.setOnRefreshListener { loadData();swipeRefresh.isRefreshing = false }
+
+        return rootView }
+    private fun loadData(){
         val url = getString(R.string.url,"filter_styles.php")
         val jsonRequest = JsonArrayRequest(
             Request.Method.POST, url,filterArr, { arr ->
@@ -96,17 +105,14 @@ class FilterStyleFragment : Fragment() {
                     val accountName = obj.getString("account_name")
                     val rating = obj.getString("rating").toFloatOrNull()
                     val imageId = obj.getString("image_id")
-                    if (imageId.isNotEmpty() && imageUrls.size < 6)
-                        imageUrls.add(Pair(imageId,styleId))
+                    if (imageId.isNotEmpty() && imageUrls.size < 6) imageUrls.add(Pair(imageId,styleId))
                     val accountItem = AccountItem(accountFk,accountName,addressItem= AddressItem(address=address))
-                    val timeItem = TimeItem(time,maxTime)
-                    styleItemList.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem,rating=rating,imageId=imageId)) }
+                    styleItemList.add(StyleItem(name,price,time,info,styleId,accountItem=accountItem,rating=rating,imageId=imageId)) }
                 if (imageUrls.size == 0) vpImages.visibility = View.GONE
                 vpImages.adapter?.notifyItemRangeInserted(1,imageUrls.size)
                 displayStyleList.addAll(styleItemList)
                 rvCategoryStyleItems.adapter?.notifyItemRangeInserted(0,displayStyleList.size) },
             { volleyError -> println(volleyError.message) })
         VolleySingleton.instance?.addToRequestQueue(jsonRequest)
-
-        return rootView }
+    }
 }

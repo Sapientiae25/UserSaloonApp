@@ -38,10 +38,8 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var max: String
     private lateinit var accountItem : AccountItem
     private lateinit var styleItem : StyleItem
-    private lateinit var timeItem : TimeItem
     private lateinit var chosenDate: String
     private  var bookedTimes = mutableListOf<Pair<Int,Int>>()
-    private lateinit var timeValue: String
     private lateinit var addressItem: AddressItem
     private lateinit var vpImages: ViewPager2
     private val imageUrls = mutableListOf("")
@@ -78,10 +76,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         chosenDate = getString(R.string.datetime,year,month,day)
         rvReviews.adapter = ReviewAdapter(reviewList)
         rvReviews.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
-        timeItem = styleItem.time
-        if (timeItem.maxTime.isNullOrEmpty()) { timeValue = timeItem.time; max = timeItem.time }
-        else { timeValue = getString(R.string.time_distance, timeItem.time, timeItem.maxTime); max = timeItem.maxTime!! }
-        tvDuration.text = getString(R.string.duration_time,timeValue)
+        tvDuration.text = styleItem.time
         tvPrice.text = getString(R.string.money,styleItem.price)
         btnBook.text = getString(R.string.separate,"BOOK NOW",tvPrice.text)
         requireActivity().title = styleItem.accountItem?.name
@@ -168,8 +163,10 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
 
-        btnBook.setOnClickListener{ val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
-            datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show()}
+        btnBook.setOnClickListener{ view -> view.findNavController().navigate(R.id.action_styleFragment_to_appointmentFragment)
+//            val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
+//            datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show()
+        }
         rvMoreLike.adapter = SimilarAdapter(similarStyles)
         url = getString(R.string.url,"similar_styles.php")
         stringRequest = object : StringRequest(
@@ -182,13 +179,11 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     val price = obj.getString("price").toFloat()
                     val time = obj.getString("time")
                     val styleId = obj.getString("style_id")
-                    val maxTime = obj.getString("max_time")
                     val info = obj.getString("info")
                     val accountId = obj.getString("account_id")
                     val accountName = obj.getString("account_name")
                     val accountItem = AccountItem(accountId,accountName)
-                    val timeItem = TimeItem(time,maxTime)
-                    similarStyles.add(StyleItem(name,price,timeItem,info,styleId,accountItem=accountItem)) }
+                    similarStyles.add(StyleItem(name,price,time,info,styleId,accountItem=accountItem)) }
                 rvMoreLike.adapter?.notifyItemRangeInserted(0,similarStyles.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)

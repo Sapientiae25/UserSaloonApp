@@ -4,9 +4,9 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TimeItem(val time: String="", val maxTime: String? = null): Parcelable
+data class TimeItem(val time: String=""): Parcelable
 @Parcelize
-data class StyleItem(val name: String="",val price: Float=0.0.toFloat(), val time: TimeItem=TimeItem(),val info: String="",
+data class StyleItem(val name: String="",val price: Float=0.0.toFloat(), val time: String="",val info: String="",
                      val id: String = "",val bookingId:String="",val filterItem: StyleFilterItem=StyleFilterItem(),
                      var accountItem: AccountItem? = null,val date: String="",val rating:Float?=null,var like: Boolean=false,
                      val imageId: String=""): Parcelable
@@ -34,3 +34,6 @@ data class FilterItem(var gender: Int = 2, var length: MutableSet<Int> = mutable
                       var sort: Int=0,val text: String=""): Parcelable
 @Parcelize
 data class CardItem(val id: String="", val number: String="",val expiry: String="",val cvv: String=""): Parcelable
+@Parcelize
+data class AppointmentItem(val start: String="",val end: String="",val startMinute:Int=0,val endMinute:Int = 0,
+                           var available: Boolean=true): Parcelable
