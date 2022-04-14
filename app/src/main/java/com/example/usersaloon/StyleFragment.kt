@@ -76,7 +76,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         chosenDate = getString(R.string.datetime,year,month,day)
         rvReviews.adapter = ReviewAdapter(reviewList)
         rvReviews.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
-        tvDuration.text = styleItem.time
+        tvDuration.text = getString(R.string.duration_time,styleItem.time)
         tvPrice.text = getString(R.string.money,styleItem.price)
         btnBook.text = getString(R.string.separate,"BOOK NOW",tvPrice.text)
         requireActivity().title = styleItem.accountItem?.name
@@ -163,7 +163,8 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
 
-        btnBook.setOnClickListener{ view -> view.findNavController().navigate(R.id.action_styleFragment_to_appointmentFragment)
+        btnBook.setOnClickListener{ view -> val bundle = bundleOf(Pair("styleItem",styleItem))
+            view.findNavController().navigate(R.id.action_styleFragment_to_appointmentFragment,bundle)
 //            val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
 //            datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show()
         }

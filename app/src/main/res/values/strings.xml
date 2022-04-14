@@ -131,6 +131,7 @@
     <string name="no_styles_found">No Styles Found</string>
     <string name="delete_check">Are You Sure You Want To Delete %1$s</string>
     <string name="user_date">%1$02d/%2$02d/%3$04d</string>
+    <string name="time_format">%1$02d:%2$02d</string>
     <string name="save_number">Save Number</string>
     <string name="no_upcoming_bookings">No Upcoming Bookings</string>
     <string name="code">code</string>
@@ -201,11 +202,13 @@
     <string name="google_icon">Google Icon</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="already_have_an_account">Already Have An Account?</string>
-    <string name="url">http://192.168.1.102:8012/saloon/%1$s</string>
+    <string name="url">http://192.168.1.134:8012/saloon/%1$s</string>
     <string name="salon_s_near_you">Salon\'s Near You</string>
     <string name="recently_viewed">Recently Viewed</string>
     <string name="select_payment_method">Select Payment Method:</string>
     <string name="go_to_store"><u>Go To Store</u></string>
     <string name="go_to_saloon">Go To Saloon</string>
+    <string name="show_all_times">Show all times</string>
+    <string name="only_show_available_times">Only Show available times</string>
 
 </resources>

@@ -1,20 +1,13 @@
 package com.example.usersaloon
 
-import android.app.Dialog
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.AdapterView
 import android.widget.TextView
-import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.AuthFailureError
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
 
-class DayAdapter (private val dayList: MutableList<Triple<Int,Int,Int>>,val clickListener: (Triple<Int,Int,Int>) -> Unit)
+class DayAdapter (private val dayList: MutableList<DayItem>,val clickListener: (DayItem) -> Unit)
     : RecyclerView.Adapter<DayAdapter.DayViewHolder>() {
 
     inner class DayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -22,8 +15,15 @@ class DayAdapter (private val dayList: MutableList<Triple<Int,Int,Int>>,val clic
 
         fun bind(index: Int){
             val currentItem = dayList[index]
-            tvDate.text= currentItem.third.toString()
-            itemView.setOnClickListener { clickListener(currentItem) } }}
+            if (currentItem.chosen) { tvDate.setBackgroundResource(R.drawable.chosen_circle) }
+            else {tvDate.setBackgroundResource(R.drawable.circle)}
+            tvDate.text = currentItem.date.first.toString()
+            itemView.setOnClickListener {
+                tvDate.setBackgroundResource(R.drawable.chosen_circle)
+                currentItem.chosen = true
+                for (x in 0 until dayList.size){ val item = dayList[x]
+                    if (item.chosen && index != x) { item.chosen = false; notifyItemChanged (x);break }}
+                clickListener(currentItem) } }}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DayViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.day_layout, parent, false)

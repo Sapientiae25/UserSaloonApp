@@ -1,17 +1,10 @@
 package com.example.usersaloon
 
-import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.TextView
-import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.AuthFailureError
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
 
 class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>,val styleItem: StyleItem)
     : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
@@ -28,11 +21,10 @@ class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>,
             val currentItem = bookingList[index]
             tvStyle.text = styleItem.name
             tvTime.text = itemView.context.getString(R.string.separate,currentItem.start,currentItem.end)
-            tvDuration.text = styleItem.time
+            tvDuration.text = itemView.context.getString(R.string.duration_time,styleItem.time)
             tvAddress.text = styleItem.accountItem?.addressItem?.address
-            tvCost.text = String.format("%.1f", styleItem.price)
+            tvCost.text = itemView.context.getString(R.string.money,styleItem.price)
             btnBook.isEnabled = currentItem.available
-
         }}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppointmentViewHolder {

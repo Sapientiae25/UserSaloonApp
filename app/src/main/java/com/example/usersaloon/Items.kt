@@ -35,5 +35,7 @@ data class FilterItem(var gender: Int = 2, var length: MutableSet<Int> = mutable
 @Parcelize
 data class CardItem(val id: String="", val number: String="",val expiry: String="",val cvv: String=""): Parcelable
 @Parcelize
-data class AppointmentItem(val start: String="",val end: String="",val startMinute:Int=0,val endMinute:Int = 0,
+data class AppointmentItem(var start: String="",var end: String="",val startMinute:Int=0,val endMinute:Int = 0,
                            var available: Boolean=true): Parcelable
+@Parcelize
+data class DayItem(val date: Triple<Int,Int,Int>, var chosen: Boolean=false): Parcelable

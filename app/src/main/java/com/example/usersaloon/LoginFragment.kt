@@ -51,7 +51,6 @@ class LoginFragment : Fragment() {
                 val url = getString(R.string.url,"user_login.php")
                 val stringRequest = object : StringRequest(
                     Method.POST, url, Response.Listener { response ->
-                        Log.println(Log.ASSERT,"SUI",response)
                         val obj = JSONObject(response)
                         val exist = obj.getInt("exist")
                         if (exist == 1){
