@@ -42,6 +42,9 @@ class FavouriteSaloonsFragment : Fragment(){
         return rootView
     }
     private fun loadData(){
+        rvSaloons.adapter?.notifyItemRangeRemoved(0,saloonList.size)
+        saloonList.clear()
+
         val url = getString(R.string.url,"get_liked_saloons.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
 
-class StyleCategoryAdapter (private val categories: MutableList<CategoryItem>)
+class StyleCategoryAdapter (private val categories: MutableList<CategoryItem>,val accountItem: AccountItem)
     : RecyclerView.Adapter<StyleCategoryAdapter.StyleCategoryViewHolder>(){
 
     inner class StyleCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -22,7 +22,7 @@ class StyleCategoryAdapter (private val categories: MutableList<CategoryItem>)
         fun bind(index: Int){val currentItem = categories[index]
             tvCategory.text = currentItem.category
             itemView.setOnClickListener { view ->
-                val bundle = bundleOf(Pair("categoryItem",currentItem))
+                val bundle = bundleOf(Pair("categoryItem",currentItem),Pair("accountItem",accountItem))
                 view.findNavController().navigate(R.id.action_saloonFragment_to_categoryFragment,bundle) }
             if (currentItem.imageId.isNotEmpty()){
                 Picasso.get().load(itemView.context.getString(

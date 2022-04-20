@@ -29,11 +29,9 @@ class PaymentBottomSheet : BottomSheetDialogFragment(){
         val rootView =  inflater.inflate(R.layout.payment_bottom_sheet, container, false)
         val rbCards = rootView.findViewById<RadioGroup>(R.id.rbCards)
         val btnAddCard = rootView.findViewById<AppCompatButton>(R.id.btnAddCard)
+        val bookingItem = arguments?.getParcelable<BookingItem>("bookingItem")!!
         val cardList = mutableListOf<CardItem>()
         val url = getString(R.string.url,"get_cards.php")
-        val bookingItem = arguments?.getParcelable<BookingItem>("bookingItem")!!
-
-
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
                 Log.println(Log.ASSERT,"PAY",response)
@@ -47,12 +45,12 @@ class PaymentBottomSheet : BottomSheetDialogFragment(){
                     val btn = RadioButton(context)
                     btn.text = getString(R.string.card_ending, cardNum.takeLast(4))
                     btn.setOnClickListener{
-                        val url2 = getString(R.string.url,"check_booked_time.php")
+                        val url2 = getString(R.string.url,"book.php")
                         val stringRequest = object : StringRequest(
                             Method.POST, url2, Response.Listener { response -> dismiss()
-                                Log.println(Log.ASSERT,"BOOK",response)
-                                Toast.makeText(context,"Style Booked",Toast.LENGTH_SHORT).show()
-                                (activity as DefaultActivity).addNotification() },
+                                if (response == "0"){Toast.makeText(context,"Style Booked",Toast.LENGTH_SHORT).show()
+                                    (activity as DefaultActivity).addNotification()}
+                                else{Toast.makeText(context,"Invalid Time",Toast.LENGTH_SHORT).show()} },
                             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
                             @Throws(AuthFailureError::class)
                             override fun getParams(): Map<String, String> {
@@ -63,11 +61,9 @@ class PaymentBottomSheet : BottomSheetDialogFragment(){
                                 params["style_id"] = bookingItem.styleItem.id
                                 params["user_id"] = (activity as DefaultActivity).userItem.id
                                 return params }}
-                        VolleySingleton.instance?.addToRequestQueue(stringRequest)
-                        }
+                        VolleySingleton.instance?.addToRequestQueue(stringRequest) }
                     rbCards.addView(btn)
-                    cardList.add(CardItem(cardId, cardNum, expiry, cvv))
-                } },
+                    cardList.add(CardItem(cardId, cardNum, expiry, cvv)) } },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {

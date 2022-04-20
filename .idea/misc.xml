@@ -25,12 +25,14 @@
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/booking_layout.xml" value="0.2545289855072464" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/card_fragment.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/card_layout.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/charge_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/check_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/choose_card.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/chosen_circle.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/curved_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/day_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/delete_layout.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/delete_popup.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/explore_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/favourite_saloon_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_address.xml" value="0.32083333333333336" />
@@ -73,6 +75,7 @@
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/saloon_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/similar_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/similiar_layout.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/slide_layout.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/style_category_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/style_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/test.xml" value="0.25" />

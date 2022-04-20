@@ -67,7 +67,7 @@ class BookingFragment : Fragment() {
                     val rating = obj.getString("rating").toFloatOrNull()
                     val accountItem = AccountItem(accountId,accountName, addressItem=AddressItem(address=address))
                     val styleItem =  StyleItem(name,price,time,info,styleId,accountItem=accountItem,rating=rating)
-                    bookingList.add(BookingItem(bookingId,sTime,sDate,"",styleItem)) }
+                    bookingList.add(BookingItem(bookingId,sTime,sDate,styleItem)) }
                 rvBooking.adapter?.notifyItemRangeInserted(0,bookingList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)

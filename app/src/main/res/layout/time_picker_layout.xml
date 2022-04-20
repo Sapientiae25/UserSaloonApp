@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardMaxElevation="12dp"
+    app:cardPreventCornerOverlap="true"
+    android:layout_gravity="center">
+
+<LinearLayout
     android:id="@+id/llTester"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="@drawable/border"
     android:orientation="vertical">
     <TextView
         android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:id="@+id/tvHelp"
         android:textAlignment="center"
         android:layout_width="match_parent"
@@ -17,7 +31,7 @@
         android:textColor="@color/white"
         android:textSize="30sp"
         android:background="@drawable/border"
-        android:backgroundTint="@color/teal_200"/>
+        android:backgroundTint="@color/loginColor"/>
     <LinearLayout
         android:textAlignment="center"
         android:layout_width="match_parent"
@@ -25,8 +39,8 @@
         android:gravity="center"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp">
+        android:paddingStart="60dp"
+        android:paddingEnd="60dp">
         <NumberPicker
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,28 +55,35 @@
     <LinearLayout
         android:textAlignment="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/close"
-            android:textAlignment="center"
-            android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingBottom="12dp">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/back"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/light_grey"
+            android:background="@drawable/round_button"
+            android:textColor="@color/white"
             android:text="@string/back"
-            android:background="@drawable/border"
-            android:layout_weight="1"
-            android:textColor="@color/red"
-            android:textSize="30sp"
-            android:paddingBottom="5dp"/>
-        <TextView
+            android:textSize="15sp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="4dp"/>
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/save"
-            android:textAlignment="center"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/border"
+            android:backgroundTint="@color/loginColor"
+            android:background="@drawable/round_button"
+            android:textColor="@color/white"
             android:text="@string/save"
-            android:textColor="@color/teal_200"
-            android:textSize="30sp"
-            android:paddingBottom="5dp"/>
+            android:textSize="15sp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="12dp"/>
     </LinearLayout>
 </LinearLayout>
+</androidx.cardview.widget.CardView>

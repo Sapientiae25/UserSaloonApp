@@ -104,6 +104,20 @@ class UserFragment : Fragment(), UpdateLocation {
 
     override fun update(location: LatLng, address: String) { currentLat = location.latitude; currentLong = location.longitude }
     private fun loadData() {
+        rvPopular.adapter?.notifyItemRangeRemoved(0,popularList.size)
+        rvSaloons.adapter?.notifyItemRangeRemoved(0,saloonList.size)
+        rvFavouriteSaloons.adapter?.notifyItemRangeRemoved(0,likedSaloonList.size)
+        rvFavouriteStyles.adapter?.notifyItemRangeRemoved(0,likedStyleList.size)
+        rvCategories.adapter?.notifyItemRangeRemoved(0,filters.size)
+        rvRecent.adapter?.notifyItemRangeRemoved(0,recentList.size)
+
+        saloonList.clear()
+        popularList.clear()
+        likedSaloonList.clear()
+        likedStyleList.clear()
+        recentList.clear()
+        filters.clear()
+
         var url = getString(R.string.url,"get_chosen_locations.php")
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->

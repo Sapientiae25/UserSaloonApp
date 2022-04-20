@@ -8,7 +8,7 @@ data class TimeItem(val time: String=""): Parcelable
 @Parcelize
 data class StyleItem(val name: String="",val price: Float=0.0.toFloat(), val time: String="",val info: String="",
                      val id: String = "",val bookingId:String="",val filterItem: StyleFilterItem=StyleFilterItem(),
-                     var accountItem: AccountItem? = null,val date: String="",val rating:Float?=null,var like: Boolean=false,
+                     var accountItem: AccountItem = AccountItem(),val date: String="",val rating:Float?=null,var like: Boolean=false,
                      val imageId: String=""): Parcelable
 @Parcelize
 data class AccountItem(val id: String="",var name: String="", var password: String? = null,var number: String="",
@@ -25,8 +25,8 @@ data class ReviewItem(val review: String,val rating: Int ,val date: String)
 @Parcelize
 data class CategoryItem(val id: String,val category: String,val accountItem: AccountItem? = null,val imageId: String=""): Parcelable
 @Parcelize
-data class BookingItem(val bookingId: String,val time: String="", val date: String="",val duration: String="",
-                       val styleItem: StyleItem=StyleItem(),val accountItem: AccountItem=AccountItem()): Parcelable
+data class BookingItem(val bookingId: String,val time: String="", val date: String="", val styleItem: StyleItem=StyleItem(),
+                       val accountItem: AccountItem=AccountItem()): Parcelable
 @Parcelize
 data class StyleFilterItem(val length: String="",val gender: String="",val hair: String="",val style: String=""): Parcelable
 @Parcelize
@@ -36,6 +36,6 @@ data class FilterItem(var gender: Int = 2, var length: MutableSet<Int> = mutable
 data class CardItem(val id: String="", val number: String="",val expiry: String="",val cvv: String=""): Parcelable
 @Parcelize
 data class AppointmentItem(var start: String="",var end: String="",val startMinute:Int=0,val endMinute:Int = 0,
-                           var available: Boolean=true): Parcelable
+                           var available: Boolean=true,val date: String="",var visible: Boolean=true): Parcelable
 @Parcelize
 data class DayItem(val date: Triple<Int,Int,Int>, var chosen: Boolean=false): Parcelable

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="15dp"
         android:textColor="@color/black"
         android:text="@string/select_payment_method"
         android:textSize="25sp" />

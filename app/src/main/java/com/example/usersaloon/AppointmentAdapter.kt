@@ -4,9 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 
-class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>,val styleItem: StyleItem)
+class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>,val styleItem: StyleItem,
+                          val clickListener: (time: String) -> Unit)
     : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
 
     inner class AppointmentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -22,16 +24,20 @@ class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>,
             tvStyle.text = styleItem.name
             tvTime.text = itemView.context.getString(R.string.separate,currentItem.start,currentItem.end)
             tvDuration.text = itemView.context.getString(R.string.duration_time,styleItem.time)
-            tvAddress.text = styleItem.accountItem?.addressItem?.address
+            tvAddress.text = styleItem.accountItem.addressItem?.address
             tvCost.text = itemView.context.getString(R.string.money,styleItem.price)
             btnBook.isEnabled = currentItem.available
-        }}
+            btnBook.setOnClickListener { clickListener(tvTime.text.toString()) } }
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppointmentViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.appointment_layout, parent, false)
-        return AppointmentViewHolder(itemView)
-    }
+        return AppointmentViewHolder(itemView) }
 
     override fun onBindViewHolder(holder: AppointmentViewHolder, position: Int) { holder.bind(position) }
-    override fun getItemCount() = bookingList.size
+    override fun getItemCount(): Int {
+        var count = 0
+        for (i in bookingList){ if (i.visible) count+=1}
+        return count }
 }

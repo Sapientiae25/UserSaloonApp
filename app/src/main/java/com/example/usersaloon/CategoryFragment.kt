@@ -26,8 +26,9 @@ import kotlin.math.abs
 class CategoryFragment : Fragment(){
 
     lateinit var categoryItem: CategoryItem
+    lateinit var accountItem: AccountItem
     private lateinit var vpImages: ViewPager2
-    private lateinit var imageUrls: MutableList<Pair<String,String>>
+    private val imageUrls = mutableListOf<Pair<String,String>>()
     private lateinit var rvCategoryStyleItems: RecyclerView
     private lateinit var tvNoStyles: TextView
     val styleItemList = mutableListOf<StyleItem>()
@@ -38,6 +39,7 @@ class CategoryFragment : Fragment(){
     ): View? {
         val rootView =  inflater.inflate(R.layout.fragment_category, container, false)
         categoryItem = arguments?.getParcelable("categoryItem")!!
+        accountItem = arguments?.getParcelable("accountItem")!!
         (activity as DefaultActivity).supportActionBar?.title = categoryItem.category
         rvCategoryStyleItems = rootView.findViewById(R.id.rvCategoryStyleItems)
         tvNoStyles = rootView.findViewById(R.id.tvNoStyles)
@@ -49,7 +51,7 @@ class CategoryFragment : Fragment(){
         vpImages = rootView.findViewById(R.id.vpImages)
         val sliderHandler = Handler(Looper.getMainLooper())
         val tabLayout = rootView.findViewById<TabLayout>(R.id.tabLayout)
-        val adapter = ClickStyleImageAdapter(imageUrls)
+        val adapter = ClickStyleImageAdapter(imageUrls,accountItem)
         vpImages.adapter = adapter
         vpImages.clipChildren = false
         vpImages.clipToPadding = false
@@ -98,6 +100,11 @@ class CategoryFragment : Fragment(){
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
     }
     private fun loadData(){
+        rvCategoryStyleItems.adapter?.notifyItemRangeRemoved(0,styleItemList.size)
+        vpImages.adapter?.notifyItemRangeRemoved(0,imageUrls.size)
+
+        imageUrls.clear()
+        styleItemList.clear()
         val url = getString(R.string.url,"get_category_styles.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
@@ -114,7 +121,7 @@ class CategoryFragment : Fragment(){
                     val info = obj.getString("info")
                     val rating = obj.getString("rating").toFloatOrNull()
                     val imageId = obj.getString("image_id")
-                    styleItemList.add(StyleItem(name,price,time,info,id=styleId,rating=rating,imageId=imageId)) }
+                    styleItemList.add(StyleItem(name,price,time,info,id=styleId,rating=rating,imageId=imageId,accountItem=accountItem)) }
                 rvCategoryStyleItems.adapter?.notifyItemRangeInserted(0,styleItemList.size)},
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)

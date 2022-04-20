@@ -30,7 +30,7 @@ import org.json.JSONObject
 import java.util.*
 import kotlin.math.abs
 
-class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
+class StyleFragment : Fragment() {
 
     private var day = 0
     private var month = 0
@@ -42,7 +42,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private  var bookedTimes = mutableListOf<Pair<Int,Int>>()
     private lateinit var addressItem: AddressItem
     private lateinit var vpImages: ViewPager2
-    private val imageUrls = mutableListOf("")
+    private val imageUrls = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +52,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         styleItem = arguments?.getParcelable("styleItem")!!
         (activity as DefaultActivity).supportActionBar?.title = styleItem.name
         val userItem = (activity as DefaultActivity).userItem
-        accountItem = styleItem.accountItem!!
+        accountItem = styleItem.accountItem
         val tvDuration = rootView.findViewById<TextView>(R.id.tvDuration)
         val tvName = rootView.findViewById<TextView>(R.id.tvName)
         val tvInfo = rootView.findViewById<TextView>(R.id.tvInfo)
@@ -79,7 +79,7 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         tvDuration.text = getString(R.string.duration_time,styleItem.time)
         tvPrice.text = getString(R.string.money,styleItem.price)
         btnBook.text = getString(R.string.separate,"BOOK NOW",tvPrice.text)
-        requireActivity().title = styleItem.accountItem?.name
+        requireActivity().title = styleItem.accountItem.name
         tvName.text = styleItem.name
         tvInfo.text = styleItem.info
         ivLike.setOnClickListener {
@@ -254,92 +254,92 @@ class StyleFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
     }
 
-    override fun onDateSet(view: DatePicker?, newYear: Int, newMonth: Int, newDay: Int) {
-        bookedTimes.clear()
-        year=newYear;month=newMonth;day=newDay
-        chosenDate = getString(R.string.datetime,newYear,(newMonth+1),newDay)
-        val url = getString(R.string.url,"check_booking_day.php")
-        val stringRequest = object : StringRequest(
-            Method.POST, url, Response.Listener { response ->
-                val arr = JSONArray(response)
-                for (i in 0 until arr.length()){
-                    val obj = arr.getJSONObject(i)
-                    val startHour = obj.getInt("s_hour") * 60
-                    val startMinute = obj.getInt("s_min")
-                    val endHour = obj.getInt("e_hour") * 60
-                    val endMinute = obj.getInt("e_min")
-                    val startTime = startHour + startMinute
-                    val endTime = endHour + endMinute
-                    bookedTimes.add(Pair(startTime,endTime)) } },
-            Response.ErrorListener { volleyError -> println(volleyError.message) }) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["account_id"] = accountItem.id
-                params["date"] = chosenDate
-                return params
-            }}
-        VolleySingleton.instance?.addToRequestQueue(stringRequest)
-        showCustomDialog()
-    }
-    private fun showCustomDialog() {
-        val dialog = Dialog(requireContext())
-        var hour = 0
-        var minute = 0
-        val minOptions = arrayOf("00","15","30","45")
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.time_picker_layout)
-        val numPickerHour = dialog.findViewById<NumberPicker>(R.id.numPickerHour)
-        val numPickerMins = dialog.findViewById<NumberPicker>(R.id.numPickerMins)
-        val save = dialog.findViewById<TextView>(R.id.save)
-        val close = dialog.findViewById<TextView>(R.id.close)
-
-        numPickerHour.minValue = 0
-        numPickerHour.maxValue  = 23
-        numPickerMins.minValue = 0
-        numPickerMins.maxValue = 3
-        numPickerMins.displayedValues = minOptions
-        numPickerHour.setOnValueChangedListener { numberPicker, _, _ ->  hour = numberPicker.value}
-        numPickerMins.setOnValueChangedListener { numberPicker, _, _ ->
-            val x = minOptions[numberPicker.value] ;minute = x.toInt() }
-        close.setOnClickListener {val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
-            datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show();dialog.dismiss() }
-        save.setOnClickListener {
-            var booked = false
-            val currentMin = (hour * 60) + minute
-            for (book in bookedTimes){
-                if ((book.first .. book.second).contains(currentMin)){
-                    Toast.makeText(context,"Time Already Booked",Toast.LENGTH_SHORT).show()
-                    booked = true; break } }
-            if (!booked){
-                val chosenTime = getString(R.string.clock,hour,minute)
-                val startDateTime = getString(R.string.make_datetime,chosenDate,chosenTime)
-                val url = getString(R.string.url,"check_booked_time.php")
-                val stringRequest = object : StringRequest(
-                    Method.POST, url, Response.Listener { response ->
-                        if (response == "0"){ dialog.dismiss()
-                            val paymentBottomSheet = PaymentBottomSheet()
-                            val bookingItem = BookingItem("",startDateTime,
-                                getString(R.string.clock,max.toInt() / 60,max.toInt() % 60),"",styleItem,accountItem)
-                            val bundle = bundleOf(Pair("bookingItem",bookingItem))
-                            paymentBottomSheet.arguments = bundle
-                            paymentBottomSheet.show(childFragmentManager,"paymentBottomSheet")
-                        }
-                        else{Toast.makeText(context,"Invalid Time",Toast.LENGTH_SHORT).show()} },
-                    Response.ErrorListener { volleyError -> println(volleyError.message) }) {
-                    @Throws(AuthFailureError::class)
-                    override fun getParams(): Map<String, String> {
-                        val params = HashMap<String, String>()
-                        params["account_id"] = accountItem.id
-                        params["start"] = startDateTime
-                        params["diff"] = getString(R.string.clock,max.toInt() / 60,max.toInt() % 60)
-                        params["style_id"] = styleItem.id
-                        params["user_id"] = (activity as DefaultActivity).userItem.id
-                        return params
-                    }}
-                VolleySingleton.instance?.addToRequestQueue(stringRequest)
-            } }
-        dialog.show()
-    }
+//    override fun onDateSet(view: DatePicker?, newYear: Int, newMonth: Int, newDay: Int) {
+//        bookedTimes.clear()
+//        year=newYear;month=newMonth;day=newDay
+//        chosenDate = getString(R.string.datetime,newYear,(newMonth+1),newDay)
+//        val url = getString(R.string.url,"check_booking_day.php")
+//        val stringRequest = object : StringRequest(
+//            Method.POST, url, Response.Listener { response ->
+//                val arr = JSONArray(response)
+//                for (i in 0 until arr.length()){
+//                    val obj = arr.getJSONObject(i)
+//                    val startHour = obj.getInt("s_hour") * 60
+//                    val startMinute = obj.getInt("s_min")
+//                    val endHour = obj.getInt("e_hour") * 60
+//                    val endMinute = obj.getInt("e_min")
+//                    val startTime = startHour + startMinute
+//                    val endTime = endHour + endMinute
+//                    bookedTimes.add(Pair(startTime,endTime)) } },
+//            Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+//            @Throws(AuthFailureError::class)
+//            override fun getParams(): Map<String, String> {
+//                val params = HashMap<String, String>()
+//                params["account_id"] = accountItem.id
+//                params["date"] = chosenDate
+//                return params
+//            }}
+//        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+//        showCustomDialog()
+//    }
+//    private fun showCustomDialog() {
+//        val dialog = Dialog(requireContext())
+//        var hour = 0
+//        var minute = 0
+//        val minOptions = arrayOf("00","15","30","45")
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        dialog.setCancelable(false)
+//        dialog.setContentView(R.layout.time_picker_layout)
+//        val numPickerHour = dialog.findViewById<NumberPicker>(R.id.numPickerHour)
+//        val numPickerMins = dialog.findViewById<NumberPicker>(R.id.numPickerMins)
+//        val save = dialog.findViewById<AppCompatButton>(R.id.save)
+//        val close = dialog.findViewById<AppCompatButton>(R.id.close)
+//
+//        numPickerHour.minValue = 0
+//        numPickerHour.maxValue  = 23
+//        numPickerMins.minValue = 0
+//        numPickerMins.maxValue = 3
+//        numPickerMins.displayedValues = minOptions
+//        numPickerHour.setOnValueChangedListener { numberPicker, _, _ ->  hour = numberPicker.value}
+//        numPickerMins.setOnValueChangedListener { numberPicker, _, _ ->
+//            val x = minOptions[numberPicker.value] ;minute = x.toInt() }
+//        close.setOnClickListener {val datePickerDialog = DatePickerDialog(requireContext(),this,year,month,day)
+//            datePickerDialog.datePicker.minDate = System.currentTimeMillis(); datePickerDialog.show();dialog.dismiss() }
+//        save.setOnClickListener {
+//            var booked = false
+//            val currentMin = (hour * 60) + minute
+//            for (book in bookedTimes){
+//                if ((book.first .. book.second).contains(currentMin)){
+//                    Toast.makeText(context,"Time Already Booked",Toast.LENGTH_SHORT).show()
+//                    booked = true; break } }
+//            if (!booked){
+//                val chosenTime = getString(R.string.clock,hour,minute)
+//                val startDateTime = getString(R.string.make_datetime,chosenDate,chosenTime)
+//                val url = getString(R.string.url,"check_booked_time.php")
+//                val stringRequest = object : StringRequest(
+//                    Method.POST, url, Response.Listener { response ->
+//                        if (response == "0"){ dialog.dismiss()
+//                            val paymentBottomSheet = PaymentBottomSheet()
+//                            val bookingItem = BookingItem("",startDateTime,
+//                                getString(R.string.clock,max.toInt() / 60,max.toInt() % 60),"",styleItem,accountItem)
+//                            val bundle = bundleOf(Pair("bookingItem",bookingItem))
+//                            paymentBottomSheet.arguments = bundle
+//                            paymentBottomSheet.show(childFragmentManager,"paymentBottomSheet")
+//                        }
+//                        else{Toast.makeText(context,"Invalid Time",Toast.LENGTH_SHORT).show()} },
+//                    Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+//                    @Throws(AuthFailureError::class)
+//                    override fun getParams(): Map<String, String> {
+//                        val params = HashMap<String, String>()
+//                        params["account_id"] = accountItem.id
+//                        params["start"] = startDateTime
+//                        params["diff"] = getString(R.string.clock,max.toInt() / 60,max.toInt() % 60)
+//                        params["style_id"] = styleItem.id
+//                        params["user_id"] = (activity as DefaultActivity).userItem.id
+//                        return params
+//                    }}
+//                VolleySingleton.instance?.addToRequestQueue(stringRequest)
+//            } }
+//        dialog.show()
+//    }
 }

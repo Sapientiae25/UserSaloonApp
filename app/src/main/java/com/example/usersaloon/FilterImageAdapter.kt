@@ -14,10 +14,10 @@ import com.android.volley.toolbox.StringRequest
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
 
-class ClickStyleImageAdapter(private var images: MutableList<Pair<String,String>>,val accountItem: AccountItem)
-    : RecyclerView.Adapter<ClickStyleImageAdapter.ClickStyleImageViewHolder>(){
+class FilterImageAdapter(private var images: MutableList<Triple<String,String,AccountItem>>)
+    : RecyclerView.Adapter<FilterImageAdapter.FilterImageViewHolder>(){
 
-    inner class ClickStyleImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class FilterImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         private val image = itemView.findViewById<ImageView>(R.id.image)
         fun bind(index: Int){
             val currentItem = images[index]
@@ -34,9 +34,9 @@ class ClickStyleImageAdapter(private var images: MutableList<Pair<String,String>
                         val time = obj.getString("time")
                         val info = obj.getString("info")
                         val rating = obj.getString("rating").toFloatOrNull()
-                        val styleItem = StyleItem(name,price,time,info,styleId,rating=rating,accountItem=accountItem)
+                        val styleItem = StyleItem(name,price,time,info,styleId,rating=rating,accountItem=currentItem.third)
                         val bundle = bundleOf(Pair("styleItem",styleItem))
-                        view.findNavController().navigate(R.id.action_categoryFragment_to_styleFragment,bundle) },
+                        view.findNavController().navigate(R.id.action_filterStyleFragment_to_styleFragment,bundle) },
                     Response.ErrorListener { volleyError -> println(volleyError.message) }) { @Throws(
                     AuthFailureError::class)
                 override fun getParams(): Map<String, String> {
@@ -47,11 +47,11 @@ class ClickStyleImageAdapter(private var images: MutableList<Pair<String,String>
             }
         }
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClickStyleImageViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterImageViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.image_layout, parent, false)
-        return ClickStyleImageViewHolder(itemView)
+        return FilterImageViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ClickStyleImageViewHolder, position: Int) { holder.bind(position) }
+    override fun onBindViewHolder(holder: FilterImageViewHolder, position: Int) { holder.bind(position) }
     override fun getItemCount() = images.size
 }

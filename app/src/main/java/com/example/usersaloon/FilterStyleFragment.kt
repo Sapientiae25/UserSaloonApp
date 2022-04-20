@@ -30,7 +30,7 @@ class FilterStyleFragment : Fragment() {
     private var displayStyleList = mutableListOf<StyleItem>()
     private var styleItemList = mutableListOf<StyleItem>()
     private lateinit var vpImages: ViewPager2
-    private lateinit var imageUrls: MutableList<Pair<String,String>>
+    private lateinit var imageUrls: MutableList<Triple<String,String,AccountItem>>
     private lateinit var tvNoStyles: TextView
     private lateinit var rvCategoryStyleItems: RecyclerView
     private val filterArr = JSONArray()
@@ -57,7 +57,7 @@ class FilterStyleFragment : Fragment() {
         val sliderHandler = Handler(Looper.getMainLooper())
         val tabLayout = rootView.findViewById<TabLayout>(R.id.tabLayout)
         val swipeRefresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
-        val adapter = ClickStyleImageAdapter(imageUrls)
+        val adapter = FilterImageAdapter(imageUrls)
         vpImages.adapter = adapter
         vpImages.clipChildren = false
         vpImages.clipToPadding = false
@@ -105,8 +105,8 @@ class FilterStyleFragment : Fragment() {
                     val accountName = obj.getString("account_name")
                     val rating = obj.getString("rating").toFloatOrNull()
                     val imageId = obj.getString("image_id")
-                    if (imageId.isNotEmpty() && imageUrls.size < 6) imageUrls.add(Pair(imageId,styleId))
                     val accountItem = AccountItem(accountFk,accountName,addressItem= AddressItem(address=address))
+                    if (imageId.isNotEmpty() && imageUrls.size < 6) imageUrls.add(Triple(imageId,styleId,accountItem))
                     styleItemList.add(StyleItem(name,price,time,info,styleId,accountItem=accountItem,rating=rating,imageId=imageId)) }
                 if (imageUrls.size == 0) vpImages.visibility = View.GONE
                 vpImages.adapter?.notifyItemRangeInserted(1,imageUrls.size)

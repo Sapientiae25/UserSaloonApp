@@ -113,6 +113,12 @@
         <action
             android:id="@+id/action_categoryFragment_to_styleFragment"
             app:destination="@id/styleFragment" />
+        <argument
+            android:name="accountItem"
+            app:argType="com.example.usersaloon.AccountItem" />
+        <argument
+            android:name="categoryItem"
+            app:argType="com.example.usersaloon.CategoryItem" />
     </fragment>
     <action android:id="@+id/action_global_userFragment"
         app:destination="@id/userFragment" />

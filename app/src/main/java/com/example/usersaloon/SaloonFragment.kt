@@ -3,12 +3,10 @@ package com.example.usersaloon
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
@@ -72,7 +70,7 @@ class SaloonFragment : Fragment() {
         val tvMap = rootView.findViewById<TextView>(R.id.tvMap)
         val svStyle = rootView.findViewById<SearchView>(R.id.svStyle)
         ivLike = rootView.findViewById(R.id.ivLike)
-        rvStyleCategories.adapter = StyleCategoryAdapter(categoryList)
+        rvStyleCategories.adapter = StyleCategoryAdapter(categoryList,accountItem)
         rvStyleCategories.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
         rvStyleItems.layoutManager = LinearLayoutManager(context)
         rvStyleItems.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
@@ -130,8 +128,7 @@ class SaloonFragment : Fragment() {
         vpImages = rootView.findViewById(R.id.vpImages)
         val sliderHandler = Handler(Looper.getMainLooper())
         val tabLayout = rootView.findViewById<TabLayout>(R.id.tabLayout)
-        val adapter = SaloonImageAdapter(imageUrls)
-        vpImages.adapter = adapter
+        vpImages.adapter = SaloonImageAdapter(imageUrls)
         vpImages.clipChildren = false
         vpImages.clipToPadding = false
         vpImages.offscreenPageLimit = 3
@@ -162,6 +159,8 @@ class SaloonFragment : Fragment() {
         return rootView
     }
     private fun loadImages(){
+        vpImages.adapter?.notifyItemRangeRemoved(0,imageUrls.size)
+        imageUrls.clear()
         val url = getString(R.string.url,"get_saloon_images.php")
         val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
             val arr = JSONArray(response)
@@ -177,6 +176,11 @@ class SaloonFragment : Fragment() {
             return params }}
         VolleySingleton.instance?.addToRequestQueue(stringRequest) }
     private fun loadData(){
+        rvStyleItems.adapter?.notifyItemRangeRemoved(0,styleItemList.size)
+        rvStyleCategories.adapter?.notifyItemRangeRemoved(0,categoryList.size)
+        styleItemList.clear()
+        categoryList.clear()
+
         var url = getString(R.string.url,"get_saloon_like.php")
         var stringRequest: StringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
@@ -194,7 +198,6 @@ class SaloonFragment : Fragment() {
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
         url = getString(R.string.url,"get_categories.php")
         stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
-            Log.println(Log.ASSERT,"response", response)
             val arr = JSONArray(response)
             for (x in 0 until arr.length()){
                 val obj = arr.getJSONObject(x)
@@ -205,11 +208,14 @@ class SaloonFragment : Fragment() {
                 categoryList.add(categoryItem)
                 val btn = Chip(context)
                 btn.text = category
+                val params = ChipGroup.LayoutParams(ChipGroup.LayoutParams.WRAP_CONTENT,ChipGroup.LayoutParams.WRAP_CONTENT)
+                params.setMargins(4,0,4,0)
+                btn.layoutParams = params
                 btn.setOnClickListener{ view ->
-                    val bundle = bundleOf(Pair("categoryItem",categoryList[x]))
-                    view.findNavController().navigate(R.id.action_saloonFragment_to_categoryFragment,bundle)
-                }
-                cgCategories.addView(btn) }},
+                    val bundle = bundleOf(Pair("categoryItem",categoryList[x]),Pair("accountItem",accountItem))
+                    view.findNavController().navigate(R.id.action_saloonFragment_to_categoryFragment,bundle) }
+                cgCategories.addView(btn) }
+            rvStyleCategories.adapter?.notifyItemRangeInserted(0,categoryList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
@@ -233,12 +239,10 @@ class SaloonFragment : Fragment() {
                         val info = obj.getString("info")
                         val rating = obj.getString("rating").toFloatOrNull()
                         val imageId = obj.getString("image_id")
-                        styleItemList.add(StyleItem(name,price,time,info,styleId,accountItem=accountItem,rating=rating,
-                            imageId=imageId)) }
+                        styleItemList.add(StyleItem(name,price,time,info,styleId,accountItem=accountItem,rating=rating,imageId=imageId)) }
                     displayStyleList.addAll(styleItemList)
                     rvStyleItems.adapter = SaloonStyleAdapter(displayStyleList)},
-                Response.ErrorListener { volleyError -> println(volleyError.message) }) {
-                @Throws(AuthFailureError::class)
+                Response.ErrorListener { volleyError -> println(volleyError.message) }) { @Throws(AuthFailureError::class)
                 override fun getParams(): Map<String, String> {
                     val params = HashMap<String, String>()
                     params["account_id"] = accountItem.id

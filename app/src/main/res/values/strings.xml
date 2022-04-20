@@ -95,6 +95,7 @@
     <string name="end">End:</string>
     <string name="month">Month</string>
     <string name="make_datetime">%1$s %2$s</string>
+    <string name="charge">You will be charged £%1$.2f</string>
     <string name="time_colon">%1$s:%2$s</string>
     <string name="next_day">Next day</string>
     <string name="previous_day">Previous day</string>
@@ -210,5 +211,10 @@
     <string name="go_to_saloon">Go To Saloon</string>
     <string name="show_all_times">Show all times</string>
     <string name="only_show_available_times">Only Show available times</string>
+    <string name="cancel_appointment">Cancel Appointment</string>
+    <string name="are_you_sure_you_want_to_cancel">Are you sure you want to cancel?</string>
+    <string name="you_won_t_be_charged_if_you_cancel_24_hours_in_advance">You won\'t be charged if you cancel 24 hours in advance</string>
+    <string name="if_you_cancel_within_24_hours_you_will_be_charged_1_00">If you cancel within 24 hours you will be charged £1.00</string>
+    <string name="if_you_cancel_within_3_hours_you_will_be_charged_fully">If you cancel within 3 hours you will be charged fully</string>
 
 </resources>

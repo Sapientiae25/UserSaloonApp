@@ -1,9 +1,11 @@
 package com.example.usersaloon
 
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,12 +13,14 @@ import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.HashMap
 
 class SlideDayAdapter (private val bookingList: MutableList<DayItem>,var appointmentList: MutableList<AppointmentItem>,
-                       val chosenHours:AppointmentItem,val styleItem: StyleItem)
+                       val chosenHours:AppointmentItem,val styleItem: StyleItem,val clickListener: (time: String) -> Unit)
     : RecyclerView.Adapter<SlideDayAdapter.SlideDayViewHolder>(),ChangeDate {
 
-    val accountItem = styleItem.accountItem!!
+    val accountItem = styleItem.accountItem
     lateinit var rvBook: RecyclerView
 
     inner class SlideDayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -25,13 +29,31 @@ class SlideDayAdapter (private val bookingList: MutableList<DayItem>,var appoint
             rvBook = itemView.findViewById(R.id.rvBook)
             val currentItem = bookingList[index].date
             val date = itemView.context.getString(R.string.user_date,currentItem.first,currentItem.second,currentItem.third)
-            rvBook.adapter = AppointmentAdapter(appointmentList,styleItem)
+            rvBook.adapter = AppointmentAdapter(appointmentList,styleItem){ t -> clickListener(t) }
             rvBook.addItemDecoration(DividerItemDecoration(itemView.context, RecyclerView.VERTICAL))
             rvBook.layoutManager = LinearLayoutManager(itemView.context)
-            if (appointmentList.isNotEmpty()) findBookings(date)
+//            if (appointmentList.isNotEmpty()) findBookings(date)
         }
 
         private fun findBookings(date: String){
+            val d = Date()
+            val calendar = Calendar.getInstance()
+            val today = DateFormat.format("dd/MM/yyyy", d.time)
+
+            if (today == date){ calendar.time = d
+                val todayHour = calendar.get(Calendar.HOUR_OF_DAY)
+                val todayMinute = calendar.get(Calendar.MINUTE)
+                var delete = 0
+                for (i in 0 until appointmentList.size){
+                    val item = appointmentList[i]
+                    val split = item.start.split(":")
+                    val h = split[0].toInt()
+                    val m = split[1].toInt()
+                    if  (todayHour < h || (todayHour == h && todayMinute < m)){ delete=i;break} }
+                Log.println(Log.ASSERT,"todayHour","$todayHour")
+
+                for (x in 0 until delete){ appointmentList.removeAt(0);rvBook.adapter?.notifyItemRangeRemoved(0,delete)} }
+
             val url = itemView.context.getString(R.string.url,"find_available_times.php")
             val stringRequest = object : StringRequest(
                 Method.POST, url, Response.Listener { response ->
