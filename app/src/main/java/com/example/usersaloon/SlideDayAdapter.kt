@@ -29,7 +29,7 @@ class SlideDayAdapter (private val bookingList: MutableList<DayItem>,var appoint
             rvBook = itemView.findViewById(R.id.rvBook)
             val currentItem = bookingList[index].date
             val date = itemView.context.getString(R.string.user_date,currentItem.first,currentItem.second,currentItem.third)
-            rvBook.adapter = AppointmentAdapter(appointmentList,styleItem){ t -> clickListener(t) }
+//            rvBook.adapter = AppointmentAdapter(appointmentList,styleItem,indexList){ t -> clickListener(t) }
             rvBook.addItemDecoration(DividerItemDecoration(itemView.context, RecyclerView.VERTICAL))
             rvBook.layoutManager = LinearLayoutManager(itemView.context)
 //            if (appointmentList.isNotEmpty()) findBookings(date)

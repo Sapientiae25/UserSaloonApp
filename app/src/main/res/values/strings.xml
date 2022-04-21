@@ -216,5 +216,7 @@
     <string name="you_won_t_be_charged_if_you_cancel_24_hours_in_advance">You won\'t be charged if you cancel 24 hours in advance</string>
     <string name="if_you_cancel_within_24_hours_you_will_be_charged_1_00">If you cancel within 24 hours you will be charged £1.00</string>
     <string name="if_you_cancel_within_3_hours_you_will_be_charged_fully">If you cancel within 3 hours you will be charged fully</string>
+    <string name="no_available_appointments">No available appointments</string>
+    <string name="try_expanding_your_search_filter_or_change_day">Try expanding your search filter or change day</string>
 
 </resources>

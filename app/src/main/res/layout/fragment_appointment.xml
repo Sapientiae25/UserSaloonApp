@@ -66,59 +66,93 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/llSlider">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/linearLayout3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp">
+                android:paddingEnd="10dp"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <TextView
                     android:id="@+id/tvDate"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/calendar"
-                    android:textSize="22sp"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
+
                 <ImageView
                     android:id="@+id/ivCalendar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="end"
                     android:contentDescription="@string/calendar"
-                    android:src="@drawable/ic_baseline_calendar_today_24"/>
+                    android:src="@drawable/ic_baseline_calendar_today_24" />
             </LinearLayout>
+
             <RadioGroup
+                android:id="@+id/radioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp">
+                android:paddingBottom="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
                 <RadioButton
                     android:id="@+id/rbAll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
                     android:checked="true"
-                    android:text="@string/show_all_times"/>
+                    android:text="@string/show_all_times"
+                    android:textSize="18sp" />
+
                 <RadioButton
                     android:id="@+id/rbFilter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:text="@string/only_show_available_times"/>
+                    android:text="@string/only_show_available_times"
+                    android:textSize="18sp" />
             </RadioGroup>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+            <LinearLayout
+                android:id="@+id/llNoBookings"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_marginTop="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_available_appointments"
+                android:textSize="23sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/try_expanding_your_search_filter_or_change_day"
+                    android:textSize="17sp"
+                    android:layout_marginTop="12dp"/>
+            </LinearLayout>
 
-        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

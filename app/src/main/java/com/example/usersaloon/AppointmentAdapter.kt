@@ -7,8 +7,8 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 
-class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>,val styleItem: StyleItem,
-                          val clickListener: (time: String) -> Unit)
+class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>, val styleItem: StyleItem,
+                          private val indexList: MutableList<Int>, val clickListener: (time: String) -> Unit)
     : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
 
     inner class AppointmentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -20,7 +20,7 @@ class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>,
         private val btnBook: TextView = itemView.findViewById(R.id.btnBook)
 
         fun bind(index: Int){
-            val currentItem = bookingList[index]
+            val currentItem = bookingList[indexList[index]]
             tvStyle.text = styleItem.name
             tvTime.text = itemView.context.getString(R.string.separate,currentItem.start,currentItem.end)
             tvDuration.text = itemView.context.getString(R.string.duration_time,styleItem.time)
@@ -36,8 +36,5 @@ class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>,
         return AppointmentViewHolder(itemView) }
 
     override fun onBindViewHolder(holder: AppointmentViewHolder, position: Int) { holder.bind(position) }
-    override fun getItemCount(): Int {
-        var count = 0
-        for (i in bookingList){ if (i.visible) count+=1}
-        return count }
+    override fun getItemCount() = indexList.size
 }
