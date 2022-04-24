@@ -27,7 +27,7 @@ class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>,
             tvAddress.text = styleItem.accountItem.addressItem?.address
             tvCost.text = itemView.context.getString(R.string.money,styleItem.price)
             btnBook.isEnabled = currentItem.available
-            btnBook.setOnClickListener { clickListener(tvTime.text.toString()) } }
+            btnBook.setOnClickListener { clickListener(currentItem.start) } }
 
     }
 

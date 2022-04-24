@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingStart="15dp"
     android:paddingEnd="15dp"
     android:orientation="vertical">
@@ -11,52 +12,88 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp">
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:inputType="text"
+            android:layout_height="wrap_content"
+            android:hint="@string/name_on_card"
+            android:textSize="20sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etNumber"
             android:layout_width="match_parent"
             android:inputType="number"
             android:layout_height="wrap_content"
-            android:hint="Card Number"
+            android:hint="@string/card_number"
             android:textSize="20sp" />
     </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCVV"
+            android:layout_width="match_parent"
+            android:inputType="number"
+            android:layout_height="wrap_content"
+            android:hint="@string/cvv"
+            android:textSize="20sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/expiration_date"
+        android:textSize="23sp"
+        android:textColor="@color/black"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:baselineAligned="false">
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1">
-            <com.google.android.material.textfield.TextInputEditText
+            android:inputType="none"
+            android:layout_weight="1"
+            app:endIconMode="dropdown_menu"
+            android:layout_marginEnd="8dp">
+            <AutoCompleteTextView
                 android:id="@+id/etExpiry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:maxLength="5"
-                android:hint="@string/expiry"
-                android:textSize="20sp" />
+                android:hint="@string/mm"
+                android:textSize="20sp"
+                android:padding="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etCVV"
+            android:inputType="none"
+            android:layout_weight="1"
+            app:endIconMode="dropdown_menu"
+            android:layout_marginStart="8dp">
+            <AutoCompleteTextView
+                android:id="@+id/etYear"
                 android:layout_width="match_parent"
-                android:inputType="number"
                 android:layout_height="wrap_content"
-                android:hint="@string/cvv"
+                android:padding="10dp"
+                android:hint="@string/yyyy"
                 android:textSize="20sp" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSave"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_button"

@@ -3,12 +3,14 @@ package com.example.usersaloon
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -23,7 +25,6 @@ import java.util.*
 class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
 
     private lateinit var rvDays: RecyclerView
-//    private lateinit var vpBook: ViewPager2
     private lateinit var rvBook: RecyclerView
     private lateinit var rsTime: RangeSlider
     private lateinit var tvDate: TextView
@@ -44,7 +45,6 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
     private var year = 0
     private var month = 0
     private var day = 0
-//    lateinit var adapter: SlideDayAdapter
     var date = ""
     var startHour = 0
     var endHour = 0
@@ -62,7 +62,6 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
         styleItem = arguments?.getParcelable("styleItem")!!
         accountItem = styleItem.accountItem
         rvDays = rootView.findViewById(R.id.rvDays)
-//        vpBook = rootView.findViewById(R.id.vpBook)
         rvBook = rootView.findViewById(R.id.rvBook)
         rsTime = rootView.findViewById(R.id.rsTime)
         tvDate = rootView.findViewById(R.id.tvDate)
@@ -72,51 +71,25 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
         tvStart = rootView.findViewById(R.id.tvStart)
         tvEnd = rootView.findViewById(R.id.tvEnd)
         llNoBookings = rootView.findViewById(R.id.llNoBookings)
-        val swipeRefresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
-//        adapter = SlideDayAdapter(dayList,appointmentList,chosenHours,styleItem){ t ->
-//            val paymentBottomSheet = PaymentBottomSheet()
-//            val bookingItem = BookingItem("",t,date,styleItem,accountItem)
-//            val bundle = bundleOf(Pair("bookingItem",bookingItem))
-//            paymentBottomSheet.arguments = bundle
-//            paymentBottomSheet.show(childFragmentManager,"paymentBottomSheet") }
-//        vpBook.adapter = adapter
 
+        val swipeRefresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
         rvDays.adapter = DayAdapter(dayList){ item ->
             val dateItem = item.date
-//            val position = dayList.indexOf(item)
             day = dateItem.first; month = dateItem.second; year = dateItem.third
             date = getString(R.string.user_date,day,month,year)
             tvDate.text = date
             calendar.set(year,month-1,day-1)
             findBookings()}
         rvBook.adapter = AppointmentAdapter(appointmentList,styleItem,indexList){ t ->
-            val paymentBottomSheet = PaymentBottomSheet()
+            val paymentBottomSheet = PaymentBottomSheet { findBookings() }
             val bookingItem = BookingItem("",t,date,styleItem,accountItem)
             val bundle = bundleOf(Pair("bookingItem",bookingItem))
             paymentBottomSheet.arguments = bundle
             paymentBottomSheet.show(childFragmentManager,"paymentBottomSheet")
         }
-
-//            vpBook.setCurrentItem(position,false)
-
-//            if (dateItem.first == dayList[dayList.size-1].date.first) makeCalendar()
-
         rvDays.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
         rvBook.layoutManager = LinearLayoutManager(context)
-
-//        vpBook.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-//            override fun onPageSelected(position: Int) {
-//                val currentItem = dayList[position].date
-//                for (x in 0 until dayList.size){ val item = dayList[x]
-//                    if (item.chosen) { item.chosen = false; rvDays.adapter?.notifyItemChanged(x); break }}
-//                dayList[position].chosen = true; year = currentItem.third; month = currentItem.second; day = currentItem.first
-//                rvDays.adapter?.notifyItemChanged(position)
-//                date = getString(R.string.user_date,day,month,year)
-//                tvDate.text = date
-//                calendar.set(year,month-1,day-1)
-//                if (defaultList.isNotEmpty()) findBookings()
-//                }
-//        })
+        rvBook.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
 
         rsTime.addOnChangeListener { _, _, _ ->
             val values = rsTime.values
@@ -126,7 +99,6 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
             tvEnd.text = getString(R.string.time_format,endHour,0)
             chosenHours.start = getString(R.string.time_format,startHour,0)
             chosenHours.end = getString(R.string.time_format,endHour,0)
-//            if (defaultList.isNotEmpty()) findBookings()
             var counter = 0
             for (item in appointmentList){
                 val s = item.start.split(":")[0].toInt()
@@ -139,21 +111,7 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
                 }else{
                     val index = appointmentList.indexOf(item)
                     if (index != -1){item.visible=false
-                        rvBook.adapter?.notifyItemRemoved(index)}} }
-//            appointmentList.clear()
-//            for (item in defaultList){
-//                val s = item.start.split(":")[0].toInt()
-//                val e = item.end.split(":")[0].toInt()
-//
-//                if ((startHour .. endHour).contains(s) && (startHour .. endHour).contains(e)){
-//                    if (!appointmentList.contains(item)){appointmentList.add(counter,item)
-//                        adapter.rvBook.adapter?.notifyItemInserted(counter)}
-//                    else counter += 1
-//                }else{
-//                    val index = appointmentList.indexOf(item)
-//                    if (index != -1){appointmentList.removeAt(index)
-//                        adapter.rvBook.adapter?.notifyItemRemoved(index)}} }
-        }
+                        rvBook.adapter?.notifyItemRemoved(index)}} } }
 
         ivCalendar.setOnClickListener {
             val datePickerDialog = DatePickerDialog(requireContext(),this,year,month-1,day)
@@ -216,18 +174,24 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
 
         val url = getString(R.string.url,"find_available_times.php")
         val stringRequest = object : StringRequest(
-            Method.POST, url, Response.Listener { response ->
+            Method.POST, url, Response.Listener { response ->  Log.println(Log.ASSERT,"response","$response")
                 val arr = JSONArray(response)
+                val removeList = mutableListOf<Int>()
+                var last = false
                 for (z in 0 until appointmentList.size){ val item = appointmentList[z]
                     item.visible = true
-                    val removeList = mutableListOf<Int>()
-                    for (x in 0 until arr.length()) {
-                        val obj = arr.getJSONObject(x)
-                        val startBook = obj.getInt("start")
-                        val endBook = obj.getInt("end")
-                        if ((item.startMinute .. item.endMinute).contains(startBook) ||
-                            (item.startMinute .. item.endMinute).contains(endBook)){ item.available = false; removeList.add(x);break } }
-                    for (i in removeList) { arr.remove(i) }; indexList.add(z) }
+                    if (last) item.available = false
+                    else{
+                        for (x in 0 until arr.length()) {
+                            val obj = arr.getJSONObject(x)
+                            val startBook = obj.getString("start").toIntOrNull()
+                            val endBook = obj.getString("end").toIntOrNull()
+                            if (endBook == null) { last = true;break }
+                            if (endBook < item.startMinute) removeList.add(x)
+                            if ((item.startMinute .. item.endMinute).contains(startBook) || startBook == null ||
+                                (item.startMinute .. item.endMinute).contains(endBook)){ Log.println(Log.ASSERT,"remove","$item")
+                                    item.available = false; break } }
+                    for (i in removeList) arr.remove(i) }; indexList.add(z) }
                 if (today == date){ calendar.time = d
                     val todayHour = calendar.get(Calendar.HOUR_OF_DAY)
                     val todayMinute = calendar.get(Calendar.MINUTE)
@@ -240,28 +204,7 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
                         if (todayHour > h || (todayHour == h && todayMinute > m)) {item.visible = false; indexList.remove(i)}
                         else break } }
                 llNoBookings.visibility = if (indexList.size == 0) View.VISIBLE else View.GONE
-                rvBook.adapter?.notifyItemRangeInserted(0,indexList.size)
-
-//                val obj = JSONObject(response)
-//                val datesArray = obj.getJSONArray("dates")
-//                val breaksArray = obj.getJSONArray("break")
-//                for (x in 0 until datesArray.length()) {
-//                    val dt = datesArray.getJSONObject(x)
-//                    val startBook = dt.getInt("start")
-//                    val endBook = dt.getInt("end")
-//                    for (z in 0 until appointmentList.size){ val item = appointmentList[z]
-//                        if ((item.startMinute .. item.endMinute).contains(startBook) ||
-//                            (item.startMinute .. item.endMinute).contains(endBook)){ item.available = false
-//                            rvBook.adapter?.notifyItemChanged(z)} } }
-//                for (x in 0 until breaksArray.length()) {
-//                    val breaks = breaksArray.getJSONObject(x)
-//                    val startBreak = breaks.getInt("start")
-//                    val endBreak = breaks.getInt("end")
-//                    for (z in 0 until appointmentList.size){ val item = appointmentList[z]
-//                        if ((item.startMinute .. item.endMinute).contains(startBreak) ||
-//                            (item.startMinute .. item.endMinute).contains(endBreak)){ item.available = false
-//                            rvBook.adapter?.notifyItemChanged(x)} } }
-                                                },
+                rvBook.adapter?.notifyItemRangeInserted(0,indexList.size)},
             Response.ErrorListener { volleyError -> println(volleyError.message) }) { @Throws(AuthFailureError::class)
         override fun getParams(): Map<String, String> {
             val params = HashMap<String, String>()
@@ -276,9 +219,7 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
             val dt = Triple(calendar.get(Calendar.DAY_OF_MONTH),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.YEAR))
             calendar.add(Calendar.DATE, 1)
             dayList.add(DayItem(dt,i == 1))}
-        rvDays.adapter?.notifyItemRangeChanged(0,6)
-//        vpBook.adapter?.notifyItemRangeChanged(0,6)
-    }
+        rvDays.adapter?.notifyItemRangeChanged(0,6) }
     override fun onDateSet(view: DatePicker?, newYear: Int, newMonth: Int, newDay: Int) {
         day = newDay
         month = newMonth+1

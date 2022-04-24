@@ -141,6 +141,7 @@
     <string name="filter">Filter</string>
     <string name="map">Map</string>
     <string name="separate">%1$s - %2$s</string>
+    <string name="expire_date">%1$s/%2$s</string>
     <string name="your_code">Your Code: %1$s</string>
     <string name="saloon">Saloon</string>
     <string name="km">%1$s km</string>
@@ -218,5 +219,8 @@
     <string name="if_you_cancel_within_3_hours_you_will_be_charged_fully">If you cancel within 3 hours you will be charged fully</string>
     <string name="no_available_appointments">No available appointments</string>
     <string name="try_expanding_your_search_filter_or_change_day">Try expanding your search filter or change day</string>
+    <string name="expiration_date">Expiration Date:</string>
+    <string name="card_number">Card Number</string>
+    <string name="name_on_card">Name on card</string>
 
 </resources>

@@ -2,7 +2,6 @@ package com.example.usersaloon
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +18,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.json.JSONArray
 
-class PaymentBottomSheet : BottomSheetDialogFragment(){
+class PaymentBottomSheet(val clickListener: () -> Unit) : BottomSheetDialogFragment(){
 
+    private lateinit var bookingItem: BookingItem
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,12 +29,11 @@ class PaymentBottomSheet : BottomSheetDialogFragment(){
         val rootView =  inflater.inflate(R.layout.payment_bottom_sheet, container, false)
         val rbCards = rootView.findViewById<RadioGroup>(R.id.rbCards)
         val btnAddCard = rootView.findViewById<AppCompatButton>(R.id.btnAddCard)
-        val bookingItem = arguments?.getParcelable<BookingItem>("bookingItem")!!
+        bookingItem = arguments?.getParcelable("bookingItem")!!
         val cardList = mutableListOf<CardItem>()
         val url = getString(R.string.url,"get_cards.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                Log.println(Log.ASSERT,"PAY",response)
                 val arr = JSONArray(response)
                 for (i in 0 until arr.length()) {
                     val obj = arr.getJSONObject(i)
@@ -44,24 +43,7 @@ class PaymentBottomSheet : BottomSheetDialogFragment(){
                     val cardId = obj.getString("card_id")
                     val btn = RadioButton(context)
                     btn.text = getString(R.string.card_ending, cardNum.takeLast(4))
-                    btn.setOnClickListener{
-                        val url2 = getString(R.string.url,"book.php")
-                        val stringRequest = object : StringRequest(
-                            Method.POST, url2, Response.Listener { response -> dismiss()
-                                if (response == "0"){Toast.makeText(context,"Style Booked",Toast.LENGTH_SHORT).show()
-                                    (activity as DefaultActivity).addNotification()}
-                                else{Toast.makeText(context,"Invalid Time",Toast.LENGTH_SHORT).show()} },
-                            Response.ErrorListener { volleyError -> println(volleyError.message) }) {
-                            @Throws(AuthFailureError::class)
-                            override fun getParams(): Map<String, String> {
-                                val params = HashMap<String, String>()
-                                params["account_id"] = bookingItem.accountItem.id
-                                params["start"] = bookingItem.time
-                                params["diff"] = bookingItem.date
-                                params["style_id"] = bookingItem.styleItem.id
-                                params["user_id"] = (activity as DefaultActivity).userItem.id
-                                return params }}
-                        VolleySingleton.instance?.addToRequestQueue(stringRequest) }
+                    btn.setOnClickListener{book() }
                     rbCards.addView(btn)
                     cardList.add(CardItem(cardId, cardNum, expiry, cvv)) } },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
@@ -80,6 +62,25 @@ class PaymentBottomSheet : BottomSheetDialogFragment(){
         }
 
         return rootView
+    }
+    private fun book(){
+        val url = getString(R.string.url,"book.php")
+        val stringRequest = object : StringRequest(
+            Method.POST, url, Response.Listener { response -> dismiss()
+                if (response == "0"){Toast.makeText(context,"Style Booked",Toast.LENGTH_SHORT).show();clickListener()
+                    (activity as DefaultActivity).addNotification()}
+                else{Toast.makeText(context,"Invalid Time",Toast.LENGTH_SHORT).show()} },
+            Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["account_id"] = bookingItem.accountItem.id
+                params["start"] = getString(R.string.make_datetime,bookingItem.date,bookingItem.time)
+                params["diff"] = bookingItem.styleItem.time
+                params["style_id"] = bookingItem.styleItem.id
+                params["user_id"] = (activity as DefaultActivity).userItem.id
+                return params }}
+        VolleySingleton.instance?.addToRequestQueue(stringRequest)
     }
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply { setCanceledOnTouchOutside(false) } }
