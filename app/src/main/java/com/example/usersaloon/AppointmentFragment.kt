@@ -33,6 +33,7 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
     private lateinit var tvEnd: TextView
     private lateinit var ivCalendar: ImageView
     private lateinit var rbAll: RadioButton
+    private lateinit var rgFilter: RadioGroup
     private lateinit var rbFilter: RadioButton
     private lateinit var styleItem: StyleItem
     private lateinit var accountItem: AccountItem
@@ -52,6 +53,7 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
     var closeHour = 0
     private val d = Date()
     private val today = DateFormat.format("dd/MM/yyyy", d.time)
+    var filter = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +69,7 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
         tvDate = rootView.findViewById(R.id.tvDate)
         ivCalendar = rootView.findViewById(R.id.ivCalendar)
         rbAll = rootView.findViewById(R.id.rbAll)
+        rgFilter = rootView.findViewById(R.id.rgFilter)
         rbFilter = rootView.findViewById(R.id.rbFilter)
         tvStart = rootView.findViewById(R.id.tvStart)
         tvEnd = rootView.findViewById(R.id.tvEnd)
@@ -119,6 +122,10 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
 
         loadData()
         swipeRefresh.setOnRefreshListener { loadData();swipeRefresh.isRefreshing = false }
+
+        rbAll.setOnClickListener { if (filter) {filter = false; findBookings()}}
+        rbFilter.setOnClickListener { if (!filter) {filter = true; findBookings() }}
+
         return rootView
         }
 
@@ -174,7 +181,7 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
 
         val url = getString(R.string.url,"find_available_times.php")
         val stringRequest = object : StringRequest(
-            Method.POST, url, Response.Listener { response ->  Log.println(Log.ASSERT,"response","$response")
+            Method.POST, url, Response.Listener { response ->
                 val arr = JSONArray(response)
                 val removeList = mutableListOf<Int>()
                 var last = false
@@ -189,9 +196,9 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
                             if (endBook == null) { last = true;break }
                             if (endBook < item.startMinute) removeList.add(x)
                             if ((item.startMinute .. item.endMinute).contains(startBook) || startBook == null ||
-                                (item.startMinute .. item.endMinute).contains(endBook)){ Log.println(Log.ASSERT,"remove","$item")
-                                    item.available = false; break } }
-                    for (i in removeList) arr.remove(i) }; indexList.add(z) }
+                                (item.startMinute .. item.endMinute).contains(endBook)){
+                            if (filter) {item.visible = false} else {item.available = false; break } } }
+                    for (i in removeList) arr.remove(i) }; if (item.visible) indexList.add(z) }
                 if (today == date){ calendar.time = d
                     val todayHour = calendar.get(Calendar.HOUR_OF_DAY)
                     val todayMinute = calendar.get(Calendar.MINUTE)

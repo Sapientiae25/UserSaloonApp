@@ -100,7 +100,7 @@
             </LinearLayout>
 
             <RadioGroup
-                android:id="@+id/radioGroup"
+                android:id="@+id/rgFilter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
@@ -126,7 +126,7 @@
                 android:id="@+id/rvBook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+                app:layout_constraintTop_toBottomOf="@+id/rgFilter"
                 android:layout_marginBottom="20dp"/>
             <LinearLayout
                 android:id="@+id/llNoBookings"
@@ -138,7 +138,7 @@
                 android:layout_marginTop="40dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroup">
+                app:layout_constraintTop_toBottomOf="@+id/rgFilter">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

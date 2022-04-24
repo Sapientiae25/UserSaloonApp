@@ -74,7 +74,7 @@
         android:id="@+id/btnBook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Book"
+        android:text="@string/book"
         android:textColor="@color/white"
         android:backgroundTint="@color/loginColor"
         app:layout_constraintBottom_toBottomOf="parent"

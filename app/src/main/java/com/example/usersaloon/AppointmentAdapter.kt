@@ -1,9 +1,11 @@
 package com.example.usersaloon
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 
@@ -26,9 +28,9 @@ class AppointmentAdapter (private val bookingList: MutableList<AppointmentItem>,
             tvDuration.text = itemView.context.getString(R.string.duration_time,styleItem.time)
             tvAddress.text = styleItem.accountItem.addressItem?.address
             tvCost.text = itemView.context.getString(R.string.money,styleItem.price)
-            btnBook.isEnabled = currentItem.available
-            btnBook.setOnClickListener { clickListener(currentItem.start) } }
-
+            if (!currentItem.available){ btnBook.alpha = .5f
+                btnBook.setOnClickListener { Toast.makeText(itemView.context,"Time already booked",Toast.LENGTH_SHORT).show() } }
+            else btnBook.setOnClickListener { clickListener(currentItem.start) } }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppointmentViewHolder {
