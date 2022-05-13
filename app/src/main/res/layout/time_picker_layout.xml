@@ -15,11 +15,11 @@
     app:cardPreventCornerOverlap="true"
     android:layout_gravity="center">
 
-<LinearLayout
-    android:id="@+id/llTester"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/llTester"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <TextView
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
@@ -59,7 +59,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingBottom="12dp">
+        android:paddingBottom="18dp">
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/back"
             android:layout_width="0dp"

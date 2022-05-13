@@ -17,6 +17,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.android.volley.AuthFailureError
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -56,6 +59,20 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation,CloseSearch {
         mapFragment.setOnMenuItemClickListener{goToMap(); true}
         NavigationUI.setupWithNavController(bottomNavigationView,navController)
         NavigationUI.setupActionBarWithNavController(this,navController,appBarConfiguration)
+
+        val url = getString(R.string.url,"check_cancel.php")
+        val stringRequest = object : StringRequest(
+            Method.POST, url, Response.Listener { response ->
+                notificationCount = response.toInt()
+                if (notificationCount != 0){ if (notificationCount > 100) notificationCount = 100
+                    cvCount.visibility = View.VISIBLE; tvCount.text = notificationCount.toString() } },
+            Response.ErrorListener { volleyError -> println(volleyError.message) }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["user_id"] = userItem.id
+                return params }}
+        VolleySingleton.instance?.addToRequestQueue(stringRequest)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -3,7 +3,6 @@ package com.example.usersaloon
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -191,10 +190,11 @@ class AppointmentFragment : Fragment(), DatePickerDialog.OnDateSetListener{
                     else{
                         for (x in 0 until arr.length()) {
                             val obj = arr.getJSONObject(x)
-                            val startBook = obj.getString("start").toIntOrNull()
-                            val endBook = obj.getString("end").toIntOrNull()
-                            if (endBook == null) { last = true;break }
+                            var startBook = obj.getString("start").toIntOrNull()
+                            var endBook = obj.getString("end").toIntOrNull()
+                            if (endBook == null) { last = true;break } else {endBook -= 1}
                             if (endBook < item.startMinute) removeList.add(x)
+                            if (startBook != null) startBook += 1
                             if ((item.startMinute .. item.endMinute).contains(startBook) || startBook == null ||
                                 (item.startMinute .. item.endMinute).contains(endBook)){
                             if (filter) {item.visible = false} else {item.available = false; break } } }
