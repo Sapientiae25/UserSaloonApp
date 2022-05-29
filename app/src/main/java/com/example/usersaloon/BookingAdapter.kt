@@ -3,11 +3,13 @@ package com.example.usersaloon
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 class BookingAdapter (private val styleItemList: MutableList<BookingItem>,val fragment: BookingFragment)
     : RecyclerView.Adapter<BookingAdapter.BookingViewHolder>() {
@@ -18,6 +20,7 @@ class BookingAdapter (private val styleItemList: MutableList<BookingItem>,val fr
         private val time: TextView = itemView.findViewById(R.id.time)
         private val tvAddress: TextView = itemView.findViewById(R.id.tvAddress)
         private val rating: RatingBar = itemView.findViewById(R.id.rating)
+        private val image: ImageView = itemView.findViewById(R.id.image)
 
         fun bind(index: Int){
             val currentItem = styleItemList[index]
@@ -32,6 +35,8 @@ class BookingAdapter (private val styleItemList: MutableList<BookingItem>,val fr
                 val bundle = bundleOf(Pair("bookingItem",currentItem))
                 bookingBottomSheet.arguments = bundle
                 bookingBottomSheet.show(fragment.childFragmentManager,"bookingBottomSheet") }
+            Picasso.get().load(itemView.context.getString(
+                R.string.url,"style_images/${styleItem.imageId}.jpeg")).fit().centerCrop().into(image)
         } }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookingViewHolder {

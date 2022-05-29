@@ -33,7 +33,7 @@ class BookedAdapter (private val styleItemList: MutableList<StyleItem>,val fragm
             time.text = itemView.context.getString(R.string.time_mins,currentItem.time)
             itemView.setOnClickListener {
                 val bookedBottomSheet = BookedBottomSheet()
-                val bundle = bundleOf(Pair("styleItem",currentItem))
+                val bundle = bundleOf(Pair("styleItem",currentItem),Pair("location",true))
                 bookedBottomSheet.arguments = bundle
                 bookedBottomSheet.show(fragment.childFragmentManager,"bookedBottomSheet")
             }

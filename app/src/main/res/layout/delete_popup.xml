@@ -54,7 +54,7 @@
             android:textAlignment="center"
             android:text="@string/if_you_cancel_within_24_hours_you_will_be_charged_1_00"/>
         <TextView
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
@@ -83,10 +83,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/red"
+                android:backgroundTint="@color/loginColor"
                 android:background="@drawable/round_button"
                 android:textColor="@color/white"
-                android:text="@string/cancel"
+                android:text="@string/continuee"
                 android:textSize="15sp"
                 android:layout_margin="8dp"/>
         </LinearLayout>

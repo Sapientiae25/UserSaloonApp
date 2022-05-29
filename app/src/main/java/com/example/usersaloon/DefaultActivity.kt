@@ -1,6 +1,7 @@
 package com.example.usersaloon
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -62,7 +63,7 @@ class DefaultActivity : AppCompatActivity(),UpdateLocation,CloseSearch {
 
         val url = getString(R.string.url,"check_cancel.php")
         val stringRequest = object : StringRequest(
-            Method.POST, url, Response.Listener { response ->
+            Method.POST, url, Response.Listener { response ->   println(response); Log.println(Log.ASSERT,"response",response)
                 notificationCount = response.toInt()
                 if (notificationCount != 0){ if (notificationCount > 100) notificationCount = 100
                     cvCount.visibility = View.VISIBLE; tvCount.text = notificationCount.toString() } },

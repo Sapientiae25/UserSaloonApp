@@ -49,7 +49,7 @@ class BookingBottomSheet : BottomSheetDialogFragment(){
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.delete_layout)
+        dialog.setContentView(R.layout.delete_popup)
         val cancel = dialog.findViewById<AppCompatButton>(R.id.cancel)
         val close = dialog.findViewById<AppCompatButton>(R.id.close)
 
@@ -75,7 +75,7 @@ class BookingBottomSheet : BottomSheetDialogFragment(){
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
-        dialog.setContentView(R.layout.delete_layout)
+        dialog.setContentView(R.layout.charge_layout)
         val cancel = dialog.findViewById<AppCompatButton>(R.id.cancel)
         val close = dialog.findViewById<AppCompatButton>(R.id.close)
         val tvCharge = dialog.findViewById<TextView>(R.id.tvCharge)
@@ -84,8 +84,7 @@ class BookingBottomSheet : BottomSheetDialogFragment(){
 
         close.setOnClickListener {dialog.dismiss() }
         cancel.setOnClickListener {dialog.dismiss();delete() }
-        dialog.show()
-    }
+        dialog.show() }
     private fun delete(){
         Toast.makeText(context,"Appointment Deleted!",Toast.LENGTH_SHORT).show()
         val url = getString(R.string.url,"delete_booking.php")

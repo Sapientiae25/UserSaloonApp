@@ -26,7 +26,7 @@ data class ReviewItem(val review: String,val rating: Int ,val date: String)
 data class CategoryItem(val id: String,val category: String,val accountItem: AccountItem? = null,val imageId: String=""): Parcelable
 @Parcelize
 data class BookingItem(val bookingId: String,val time: String="", val date: String="", val styleItem: StyleItem=StyleItem(),
-                       val accountItem: AccountItem=AccountItem()): Parcelable
+                       val accountItem: AccountItem=AccountItem(),val reason: String=""): Parcelable
 @Parcelize
 data class StyleFilterItem(val length: String="",val gender: String="",val hair: String="",val style: String=""): Parcelable
 @Parcelize

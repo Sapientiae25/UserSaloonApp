@@ -97,6 +97,7 @@
     <string name="make_datetime">%1$s %2$s</string>
     <string name="charge">You will be charged £%1$.2f</string>
     <string name="time_colon">%1$s:%2$s</string>
+    <string name="colon">%1$s:</string>
     <string name="next_day">Next day</string>
     <string name="previous_day">Previous day</string>
     <string name="break_word">Break</string>
@@ -223,5 +224,6 @@
     <string name="card_number">Card Number</string>
     <string name="name_on_card">Name on card</string>
     <string name="book">Book</string>
+    <string name="continuee">Continue</string>
 
 </resources>
