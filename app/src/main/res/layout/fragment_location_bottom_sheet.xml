@@ -9,18 +9,20 @@
     android:paddingBottom="15dp"
     android:layout_gravity="bottom">
     <TextView
+        android:textColor="@color/black"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/choose_location_"
         android:textSize="20sp"/>
     <TextView
+        android:textColor="@color/black"
         android:id="@+id/tvAddAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_address"
         android:layout_marginTop="20dp"
-        android:drawablePadding="5dp"
+        android:drawablePadding="7dp"
         android:textSize="20sp"
         app:drawableEndCompat="@drawable/ic_baseline_add_circle_24" />
     <RadioGroup

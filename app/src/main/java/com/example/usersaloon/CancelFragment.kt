@@ -16,25 +16,25 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import org.json.JSONArray
 
-class OldBookingFragment : Fragment(){
+class CancelFragment : Fragment(){
 
-    private lateinit var tvNoBooking: TextView
-    private lateinit var rvBooking: RecyclerView
-    val bookedList = mutableListOf<BookingItem>()
+    private lateinit var tvNoCancels: TextView
+    private lateinit var rvCancels: RecyclerView
+    val cancelList = mutableListOf<BookingItem>()
     private lateinit var userItem: UserItem
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView =  inflater.inflate(R.layout.fragment_old_booking, container, false)
+        val rootView =  inflater.inflate(R.layout.fragment_cancel, container, false)
         userItem = (activity as DefaultActivity).userItem
-        (activity as DefaultActivity).supportActionBar?.title = "Booked"
-        rvBooking = rootView.findViewById(R.id.rvBooking)
-        tvNoBooking = rootView.findViewById(R.id.tvNoBooking)
-        rvBooking.adapter = BookedAdapter(bookedList,this)
-        rvBooking.layoutManager = LinearLayoutManager(context)
-        rvBooking.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+        (activity as DefaultActivity).supportActionBar?.title = "Cancellations"
+        rvCancels = rootView.findViewById(R.id.rvCancels)
+        tvNoCancels = rootView.findViewById(R.id.tvNoCancels)
+        rvCancels.adapter = CancelAdapter(cancelList,this)
+        rvCancels.layoutManager = LinearLayoutManager(context)
+        rvCancels.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         val swipeRefresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
 
         loadData()
@@ -42,34 +42,33 @@ class OldBookingFragment : Fragment(){
         return rootView
     }
     private fun loadData(){
-        val url = getString(R.string.url,"booked.php")
+        val url = getString(R.string.url,"get_cancels.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->
-                Log.println(Log.ASSERT,"BKED",response)
+                Log.println(Log.ASSERT,"CAN",response)
                 val arr = JSONArray(response)
-                if (arr.length() == 0){tvNoBooking.visibility = View.VISIBLE}
+                if (arr.length() == 0){
+                    rvCancels.visibility = View.GONE; tvNoCancels.visibility = View.VISIBLE}
+                else {rvCancels.visibility = View.VISIBLE; tvNoCancels.visibility = View.GONE}
                 for (x in 0 until arr.length()){
                     val obj = arr.getJSONObject(x)
                     val name = obj.getString("name")
                     val price = obj.getString("price").toFloat()
-                    val time = obj.getString("time")
                     val styleId = obj.getString("style_id")
-                    val maxTime = obj.getString("max_time")
-                    val info = obj.getString("info")
                     val accountName = obj.getString("account_name")
                     val address = obj.getString("address")
-                    val sDate = obj.getString("sDate")
-                    val sTime = obj.getString("sTime")
-                    val bookingId = obj.getString("booking_id")
-                    val rating = obj.getString("rating").toFloatOrNull()
-                    val accountFk = obj.getString("account_fk")
-                    val accountItem = AccountItem(accountFk,accountName,addressItem=AddressItem(address=address))
+                    val sDate = obj.getString("s_date")
+                    val sTime = obj.getString("s_time")
+                    val accountId = obj.getString("account_id")
+                    val reason = obj.getString("reason")
+                    val info = obj.getString("info")
+                    val time = obj.getString("time")
                     val imageId = obj.getString("image_id")
-                    val styleItem =  StyleItem(name,price,time,info,styleId,accountItem=accountItem,rating=rating,
-                        imageId=imageId)
-                    bookedList.add(BookingItem(bookingId,sTime,sDate,styleItem))
-                }
-                rvBooking.adapter?.notifyItemRangeInserted(0,bookedList.size)},
+                    val rating = obj.getString("rating").toFloatOrNull()
+                    val accountItem = AccountItem(accountId,accountName, addressItem=AddressItem(address=address))
+                    val styleItem =  StyleItem(name,price,time,info,styleId,accountItem=accountItem,rating=rating,imageId=imageId)
+                    cancelList.add(BookingItem("",sTime,sDate,styleItem,reason=reason)) }
+                rvCancels.adapter?.notifyItemRangeInserted(0,cancelList.size) },
             Response.ErrorListener { volleyError -> println(volleyError.message) }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {

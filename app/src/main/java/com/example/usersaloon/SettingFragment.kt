@@ -24,6 +24,7 @@ class SettingFragment : Fragment(){
         val tvDetails = rootView.findViewById<TextView>(R.id.tvDetails)
         val tvPayment = rootView.findViewById<TextView>(R.id.tvPayment)
         val tvLogOut = rootView.findViewById<TextView>(R.id.tvLogOut)
+        val tvCancels = rootView.findViewById<TextView>(R.id.tvCancels)
 
         tvBooked.setOnClickListener { view -> view.findNavController().navigate(R.id.action_settingFragment_to_oldBookingFragment) }
         tvFavouriteStyles.setOnClickListener { view ->
@@ -32,6 +33,7 @@ class SettingFragment : Fragment(){
             view.findNavController().navigate(R.id.action_settingFragment_to_favouriteSaloonsFragment) }
         tvDetails.setOnClickListener { view -> view.findNavController().navigate(R.id.action_settingFragment_to_detailsFragment) }
         tvPayment.setOnClickListener { view -> view.findNavController().navigate(R.id.action_settingFragment_to_paymentFragment) }
+        tvCancels.setOnClickListener { view -> view.findNavController().navigate(R.id.action_settingFragment_to_cancelFragment) }
         tvLogOut.setOnClickListener { val intent = Intent(context, MainActivity::class.java); startActivity(intent) }
 
         return rootView

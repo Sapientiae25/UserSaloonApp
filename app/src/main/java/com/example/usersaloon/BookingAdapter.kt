@@ -27,7 +27,7 @@ class BookingAdapter (private val styleItemList: MutableList<BookingItem>,val fr
             val styleItem = currentItem.styleItem
             name.text = styleItem.name
             price.text = itemView.context.getString(R.string.money,styleItem.price)
-            tvAddress.text = styleItem.accountItem?.addressItem?.address
+            tvAddress.text = styleItem.accountItem.addressItem?.address
             if (styleItem.rating == null) {rating.visibility = View.GONE} else {rating.rating = styleItem.rating.toFloat()}
             time.text = itemView.context.getString(R.string.separate,currentItem.time,currentItem.date)
             itemView.setOnClickListener {

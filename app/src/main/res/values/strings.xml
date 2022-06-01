@@ -225,5 +225,8 @@
     <string name="name_on_card">Name on card</string>
     <string name="book">Book</string>
     <string name="continuee">Continue</string>
+    <string name="old_bookings">Old Bookings</string>
+    <string name="cancellations">Cancellations</string>
+    <string name="old_cancellations">Old Cancellations</string>
 
 </resources>

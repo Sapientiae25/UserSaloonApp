@@ -9,10 +9,11 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
-class CancelAdapter (private val styleItemList: MutableList<BookingItem>,val fragment: BookingFragment)
+class CancelAdapter (private val styleItemList: MutableList<BookingItem>,val fragment: Fragment)
     : RecyclerView.Adapter<CancelAdapter.CancelViewHolder>() {
 
     inner class CancelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

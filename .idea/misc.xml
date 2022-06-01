@@ -39,8 +39,9 @@
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_address.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_appointment.xml" value="0.264" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_booked_bottom_sheet.xml" value="0.32083333333333336" />
-        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_booking.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_booking.xml" value="0.264" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_booking_bottom_sheet.xml" value="0.2545289855072464" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_cancel.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_category.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_details.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_explore.xml" value="0.271304347826087" />
@@ -62,7 +63,7 @@
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_saloon_bottom_sheet.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_setting.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_style.xml" value="0.32083333333333336" />
-        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_user.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/fragment_user.xml" value="0.25" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/image_layout.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/layout_booked.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/PlWoCo/AndroidStudioProjects/UserSaloon/app/src/main/res/layout/map_saloon_layout.xml" value="0.32083333333333336" />

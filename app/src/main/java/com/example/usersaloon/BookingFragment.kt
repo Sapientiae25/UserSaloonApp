@@ -5,9 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -29,6 +34,16 @@ class BookingFragment : Fragment() {
     private lateinit var rvCancel: RecyclerView
     private lateinit var llCancel: LinearLayout
     private lateinit var llBooking: LinearLayout
+    private lateinit var llOldCancels: LinearLayout
+    private lateinit var llOldBookings: LinearLayout
+    private lateinit var fabHistory: FloatingActionButton
+    private lateinit var fabOldStyles: FloatingActionButton
+    private lateinit var fabOldCancels: FloatingActionButton
+    private var clicked = false
+//    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(context,R.anim.rotate_open_anim)}
+//    private val rotateClose: Animation by lazy {AnimationUtils.loadAnimation(context,R.anim.rotate_close_anim)}
+    private val fromBottom: Animation by lazy {AnimationUtils.loadAnimation(context,R.anim.from_bottom_anim)}
+    private val toBottom: Animation by lazy {AnimationUtils.loadAnimation(context,R.anim.to_botton_anim)}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +53,11 @@ class BookingFragment : Fragment() {
         (activity as DefaultActivity).supportActionBar?.title = "Notifications"
         userItem = (activity as DefaultActivity).userItem
         tvNoStyles = rootView.findViewById(R.id.tvNoStyles)
+        llOldCancels = rootView.findViewById(R.id.llOldCancels)
+        llOldBookings = rootView.findViewById(R.id.llOldBookings)
+        fabHistory = rootView.findViewById(R.id.fabHistory)
+        fabOldCancels = rootView.findViewById(R.id.fabOldCancels)
+        fabOldStyles = rootView.findViewById(R.id.fabOldStyles)
         rvBooking = rootView.findViewById(R.id.rvBooking)
         rvCancel = rootView.findViewById(R.id.rvCancel)
         tvNoBooking = rootView.findViewById(R.id.tvNoBooking)
@@ -54,10 +74,35 @@ class BookingFragment : Fragment() {
 
         loadData()
         swipeRefresh.setOnRefreshListener { loadData();swipeRefresh.isRefreshing = false }
+        fabHistory.setOnClickListener{ onAddButtonClicked() }
+        fabOldCancels.setOnClickListener{ view -> view.findNavController().navigate(R.id.action_bookingFragment_to_cancelFragment)}
+        fabOldStyles.setOnClickListener{ view -> view.findNavController().navigate(R.id.action_bookingFragment_to_oldBookingFragment)}
 
         return rootView
     }
+
+    private fun onAddButtonClicked() {
+        setVisibility(clicked)
+//        setAnimation(clicked)
+        clicked = !clicked
+    }
+
+    private fun setVisibility(clicked: Boolean) {
+        if (!clicked){ llOldBookings.visibility = View.VISIBLE; llOldCancels.visibility = View.VISIBLE
+        }else{ llOldBookings.visibility = View.GONE; llOldCancels.visibility = View.GONE } }
+
+    private fun setAnimation(clicked: Boolean) {
+        if (!clicked){ llOldBookings.startAnimation(fromBottom); llOldCancels.startAnimation(fromBottom)
+            fabHistory.setImageResource(R.drawable.ic_baseline_cancel_24)
+        }else{ llOldBookings.startAnimation(toBottom); llOldCancels.startAnimation(toBottom)
+            fabHistory.setImageResource(R.drawable.ic_baseline_history_24) }
+    }
+
     private fun loadData(){
+        rvCancel.adapter?.notifyItemRangeRemoved(0,cancelList.size)
+        cancelList.clear()
+        rvBooking.adapter?.notifyItemRangeRemoved(0,bookingList.size)
+        bookingList.clear()
         val url = getString(R.string.url,"get_booked.php")
         val stringRequest = object : StringRequest(
             Method.POST, url, Response.Listener { response ->

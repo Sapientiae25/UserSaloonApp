@@ -35,6 +35,16 @@
         android:text="@string/favourite_saloons"
         android:textSize="18sp"/>
     <TextView
+        android:id="@+id/tvCancels"
+        android:padding="17dp"
+        android:background="@drawable/border"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        app:drawableEndCompat="@drawable/ic_baseline_arrow_forward_ios_24"
+        android:text="@string/cancellations"
+        android:textSize="18sp"/>
+    <TextView
         android:id="@+id/tvDetails"
         android:padding="17dp"
         android:background="@drawable/border"

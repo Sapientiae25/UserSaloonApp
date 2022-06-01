@@ -58,6 +58,7 @@ class LocationBottomSheet : BottomSheetDialogFragment(){
                     val radioButton = RadioButton(context)
                     if (chosen == 1){chosenLocation = i; radioButton.isChecked = true}
                     radioButton.id = i+1
+                    radioButton.text = getString(R.string.comma,address,postcode)
                     radioButton.setOnClickListener{
                         val url2 = getString(R.string.url,"choose_location.php")
                         val stringRequest: StringRequest = object : StringRequest(
@@ -86,7 +87,7 @@ class LocationBottomSheet : BottomSheetDialogFragment(){
 
         tvAddAddress.setOnClickListener {
             val bundle = bundleOf(Pair("setting",false),Pair("update",false))
-            this.findNavController().navigate(R.id.action_userFragment_to_addressFragment,bundle)
+            this.findNavController().navigate(R.id.action_global_addressFragment,bundle)
             dismiss()
         }
 

@@ -132,6 +132,12 @@
         <action
             android:id="@+id/action_bookingFragment_to_reviewFragment"
             app:destination="@id/reviewFragment" />
+        <action
+            android:id="@+id/action_bookingFragment_to_oldBookingFragment"
+            app:destination="@id/oldBookingFragment" />
+        <action
+            android:id="@+id/action_bookingFragment_to_cancelFragment"
+            app:destination="@id/cancelFragment" />
     </fragment>
     <action android:id="@+id/action_global_bookingFragment"
     app:destination="@id/bookingFragment"/>
@@ -170,6 +176,9 @@
         <action
             android:id="@+id/action_settingFragment_to_favouriteStylesFragment"
             app:destination="@id/favouriteStylesFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_cancelFragment"
+            app:destination="@id/cancelFragment" />
     </fragment>
     <action android:id="@+id/action_global_settingFragment" app:destination="@id/settingFragment" />
     <fragment
@@ -295,4 +304,8 @@
             android:name="styleItem"
             app:argType="com.example.usersaloon.StyleItem" />
     </fragment>
+    <fragment
+        android:id="@+id/cancelFragment"
+        android:name="com.example.usersaloon.CancelFragment"
+        android:label="CancelFragment" /><action android:id="@+id/action_global_addressFragment" app:destination="@id/addressFragment"/>
 </navigation>

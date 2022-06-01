@@ -28,7 +28,7 @@ class SaloonStyleAdapter (private val styleItemList: MutableList<StyleItem>)
             val currentItem = styleItemList[index]
             name.text = currentItem.name
             price.text = itemView.context.getString(R.string.money,currentItem.price)
-            tvAddress.text = currentItem.accountItem?.addressItem?.address
+            tvAddress.text = currentItem.accountItem.addressItem?.address
             if (currentItem.rating == null) {rating.visibility = View.GONE} else {rating.rating = currentItem.rating.toFloat()}
             time.text = itemView.context.getString(R.string.time_mins,currentItem.time)
             if (currentItem.imageId.isNotEmpty() && currentItem.imageId != "null"){

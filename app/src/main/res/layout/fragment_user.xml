@@ -24,6 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -31,7 +32,7 @@
                 android:text="@string/salon_s_near_you"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="5dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSaloons"
@@ -48,13 +49,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/llFavouriteSaloons">
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
                 android:text="@string/popular_styles"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="7dp"/>
+                android:layout_marginBottom="5dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPopular"
@@ -71,13 +73,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/llSaloons">
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
                 android:text="@string/favourite_styles"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="7dp"/>
+                android:layout_marginBottom="5dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFavouriteStyles"
@@ -94,13 +97,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/llFavouriteStyles">
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
                 android:text="@string/favourite_saloons"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="7dp"/>
+                android:layout_marginBottom="5dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFavouriteSaloons"
@@ -117,13 +121,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/llPopular">
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
                 android:text="@string/recently_viewed"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="7dp"/>
+                android:layout_marginBottom="5dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRecent"
@@ -140,13 +145,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/llRecent">
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
                 android:text="@string/categories"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="5dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCategories"

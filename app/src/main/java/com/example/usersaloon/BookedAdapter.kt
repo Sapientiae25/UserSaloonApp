@@ -12,7 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
-class BookedAdapter (private val styleItemList: MutableList<StyleItem>,val fragment: OldBookingFragment)
+class BookedAdapter (private val styleItemList: MutableList<BookingItem>,val fragment: OldBookingFragment)
     : RecyclerView.Adapter<BookedAdapter.BookedViewHolder>() {
 
     inner class BookedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -26,25 +26,25 @@ class BookedAdapter (private val styleItemList: MutableList<StyleItem>,val fragm
 
         fun bind(index: Int){
             val currentItem = styleItemList[index]
-            name.text = currentItem.name
-            price.text = itemView.context.getString(R.string.money,currentItem.price)
-            tvAddress.text = currentItem.accountItem?.addressItem?.address
-            if (currentItem.rating == null) {rating.visibility = View.GONE} else {rating.rating = currentItem.rating.toFloat()}
-            time.text = itemView.context.getString(R.string.time_mins,currentItem.time)
+            val styleItem = currentItem.styleItem
+            name.text = styleItem.name
+            price.text = itemView.context.getString(R.string.money,styleItem.price)
+            tvAddress.text = currentItem.accountItem.addressItem?.address
+            if (styleItem.rating == null) {rating.visibility = View.GONE} else {rating.rating = styleItem.rating.toFloat()}
+            time.text = itemView.context.getString(R.string.separate,currentItem.time,currentItem.date)
             itemView.setOnClickListener {
                 val bookedBottomSheet = BookedBottomSheet()
                 val bundle = bundleOf(Pair("styleItem",currentItem),Pair("location",true))
                 bookedBottomSheet.arguments = bundle
                 bookedBottomSheet.show(fragment.childFragmentManager,"bookedBottomSheet")
             }
-            if (currentItem.imageId.isNotEmpty() && currentItem.imageId != "null"){
+            if (styleItem.imageId.isNotEmpty() && styleItem.imageId != "null"){
             Picasso.get().load(itemView.context.getString(
-                    R.string.url,"style_images/${currentItem.imageId}.jpeg")).fit().centerCrop().into(image)}
+                    R.string.url,"style_images/${styleItem.imageId}.jpeg")).fit().centerCrop().into(image)}
             else{ card.visibility = View.GONE }
         } }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookedViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.style_layout,
-            parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.booking_layout, parent, false)
         return BookedViewHolder(itemView)
     }
 
